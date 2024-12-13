@@ -1,0 +1,70 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model AppUser {
+  id          String  @id @default(auto()) @map("_id") @db.ObjectId
+  userId      String  @unique
+  email       String  @unique
+  password    String?
+  displayName String?
+  photoURL    String?
+
+  meta     AppUserMetadata?
+  settings AppUserSettings?
+  Payment  Payment[]
+
+  @@map("appUser")
+}
+
+model AppUserMetadata {
+  appUserMetadataId String @id @default(auto()) @map("_id") @db.ObjectId
+  userId            String @unique
+
+  paidStatus String? // "free" | "premium"
+
+  appUser AppUser @relation(fields: [userId], references: [userId], onDelete: Cascade)
+
+  @@map("appUserMetadata")
+}
+
+model AppUserSettings {
+  appUserSettingsId String @id @default(auto()) @map("_id") @db.ObjectId
+  userId            String @unique
+
+  appUser AppUser @relation(fields: [userId], references: [userId], onDelete: Cascade)
+
+  @@map("appUserSettings")
+}
+
+model Payment {
+  id        String @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String @map("user_id")
+  priceId   String @map("price_id")
+  sessionId String @map("session_id")
+  productId String @map("product_id")
+
+  productName     String  @map("product_name")
+  amountReceived  Int     @map("amount_received")
+  currency        String  @map("currency")
+  status          String  @map("status")
+  paymentMethodId String? @map("payment_method_id")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  appUser AppUser @relation(fields: [userId], references: [userId], onDelete: Cascade)
+
+  @@map("payments")
+}
