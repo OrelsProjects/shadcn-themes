@@ -4,10 +4,12 @@ import ClientTrackersProvider from "@/app/providers/ClientTrackersProvider";
 import SessionWrapper from "@/app/providers/SessionWrapper";
 import StoreProvider from "@/app/providers/StoreProvider";
 import TopLoaderProvider from "@/app/providers/TopLoaderProvider";
-import Loading from "@/components/ui/loading";
 import { initLogger } from "@/logger";
-import { ThemeProvider } from "next-themes";
 import { Suspense } from "react";
+import Loading from "@/components/ui/loading";
+import { ThemeProvider } from "@/app/providers/ThemeProvider";
+import ThemeUpdate from "@/app/providers/ThemeUpdate";
+import { ShortcutProvider } from "@/app/providers/ShortcutProvider";
 
 interface RootLayoutProps {
   children: React.ReactNode;
@@ -78,15 +80,14 @@ export default function Layout({ children }: RootLayoutProps) {
       </head>
       <body className="antialiased">
         <Suspense
-          fallback={
-            <Loading spinnerClassName="absolute top-1/2 left-1/2 h-10 w-10" />
-          }
+          fallback={<Loading className="absolute top-1/2 left-1/2 h-10 w-10" />}
         >
           <StoreProvider>
             <SessionWrapper>
               <ThemeProvider>
+                <ThemeUpdate />
                 <TopLoaderProvider />
-                {children}
+                <ShortcutProvider>{children}</ShortcutProvider>
                 <ClientTrackersProvider />
               </ThemeProvider>
             </SessionWrapper>

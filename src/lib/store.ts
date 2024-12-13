@@ -1,12 +1,14 @@
 import { configureStore } from "@reduxjs/toolkit";
 import authReducer from "@/lib/features/auth/authSlice";
 import productsReducer from "@/lib/features/products/productsSlice";
+import paletteReducer from "@/lib/features/theme/paletteSlice";
 
 export const makeStore = () => {
   return configureStore({
     reducer: {
       auth: authReducer,
       products: productsReducer,
+      palette: paletteReducer,
     },
   });
 };
