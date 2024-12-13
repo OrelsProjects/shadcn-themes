@@ -9,7 +9,8 @@ export function cn(...inputs: ClassValue[]) {
 export function getThemeColor(
   color: keyof ThemePalette,
   theme: ThemePalette,
+  addHsl?: boolean,
 ): string {
   const hslString = `${theme[color][0]} ${theme[color][1]} ${theme[color][2]}`;
-  return `hsl(${hslString})`;
+  return addHsl ? `hsl(${hslString})` : `${hslString}`;
 }

@@ -22,7 +22,7 @@ import {
 } from "@/components/ui/select";
 import { ThemeType } from "@/models/palette";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks/redux";
-import { getThemeColor } from "@/lib/utils";
+import { cn, getThemeColor } from "@/lib/utils";
 import { selectPalette } from "@/lib/features/theme/paletteSlice";
 
 export default function ThemePreviewer() {
@@ -122,7 +122,12 @@ export default function ThemePreviewer() {
         <h2 className="text-2xl font-semibold mb-4">Theme Previews</h2>
         <div className="flex space-x-4">
           {Object.entries(allPalettes).map(([paletteName, palette]) => (
-            <Card key={paletteName} className="w-64 flex-shrink-0">
+            <Card
+              key={paletteName}
+              className={cn("w-64 flex-shrink-0", {
+                "border-primary": paletteName === selectedPaletteName,
+              })}
+            >
               <CardHeader>
                 <CardTitle>
                   {paletteName
@@ -138,8 +143,9 @@ export default function ThemePreviewer() {
                       className="w-full h-8 rounded"
                       style={{
                         backgroundColor: getThemeColor(
-                          "foreground",
+                          "primary",
                           palette[selectedThemeType],
+                          true
                         ),
                       }}
                     />
@@ -152,6 +158,7 @@ export default function ThemePreviewer() {
                         backgroundColor: getThemeColor(
                           "secondary",
                           palette[selectedThemeType],
+                          true
                         ),
                       }}
                     />
@@ -164,6 +171,7 @@ export default function ThemePreviewer() {
                         backgroundColor: getThemeColor(
                           "background",
                           palette[selectedThemeType],
+                          true
                         ),
                       }}
                     />
@@ -176,6 +184,7 @@ export default function ThemePreviewer() {
                         backgroundColor: getThemeColor(
                           "accent",
                           palette[selectedThemeType],
+                          true
                         ),
                       }}
                     />

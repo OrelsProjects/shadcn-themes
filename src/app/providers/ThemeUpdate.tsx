@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import { useAppSelector } from "@/lib/hooks/redux";
+import { getThemeColor } from "@/lib/utils";
 
 const ThemeUpdate = () => {
   const { selectedPalette, allPalettes } = useAppSelector(
@@ -15,7 +16,7 @@ const ThemeUpdate = () => {
       // if value is string -> Take it as is. otherwise, `${value[0]} ${value[1]} ${value[2]}`;
       const hslString =
         value instanceof Array
-          ? `hsl(${value[0]}, ${value[1]}%, ${value[2]}%)`
+          ? getThemeColor(key as keyof typeof themeVariables, themeVariables)
           : value;
       root.style.setProperty(`--${key}`, hslString);
     });
