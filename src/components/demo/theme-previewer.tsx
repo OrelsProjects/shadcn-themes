@@ -1,26 +1,32 @@
 "use client";
 
 import { useState } from "react";
+import { Button as ButtonDemo } from "@/components/ui-demo/button";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Input } from "@/components/ui-demo/input";
+import { Label } from "@/components/ui-demo/label";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@/components/ui-demo/tabs";
+import {
+  Card as CardDemo,
+  CardContent as CardContentDemo,
+  CardDescription as CardDescriptionDemo,
+  CardFooter as CardFooterDemo,
+  CardHeader as CardHeaderDemo,
+  CardTitle as CardTitleDemo,
+} from "@/components/ui-demo/card";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { ThemeType } from "@/models/palette";
+
 import { useAppDispatch, useAppSelector } from "@/lib/hooks/redux";
 import { cn, getThemeColor } from "@/lib/utils";
 import { selectPalette } from "@/lib/features/theme/paletteSlice";
@@ -42,14 +48,14 @@ export default function ThemePreviewer() {
         <h1 className="text-3xl font-bold mb-6">shadcn Components Preview</h1>
 
         <div className="space-y-8">
-          <Card>
-            <CardHeader>
-              <CardTitle>Account Settings</CardTitle>
-              <CardDescription>
+          <CardDemo>
+            <CardHeaderDemo>
+              <CardTitleDemo>Account Settings</CardTitleDemo>
+              <CardDescriptionDemo>
                 Update your account information.
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
+              </CardDescriptionDemo>
+            </CardHeaderDemo>
+            <CardContentDemo className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="name">Name</Label>
                 <Input id="name" placeholder="Enter your name" />
@@ -58,11 +64,11 @@ export default function ThemePreviewer() {
                 <Label htmlFor="email">Email</Label>
                 <Input id="email" type="email" placeholder="Enter your email" />
               </div>
-            </CardContent>
-            <CardFooter>
-              <Button>Save Changes</Button>
-            </CardFooter>
-          </Card>
+            </CardContentDemo>
+            <CardFooterDemo>
+              <ButtonDemo>Save Changes</ButtonDemo>
+            </CardFooterDemo>
+          </CardDemo>
 
           <Tabs defaultValue="account" className="w-full">
             <TabsList>
@@ -70,35 +76,35 @@ export default function ThemePreviewer() {
               <TabsTrigger value="password">Password</TabsTrigger>
             </TabsList>
             <TabsContent value="account">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Account</CardTitle>
-                  <CardDescription>
-                    Make changes to your account here. Click save when you're
+              <CardDemo>
+                <CardHeaderDemo>
+                  <CardTitleDemo>Account</CardTitleDemo>
+                  <CardDescriptionDemo>
+                    Make changes to your account here. Click save when you&apos;re
                     done.
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-2">
+                  </CardDescriptionDemo>
+                </CardHeaderDemo>
+                <CardContentDemo className="space-y-2">
                   <div className="space-y-1">
                     <Label htmlFor="username">Username</Label>
                     <Input id="username" defaultValue="@shadcn" />
                   </div>
-                </CardContent>
-                <CardFooter>
-                  <Button>Save changes</Button>
-                </CardFooter>
-              </Card>
+                </CardContentDemo>
+                <CardFooterDemo>
+                  <ButtonDemo>Save changes</ButtonDemo>
+                </CardFooterDemo>
+              </CardDemo>
             </TabsContent>
             <TabsContent value="password">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Password</CardTitle>
-                  <CardDescription>
-                    Change your password here. After saving, you'll be logged
+              <CardDemo>
+                <CardHeaderDemo>
+                  <CardTitleDemo>Password</CardTitleDemo>
+                  <CardDescriptionDemo>
+                    Change your password here. After saving, you&apos;ll be logged
                     out.
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-2">
+                  </CardDescriptionDemo>
+                </CardHeaderDemo>
+                <CardContentDemo className="space-y-2">
                   <div className="space-y-1">
                     <Label htmlFor="current">Current password</Label>
                     <Input id="current" type="password" />
@@ -107,11 +113,11 @@ export default function ThemePreviewer() {
                     <Label htmlFor="new">New password</Label>
                     <Input id="new" type="password" />
                   </div>
-                </CardContent>
-                <CardFooter>
-                  <Button>Save password</Button>
-                </CardFooter>
-              </Card>
+                </CardContentDemo>
+                <CardFooterDemo>
+                  <ButtonDemo>Save password</ButtonDemo>
+                </CardFooterDemo>
+              </CardDemo>
             </TabsContent>
           </Tabs>
         </div>
@@ -145,7 +151,7 @@ export default function ThemePreviewer() {
                         backgroundColor: getThemeColor(
                           "primary",
                           palette[selectedThemeType],
-                          true
+                          true,
                         ),
                       }}
                     />
@@ -158,7 +164,7 @@ export default function ThemePreviewer() {
                         backgroundColor: getThemeColor(
                           "secondary",
                           palette[selectedThemeType],
-                          true
+                          true,
                         ),
                       }}
                     />
@@ -171,7 +177,7 @@ export default function ThemePreviewer() {
                         backgroundColor: getThemeColor(
                           "background",
                           palette[selectedThemeType],
-                          true
+                          true,
                         ),
                       }}
                     />
@@ -184,7 +190,7 @@ export default function ThemePreviewer() {
                         backgroundColor: getThemeColor(
                           "accent",
                           palette[selectedThemeType],
-                          true
+                          true,
                         ),
                       }}
                     />

@@ -11,6 +11,6 @@ export function getThemeColor(
   theme: ThemePalette,
   addHsl?: boolean,
 ): string {
-  const hslString = `${theme[color][0]} ${theme[color][1]} ${theme[color][2]}`;
+  const hslString = `${theme[color][0]} ${theme[color][1]}% ${theme[color][2]}%`;
   return addHsl ? `hsl(${hslString})` : `${hslString}`;
 }

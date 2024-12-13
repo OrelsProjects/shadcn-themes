@@ -18,7 +18,10 @@ const ThemeUpdate = () => {
         value instanceof Array
           ? getThemeColor(key as keyof typeof themeVariables, themeVariables)
           : value;
-      root.style.setProperty(`--${key}`, hslString);
+      // split by -, add -demo after the first part, then join by -
+      const keyParts = key.split("-");
+      const demoKey = [keyParts[0], "demo", ...keyParts.slice(1)].join("-");
+      root.style.setProperty(`--${demoKey}`, hslString);
     });
   }, [selectedPalette, allPalettes]);
 
