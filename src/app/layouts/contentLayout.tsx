@@ -3,8 +3,6 @@
 import React from "react";
 import "@/../firebase.config";
 import type { Viewport } from "next";
-
-import AuthProvider from "@/app/providers/AuthProvider";
 import TopLoaderProvider from "@/app/providers/TopLoaderProvider";
 import AnimationProvider from "@/app/providers/AnimationProvider";
 import HeightProvider from "@/app/providers/HeightProvider";
@@ -17,14 +15,12 @@ interface RootLayoutProps {
 export default function ContentLayout({ children }: RootLayoutProps) {
   return (
     <main>
-      <AuthProvider>
-        <HeightProvider>
-          <ContentProvider>
-            <TopLoaderProvider />
-            <AnimationProvider>{children}</AnimationProvider>
-          </ContentProvider>
-        </HeightProvider>
-      </AuthProvider>
+      <HeightProvider>
+        <ContentProvider>
+          <TopLoaderProvider />
+          <AnimationProvider>{children}</AnimationProvider>
+        </ContentProvider>
+      </HeightProvider>
     </main>
   );
 }
