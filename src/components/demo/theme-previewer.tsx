@@ -44,7 +44,7 @@ export default function ThemePreviewer() {
   return (
     <div className="min-h-screen flex flex-col">
       {/* shadcn Components Section (3/5 of the screen) */}
-      <div className="flex-grow min-h-[60vh] p-6 overflow-y-auto">
+      <div className="flex-grow max-h-[60vh] p-6 overflow-y-auto bg-background-demo text-foreground-demo">
         <h1 className="text-3xl font-bold mb-6">shadcn Components Preview</h1>
 
         <div className="space-y-8">
@@ -80,8 +80,8 @@ export default function ThemePreviewer() {
                 <CardHeaderDemo>
                   <CardTitleDemo>Account</CardTitleDemo>
                   <CardDescriptionDemo>
-                    Make changes to your account here. Click save when you&apos;re
-                    done.
+                    Make changes to your account here. Click save when
+                    you&apos;re done.
                   </CardDescriptionDemo>
                 </CardHeaderDemo>
                 <CardContentDemo className="space-y-2">
@@ -100,8 +100,8 @@ export default function ThemePreviewer() {
                 <CardHeaderDemo>
                   <CardTitleDemo>Password</CardTitleDemo>
                   <CardDescriptionDemo>
-                    Change your password here. After saving, you&apos;ll be logged
-                    out.
+                    Change your password here. After saving, you&apos;ll be
+                    logged out.
                   </CardDescriptionDemo>
                 </CardHeaderDemo>
                 <CardContentDemo className="space-y-2">
@@ -124,13 +124,13 @@ export default function ThemePreviewer() {
       </div>
 
       {/* Theme Preview Section (2/5 of the screen) */}
-      <div className="h-[40vh] bg-muted p-6 overflow-x-auto">
-        <h2 className="text-2xl font-semibold mb-4">Theme Previews</h2>
-        <div className="flex space-x-4">
+      <div className="fixed bottom-0 w-full h-[40vh] bg-background p-6 overflow-x-auto">
+        <div className="grid grid-cols-8 gap-10 space-x-4">
           {Object.entries(allPalettes).map(([paletteName, palette]) => (
             <Card
               key={paletteName}
-              className={cn("w-64 flex-shrink-0", {
+              onClick={() => dispatch(selectPalette({ name: paletteName }))}
+              className={cn("w-40 flex-shrink-0 hover:cursor-pointer", {
                 "border-primary": paletteName === selectedPaletteName,
               })}
             >
@@ -188,25 +188,16 @@ export default function ThemePreviewer() {
                       className="w-full h-8 rounded"
                       style={{
                         backgroundColor: getThemeColor(
-                          "accent",
+                          "card",
                           palette[selectedThemeType],
                           true,
                         ),
                       }}
                     />
-                    <p className="text-xs">Accent</p>
+                    <p className="text-xs">Card</p>
                   </div>
                 </div>
               </CardContent>
-              <CardFooter>
-                <Button
-                  variant="outline"
-                  className="w-full"
-                  onClick={() => dispatch(selectPalette({ name: paletteName }))}
-                >
-                  Select Theme
-                </Button>
-              </CardFooter>
             </Card>
           ))}
         </div>

@@ -63,31 +63,31 @@ const config = {
         "foreground-demo": "hsl(var(--foreground-demo))",
         "primary-demo": {
           DEFAULT: "hsl(var(--primary-demo))",
-          foreground: "hsl(var(--primary-foreground-demo))",
+          foreground: "hsl(var(--primary-demo-foreground))",
         },
         "secondary-demo": {
           DEFAULT: "hsl(var(--secondary-demo))",
-          foreground: "hsl(var(--secondary-foreground-demo))",
+          foreground: "hsl(var(--secondary-demo-foreground))",
         },
         "destructive-demo": {
           DEFAULT: "hsl(var(--destructive-demo))",
-          foreground: "hsl(var(--destructive-foreground-demo))",
+          foreground: "hsl(var(--destructive-demo-foreground))",
         },
         "muted-demo": {
           DEFAULT: "hsl(var(--muted-demo))",
-          foreground: "hsl(var(--muted-foreground-demo))",
+          foreground: "hsl(var(--muted-demo-foreground))",
         },
         "accent-demo": {
           DEFAULT: "hsl(var(--accent-demo))",
-          foreground: "hsl(var(--accent-foreground-demo))",
+          foreground: "hsl(var(--accent-demo-foreground))",
         },
         "popover-demo": {
           DEFAULT: "hsl(var(--popover-demo))",
-          foreground: "hsl(var(--popover-foreground-demo))",
+          foreground: "hsl(var(--popover-demo-foreground))",
         },
         "card-demo": {
           DEFAULT: "hsl(var(--card-demo))",
-          foreground: "hsl(var(--card-foregroun-demo))",
+          foreground: "hsl(var(--card-demo-foregroun))",
         },
       },
       borderRadius: {

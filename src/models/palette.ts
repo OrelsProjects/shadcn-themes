@@ -1,7 +1,15 @@
+import { Theme } from "@prisma/client";
 
 export type HSL = [number, number, number]; // [hue, saturation, lightness]
 export type ThemeType = "light" | "dark";
 export type PaletteName = string;
+
+export type ParsedTheme = {
+  id: string;
+  name: string;
+  owner: string;
+  colors: Record<ThemeType, ThemePalette>;
+};
 
 export type Palette = Record<PaletteName, Record<ThemeType, ThemePalette>>;
 

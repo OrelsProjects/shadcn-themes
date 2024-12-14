@@ -14,18 +14,15 @@ export interface ThemeState {
 
 export const initialState: ThemeState = {
   allPalettes: basePalettes,
-  selectedThemeType: "dark",
+  selectedThemeType: "light",
   selectedPaletteName: "base",
-  selectedPalette: basePalettes["base"]["dark"],
+  selectedPalette: basePalettes["base"]["light"],
 };
 
 const paletteSlice = createSlice({
   name: "palette",
   initialState,
   reducers: {
-    addPalette(state, action) {
-      state.allPalettes[action.payload.name] = action.payload;
-    },
     selectPalette(
       state,
       action: PayloadAction<{ name: PaletteName; type?: ThemeType }>,
@@ -44,10 +41,13 @@ const paletteSlice = createSlice({
       state.selectedPalette =
         state.allPalettes[state.selectedPaletteName][state.selectedThemeType];
     },
+    addPalettes(state, action: PayloadAction<Palette>) {
+      state.allPalettes = { ...state.allPalettes, ...action.payload };
+    },
   },
 });
 
-export const { selectPalette, addPalette, changeThemeType } =
+export const { selectPalette, addPalettes, changeThemeType } =
   paletteSlice.actions;
 
 export default paletteSlice.reducer;

@@ -1,13 +1,31 @@
 "use client";
 
-import { useEffect } from "react";
-import { useAppSelector } from "@/lib/hooks/redux";
+import { useEffect, useRef } from "react";
+import { useAppDispatch, useAppSelector } from "@/lib/hooks/redux";
 import { getThemeColor } from "@/lib/utils";
+import axios from "axios";
+import { Palette } from "@/models/palette";
+import { addPalettes } from "@/lib/features/theme/paletteSlice";
 
 const ThemeUpdate = () => {
+  const dispatch = useAppDispatch();
   const { selectedPalette, allPalettes } = useAppSelector(
     state => state.palette,
   );
+  const loadingRef = useRef(false);
+
+  useEffect(() => {
+    if (loadingRef.current) return;
+    loadingRef.current = true;
+    axios
+      .get<Palette>("/api/test")
+      .then(palettes => {
+        dispatch(addPalettes(palettes.data));
+      })
+      .finally(() => {
+        loadingRef.current = false;
+      });
+  }, [dispatch]);
 
   useEffect(() => {
     const themeVariables = selectedPalette;

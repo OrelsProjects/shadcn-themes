@@ -50,21 +50,61 @@ model AppUserSettings {
 
 model Payment {
   id        String @id @default(auto()) @map("_id") @db.ObjectId
-  userId    String @map("user_id")
-  priceId   String @map("price_id")
-  sessionId String @map("session_id")
-  productId String @map("product_id")
+  userId    String
+  priceId   String
+  sessionId String
+  productId String
 
-  productName     String  @map("product_name")
-  amountReceived  Int     @map("amount_received")
-  currency        String  @map("currency")
-  status          String  @map("status")
-  paymentMethodId String? @map("payment_method_id")
+  productName     String
+  amountReceived  Int
+  currency        String
+  status          String
+  paymentMethodId String?
 
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   appUser AppUser @relation(fields: [userId], references: [userId], onDelete: Cascade)
 
   @@map("payments")
+}
+
+model ThemeOwner {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  name String @unique
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  Themes    Theme[]
+
+  @@map("themesOwners")
+}
+
+model Theme {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  themeOwnerId String @db.ObjectId
+  themeName    String
+  themeColors  String // JSON stringified object, Record<ThemeType, ThemePalette>
+
+  visible Boolean @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  owner ThemeOwner @relation(fields: [themeOwnerId], references: [id], onDelete: Cascade)
+
+  @@map("theme")
+}
+
+model ThemeVisit {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  themeId String
+  userId  String?
+
+  visitedAt DateTime @default(now()) @map("visited_at")
+
+  @@map("themesVisits")
 }
