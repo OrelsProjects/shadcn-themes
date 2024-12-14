@@ -42,6 +42,6 @@ export async function GET(req: NextRequest) {
 
     return NextResponse.json(parsedThemes);
   } catch (error: any) {
-    return NextResponse.error();
+    return NextResponse.json({ error: error.message }, { status: 500 });
   } // hsl(203, %, 23%)
 }
