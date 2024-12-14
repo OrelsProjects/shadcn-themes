@@ -1,5 +1,4 @@
 import prisma from "@/app/api/_db/db";
-import { generatePalette } from "@/lib/palette/utils";
 import { ParsedPalette, ThemePalette, ThemeType } from "@/models/palette";
 import { NextRequest, NextResponse } from "next/server";
 
