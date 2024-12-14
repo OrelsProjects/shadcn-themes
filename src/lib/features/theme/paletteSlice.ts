@@ -1,22 +1,21 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { RootState } from "@/lib/store";
-import { Palette, ThemePalette, ThemeType } from "@/models/palette";
-import { basePalettes } from "@/lib/consts";
+import { Palette, ParsedPalette, ThemeType } from "@/models/palette";
+import { basePalette } from "@/lib/consts";
 
 type PaletteName = string;
 
 export interface ThemeState {
-  selectedPalette: ThemePalette;
+  selectedPalette: ParsedPalette;
   selectedPaletteName: PaletteName;
   selectedThemeType: ThemeType;
-  allPalettes: Palette;
+  allPalettes: ParsedPalette[];
 }
 
 export const initialState: ThemeState = {
-  allPalettes: basePalettes,
-  selectedThemeType: "light",
+  allPalettes: [],
+  selectedThemeType: "dark",
   selectedPaletteName: "base",
-  selectedPalette: basePalettes["base"]["light"],
+  selectedPalette: basePalette,
 };
 
 const paletteSlice = createSlice({
@@ -28,7 +27,10 @@ const paletteSlice = createSlice({
       action: PayloadAction<{ name: PaletteName; type?: ThemeType }>,
     ) {
       const newType = action.payload.type || state.selectedThemeType;
-      const newPalette = state.allPalettes[action.payload.name]?.[newType];
+      const newPalette = state.allPalettes.find(
+        palette => palette.name === action.payload.name,
+      );
+
       if (newPalette) {
         state.selectedPaletteName = action.payload.name;
         state.selectedPalette = newPalette;
@@ -38,11 +40,15 @@ const paletteSlice = createSlice({
     changeThemeType(state) {
       state.selectedThemeType =
         state.selectedThemeType === "light" ? "dark" : "light";
-      state.selectedPalette =
-        state.allPalettes[state.selectedPaletteName][state.selectedThemeType];
+      const newPalette = state.allPalettes.find(
+        palette => palette.name === state.selectedPaletteName,
+      );
+      if (newPalette) {
+        state.selectedPalette = newPalette;
+      }
     },
-    addPalettes(state, action: PayloadAction<Palette>) {
-      state.allPalettes = { ...state.allPalettes, ...action.payload };
+    addPalettes(state, action: PayloadAction<ParsedPalette[]>) {
+      state.allPalettes = [...state.allPalettes, ...action.payload];
     },
   },
 });

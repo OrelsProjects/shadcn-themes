@@ -45,9 +45,9 @@ export function RevenueChart({ theme }: RevenueChartProps) {
               <Line
                 type="monotone"
                 dataKey="value"
-                stroke={getThemeColor("chart1", theme)}
+                stroke={getThemeColor("chart-1", theme)}
                 strokeWidth={2}
-                dot={{ r: 4, fill: getThemeColor("chart1", theme) }}
+                dot={{ r: 4, fill: getThemeColor("chart-1", theme) }}
               />
             </LineChart>
           </ResponsiveContainer>

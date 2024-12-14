@@ -1,17 +1,16 @@
-import { Theme } from "@prisma/client";
-
 export type HSL = [number, number, number]; // [hue, saturation, lightness]
 export type ThemeType = "light" | "dark";
 export type PaletteName = string;
 
-export type ParsedTheme = {
+export type Palette = Record<PaletteName, Record<ThemeType, ThemePalette>>;
+
+export type ParsedPalette = {
   id: string;
   name: string;
   owner: string;
   colors: Record<ThemeType, ThemePalette>;
 };
 
-export type Palette = Record<PaletteName, Record<ThemeType, ThemePalette>>;
 
 export interface ThemePalette {
   background: HSL;
@@ -34,9 +33,9 @@ export interface ThemePalette {
   input: HSL;
   ring: HSL;
   radius: string;
-  chart1: HSL;
-  chart2: HSL;
-  chart3: HSL;
-  chart4: HSL;
-  chart5: HSL;
+  "chart-1": HSL;
+  "chart-2": HSL;
+  "chart-3": HSL;
+  "chart-4": HSL;
+  "chart-5": HSL;
 }

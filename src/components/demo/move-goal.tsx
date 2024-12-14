@@ -75,7 +75,7 @@ export function MoveGoal({ theme }: MoveGoalProps) {
             <BarChart data={data}>
               <Bar
                 dataKey="goal"
-                fill={getThemeColor("chart3", theme)}
+                fill={getThemeColor("chart-3", theme)}
                 radius={[4, 4, 0, 0]}
               />
             </BarChart>

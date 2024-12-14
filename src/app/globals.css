@@ -2,14 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
-@font-face {
-  font-family: "Montserrat";
-  src: url("/fonts/Montserrat-VariableFont_wght.ttf") format("truetype");
-}
-
 @layer base {
   :root {
-    /* Light Theme */
     --background: 208 100% 97%;
     --foreground: 208 100% 27%;
     --card: 208 100% 92%;
@@ -38,14 +32,13 @@
   }
 
   .dark {
-    /* Dark Theme */
     --background: 244 21% 13%;
     --foreground: 244 21% 83%;
     --card: 244 21% 18%;
     --card-foreground: 244 21% 83%;
     --popover: 244 21% 13%;
     --popover-foreground: 244 21% 83%;
-    --primary: 324 84% 45%;
+    --primary: 140 84% 45%;
     --primary-foreground: 324 84% 100%;
     --secondary: 199 94% 47%;
     --secondary-foreground: 199 94% 100%;
@@ -173,10 +166,28 @@
 }
 
 @layer base {
-  * {
-    @apply border-border;
-  }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background-demo text-foreground-demo;
+  }
+}
+
+@media (min-width: 768px) {
+  /* Size */
+  ::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  /* Track */
+  ::-webkit-scrollbar-track,
+  .scrollbar-visible::-webkit-scrollbar-track {
+    border-radius: 999999px;
+    background: hsla(208, 100%, 27%, 0.1);
+  }
+
+  /* Handle */
+  ::-webkit-scrollbar-thumb,
+  .scrollbar-visible::-webkit-scrollbar-thumb {
+    background: hsla(224, 21%, 83%, 0.4);
+    border-radius: 9999px;
   }
 }

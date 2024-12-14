@@ -64,10 +64,10 @@ export const metadata = {
 };
 
 export default function Layout({ children }: RootLayoutProps) {
-  initLogger();
+  // initLogger();
 
   return (
-    <html lang="en" className="font-montserrat">
+    <html lang="en">
       <head>
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -88,7 +88,7 @@ export default function Layout({ children }: RootLayoutProps) {
                 <ThemeUpdate />
                 <TopLoaderProvider />
                 <ShortcutProvider>{children}</ShortcutProvider>
-                <ClientTrackersProvider />
+                {/* <ClientTrackersProvider /> */}
               </ThemeProvider>
             </SessionWrapper>
           </StoreProvider>

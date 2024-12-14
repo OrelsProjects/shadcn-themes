@@ -38,7 +38,7 @@ export function Subscriptions({ theme }: SubscriptionsProps) {
             <BarChart data={data}>
               <Bar
                 dataKey="value"
-                fill={getThemeColor("chart2", theme)}
+                fill={getThemeColor("chart-2", theme)}
                 radius={[4, 4, 0, 0]}
               />
             </BarChart>

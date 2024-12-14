@@ -44,13 +44,13 @@ export function ExerciseMinutes({ theme }: ExerciseMinutesProps) {
               <Line
                 type="monotone"
                 dataKey="actual"
-                stroke={getThemeColor("chart4", theme)}
+                stroke={getThemeColor("chart-4", theme)}
                 strokeWidth={2}
               />
               <Line
                 type="monotone"
                 dataKey="goal"
-                stroke={getThemeColor("chart5", theme)}
+                stroke={getThemeColor("chart-5", theme)}
                 strokeWidth={2}
                 strokeDasharray="5 5"
               />

@@ -1,10 +1,8 @@
-"use client";
-
 import { HSL, ThemePalette } from "@/models/palette";
 
-interface Palettes {
-  light: ThemePalette;
-  dark: ThemePalette;
+export interface Palettes {
+  light?: ThemePalette;
+  dark?: ThemePalette;
 }
 
 export function generatePalette({
@@ -140,11 +138,11 @@ export function generatePalette({
 
     radius: "0.5rem",
 
-    chart1: basePrimary,
-    chart2: baseSecondary,
-    chart3: baseAccent,
-    chart4: adjustLightness(baseAccent, 10),
-    chart5: adjustLightness(basePrimary, 10),
+    "chart-1": basePrimary,
+    "chart-2": baseSecondary,
+    "chart-3": baseAccent,
+    "chart-4": adjustLightness(baseAccent, 10),
+    "chart-5": adjustLightness(basePrimary, 10),
   };
 
   // ===== Dark Mode Palette =====
@@ -203,11 +201,11 @@ export function generatePalette({
 
     radius: "0.5rem",
 
-    chart1: ensureContrast(baseDarkBackground, adjustLightness(darkPrimary, -20)),
-    chart2: ensureContrast(baseDarkBackground, adjustLightness(darkSecondary, -20)),
-    chart3: ensureContrast(baseDarkBackground, adjustLightness(darkAccent, -20)),
-    chart4: ensureContrast(baseDarkBackground, adjustLightness(darkAccent, -10)),
-    chart5: ensureContrast(baseDarkBackground, adjustLightness(darkPrimary, -10)),
+    "chart-1": ensureContrast(baseDarkBackground, adjustLightness(darkPrimary, -20)),
+    "chart-2": ensureContrast(baseDarkBackground, adjustLightness(darkSecondary, -20)),
+    "chart-3": ensureContrast(baseDarkBackground, adjustLightness(darkAccent, -20)),
+    "chart-4": ensureContrast(baseDarkBackground, adjustLightness(darkAccent, -10)),
+    "chart-5": ensureContrast(baseDarkBackground, adjustLightness(darkPrimary, -10)),
   };
 
   return { light, dark };
