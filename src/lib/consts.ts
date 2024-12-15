@@ -205,7 +205,7 @@ export const basePalette: ParsedPalette = {
       secondary: [199, 94, 47],
       "secondary-foreground": [199, 94, 100],
       muted: [244, 21, 53],
-      "muted-foreground": [244, 21, 33],
+      "muted-foreground": [244, 24, 48],
       accent: [158, 100, 21],
       "accent-foreground": [158, 100, 100],
       destructive: [0, 80, 30],

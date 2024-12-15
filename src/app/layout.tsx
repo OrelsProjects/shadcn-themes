@@ -1,10 +1,7 @@
 import type { Viewport } from "next";
 import "./globals.css";
-import ClientTrackersProvider from "@/app/providers/ClientTrackersProvider";
-import SessionWrapper from "@/app/providers/SessionWrapper";
 import StoreProvider from "@/app/providers/StoreProvider";
 import TopLoaderProvider from "@/app/providers/TopLoaderProvider";
-import { initLogger } from "@/logger";
 import { Suspense } from "react";
 import Loading from "@/components/ui/loading";
 import { ThemeProvider } from "@/app/providers/ThemeProvider";
@@ -86,9 +83,7 @@ export default function Layout({ children }: RootLayoutProps) {
             <ThemeProvider>
               <ThemeUpdate />
               <TopLoaderProvider />
-              <ShortcutProvider>
-                {children}
-                </ShortcutProvider>
+              <ShortcutProvider>{children}</ShortcutProvider>
               {/* <ClientTrackersProvider /> */}
             </ThemeProvider>
           </StoreProvider>

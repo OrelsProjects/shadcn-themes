@@ -1,7 +1,7 @@
 "use client";
 
 import { BottomNavbar } from "@/components/bottom-navbar";
-import { CardsDemo } from "@/components/CardsDemo";
+import { CardsDemo } from "@/app/CardsDemo";
 import Header from "@/components/header";
 import Image from "next/image";
 
