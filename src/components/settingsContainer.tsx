@@ -1,5 +1,5 @@
 import React from "react";
-import { useAppSelector } from "@/lib/hooks/redux";
+import { useAppSelector } from "@/hooks/redux";
 import { UserAvatar } from "@/components/ui/avatar";
 import CustomLink from "@/components/customLink";
 

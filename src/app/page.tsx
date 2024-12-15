@@ -1,7 +1,7 @@
 "use client";
 
 import { BottomNavbar } from "@/components/bottom-navbar";
-import ThemePreviewer from "@/components/demo/theme-previewer";
+import { CardsDemo } from "@/components/CardsDemo";
 import Header from "@/components/header";
 import Image from "next/image";
 
@@ -16,22 +16,22 @@ export default function Dashboard() {
             Beautiful themes for Shadcn
           </h1>
           <div className="flex gap-6">
-          <Image
-            src="/working-with/daisy-ui.png"
-            alt="Daisy UI"
-            width={200}
-            height={100}
-          />
-          <Image
-            src="/working-with/shadcn.png"
-            alt="Shadcn"
-            width={230}
-            height={100}
-          />
+            <Image
+              src="/working-with/daisy-ui.png"
+              alt="Daisy UI"
+              width={200}
+              height={100}
+            />
+            <Image
+              src="/working-with/shadcn.png"
+              alt="Shadcn"
+              width={230}
+              height={100}
+            />
           </div>
         </div>
-        <div className="w-full h-full">
-          <ThemePreviewer />
+        <div className="relative container w-full h-full bg-background-demo rounded-lg border border-foreground/30 p-6">
+          <CardsDemo />
         </div>
       </div>
       <BottomNavbar />

@@ -1,15 +1,18 @@
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import {
+  addPalettes,
   selectPalette,
   setShowThemePalette,
 } from "@/lib/features/theme/paletteSlice";
-import { useAppSelector, useAppDispatch } from "@/lib/hooks/redux";
+import { useAppSelector, useAppDispatch } from "@/hooks/redux";
 import { cn, getThemeColor } from "@/lib/utils";
 import { ParsedPalette, ThemeType } from "@/models/palette";
 import { Moon, Palette, Sun, X } from "lucide-react";
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useState, useMemo, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { AnimatePresence, motion } from "framer-motion";
+import axios from "axios";
+import { Skeleton } from "@/components/ui-demo/skeleton";
 
 const ColorSwatch = ({ color }: { color: string }) => (
   <div
@@ -81,9 +84,35 @@ const PaletteCard = ({
 export function ThemesDialog() {
   const [isOpen, setIsOpen] = useState(false);
   const [isHover, setIsHover] = useState(false);
+  const [loadingThemes, setLoadingThemes] = useState(false);
+  const loadingRef = useRef(false);
 
-  const mouseOutTimeout = React.useRef<NodeJS.Timeout | null>(null);
-  const paletteButtonRef = React.useRef<HTMLButtonElement | null>(null);
+  const mouseOutTimeout = useRef<NodeJS.Timeout | null>(null);
+  const paletteButtonRef = useRef<HTMLButtonElement | null>(null);
+
+  useEffect(() => {
+    if (loadingRef.current) return;
+    loadingRef.current = true;
+    setLoadingThemes(true);
+    axios
+      .get<ParsedPalette[]>("/api/themes")
+      .then(({ data: palettes }) => {
+        const parsedPalettes: ParsedPalette[] = palettes.map(theme => ({
+          id: theme.id,
+          name: theme.name,
+          colors: {
+            ...theme.colors,
+          },
+          owner: theme.owner,
+        }));
+
+        dispatch(addPalettes(parsedPalettes));
+      })
+      .finally(() => {
+        setLoadingThemes(false);
+        loadingRef.current = false;
+      });
+  }, []);
 
   const {
     selectedPaletteName,
@@ -168,37 +197,58 @@ export function ThemesDialog() {
             >
               <X className="h-4 w-4" />
             </Button>
-            <div
-              className={cn("p-4 pb-0 opacity-5 transition-opacity", {
-                "opacity-100": isHover || !isHover,
-              })}
-            >
-              {Object.entries(groupedPalettes).map(([owner, palettes]) => (
-                <div key={owner} className="mb-8">
-                  <h2 className="text-2xl font-semibold mb-1 text-foreground">
-                    {owner}
-                  </h2>
-                  <div
-                    className="grid grid-cols-4 gap-4"
-                    onClick={e => {
-                      e.stopPropagation();
-                    }}
-                  >
-                    {palettes.map(palette => (
-                      <PaletteCard
-                        key={palette.name}
-                        selectedThemeType={selectedThemeType}
-                        palette={palette}
-                        isSelected={palette.name === selectedPaletteName}
-                        onPaletteSelected={(e: any) => {
-                          dispatch(selectPalette({ name: palette.name }));
-                        }}
-                      />
+            {loadingThemes ? (
+              <div className="flex flex-col gap-8 p-4 pt-6">
+                <div className="flex flex-col gap-1">
+                  <Skeleton className="h-6 w-40 rounded-full" />
+                  <div className="grid grid-cols-4 gap-4">
+                    {[...new Array(12)].map((_, i) => (
+                      <Skeleton key={i} className="h-16 w-32 rounded-lg" />
                     ))}
                   </div>
                 </div>
-              ))}
-            </div>
+                <div className="flex flex-col gap-1">
+                  <Skeleton className="h-6 w-40 rounded-full" />
+                  <div className="grid grid-cols-4 gap-4">
+                    {[...new Array(12)].map((_, i) => (
+                      <Skeleton key={i} className="h-20 w-32 rounded-lg" />
+                    ))}
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div
+                className={cn("p-4 pb-0 opacity-5 transition-opacity", {
+                  "opacity-100": isHover || !isHover,
+                })}
+              >
+                {Object.entries(groupedPalettes).map(([owner, palettes]) => (
+                  <div key={owner} className="mb-8">
+                    <h2 className="text-2xl font-semibold mb-1 text-foreground">
+                      {owner}
+                    </h2>
+                    <div
+                      className="grid grid-cols-4 gap-4"
+                      onClick={e => {
+                        e.stopPropagation();
+                      }}
+                    >
+                      {palettes.map(palette => (
+                        <PaletteCard
+                          key={palette.name}
+                          selectedThemeType={selectedThemeType}
+                          palette={palette}
+                          isSelected={palette.name === selectedPaletteName}
+                          onPaletteSelected={(e: any) => {
+                            dispatch(selectPalette({ name: palette.name }));
+                          }}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </motion.div>
         )}
       </AnimatePresence>

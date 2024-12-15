@@ -2,7 +2,7 @@
 import { signIn, signOut as signOutAuth } from "next-auth/react";
 import { useCallback, useState } from "react";
 import { clearUser, setError } from "@/lib/features/auth/authSlice";
-import { useAppDispatch } from "@/lib/hooks/redux";
+import { useAppDispatch } from "@/hooks/redux";
 import { EventTracker } from "@/eventTracker";
 import { Logger } from "@/logger";
 import axios from "axios";

@@ -15,7 +15,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { useAppSelector } from "@/lib/hooks/redux";
+import { useAppSelector } from "@/hooks/redux";
 import { HSL, ParsedPalette, ThemePalette, ThemeType } from "@/models/palette";
 import { Close, DialogClose } from "@radix-ui/react-dialog";
 import { Copy } from "lucide-react";
@@ -68,7 +68,7 @@ export function generateCSS(parsedPalette: ParsedPalette): string {
         :root {${lightThemeCSS}  }
   
         .dark {${darkThemeCSS}  }
-      }`;
+}`;
 }
 
 export default function CopyCode() {

@@ -83,14 +83,14 @@ export default function Layout({ children }: RootLayoutProps) {
           fallback={<Loading className="absolute top-1/2 left-1/2 h-10 w-10" />}
         >
           <StoreProvider>
-            <SessionWrapper>
-              <ThemeProvider>
-                <ThemeUpdate />
-                <TopLoaderProvider />
-                <ShortcutProvider>{children}</ShortcutProvider>
-                {/* <ClientTrackersProvider /> */}
-              </ThemeProvider>
-            </SessionWrapper>
+            <ThemeProvider>
+              <ThemeUpdate />
+              <TopLoaderProvider />
+              <ShortcutProvider>
+                {children}
+                </ShortcutProvider>
+              {/* <ClientTrackersProvider /> */}
+            </ThemeProvider>
           </StoreProvider>
         </Suspense>
       </body>

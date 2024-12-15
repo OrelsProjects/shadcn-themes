@@ -2,7 +2,7 @@ import axios from "axios";
 import { Logger } from "@/logger";
 import { Product } from "@/models/payment";
 import { loadStripe } from "@stripe/stripe-js";
-import { useAppDispatch } from "@/lib/hooks/redux";
+import { useAppDispatch } from "@/hooks/redux";
 import { setProducts } from "@/lib/features/products/productsSlice";
 import { useRef } from "react";
 

@@ -17,7 +17,7 @@ import {
 } from "@/components/ui-demo/card";
 import { cn, getThemeColor } from "@/lib/utils";
 import { selectPalette } from "@/lib/features/theme/paletteSlice";
-import { useAppSelector, useAppDispatch } from "@/lib/hooks/redux";
+import { useAppSelector, useAppDispatch } from "@/hooks/redux";
 import { ParsedPalette } from "@/models/palette";
 import { Button } from "@/components/ui-demo/button";
 

@@ -4,7 +4,7 @@ import {
   changeThemeType,
   setShowThemePalette,
 } from "@/lib/features/theme/paletteSlice";
-import { useAppDispatch, useAppSelector } from "@/lib/hooks/redux";
+import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 import { useCallback, ReactNode } from "react";
 import { useHotkeys } from "react-hotkeys-hook";
 
