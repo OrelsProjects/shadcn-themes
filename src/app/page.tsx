@@ -6,6 +6,8 @@ import Header from "@/components/header";
 import Image from "next/image";
 
 export default function Dashboard() {
+  console.log("Rendered at dashbaord: ", new Date());
+
   return (
     <main className="min-h-screen bg-background text-foreground relative flex flex-col space-y-8">
       <Header />

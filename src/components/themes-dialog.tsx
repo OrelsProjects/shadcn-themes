@@ -32,6 +32,7 @@ const PaletteCard = ({
   onPaletteSelected: (e: any) => void;
   selectedThemeType: ThemeType;
 }) => {
+
   const colors = useMemo(() => {
     const isSelectedThemeTypeDark = selectedThemeType === "dark";
     const haveDarkTheme = Object.keys(palette.colors.dark).length > 0;

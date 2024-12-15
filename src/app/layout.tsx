@@ -82,7 +82,7 @@ export default function Layout({ children }: RootLayoutProps) {
           <StoreProvider>
             <ThemeProvider>
               <ThemeUpdate />
-              <TopLoaderProvider />
+            <TopLoaderProvider />
               <ShortcutProvider>{children}</ShortcutProvider>
               {/* <ClientTrackersProvider /> */}
             </ThemeProvider>

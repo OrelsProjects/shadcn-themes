@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { useAppSelector } from "@/hooks/redux";
 import { getThemeColor } from "@/lib/utils";
 import { ThemePalette } from "@/models/palette";
+import { basePalette } from "@/lib/consts";
 
 const ThemeUpdate = () => {
   const { selectedPalette, allPalettes, selectedThemeType } = useAppSelector(
@@ -11,9 +12,11 @@ const ThemeUpdate = () => {
   );
 
   useEffect(() => {
+    const now = new Date();
+    console.log("ThemeUpdate", now);
     const root = document.documentElement;
-    const colors: ThemePalette | undefined =
-      selectedPalette?.colors[selectedThemeType];
+    const colors: ThemePalette =
+      selectedPalette?.colors[selectedThemeType] || basePalette.colors.dark;
 
     if (!colors) return;
 

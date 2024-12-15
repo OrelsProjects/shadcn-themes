@@ -29,6 +29,31 @@
     --chart-3: 158 100% 41%;
     --chart-4: 158 100% 51%;
     --chart-5: 324 84% 75%;
+
+    --background-demo: 208 100% 97%;
+    --foreground-demo: 208 100% 27%;
+    --card-demo: 208 100% 92%;
+    --card-demo-foreground: 208 100% 27%;
+    --popover-demo: 208 100% 97%;
+    --popover-demo-foreground: 208 100% 27%;
+    --primary-demo: 324 84% 65%;
+    --primary-demo-foreground: 324 84% 5%;
+    --secondary-demo: 199 94% 67%;
+    --secondary-demo-foreground: 199 94% 7%;
+    --muted-demo: 208 100% 77%;
+    --muted-demo-foreground: 208 100% 47%;
+    --accent-demo: 158 100% 41%;
+    --accent-demo-foreground: 158 100% 0%;
+    --destructive-demo: 0 80% 50%;
+    --destructive-demo-foreground: 0 80% 90%;
+    --border-demo: 208 100% 57%;
+    --input-demo: 208 100% 57%;
+    --ring-demo: 324 84% 45%;
+    --chart-1-demo: 324 84% 65%;
+    --chart-2-demo: 199 94% 67%;
+    --chart-3-demo: 158 100% 41%;
+    --chart-4-demo: 158 100% 51%;
+    --chart-5-demo: 324 84% 75%;
   }
 
   .dark {
@@ -57,7 +82,32 @@
     --chart-3: 158 100% 21%;
     --chart-4: 158 100% 31%;
     --chart-5: 324 84% 55%;
+    --background-demo: 244 21% 13%;
+    --foreground-demo: 244 21% 83%;
+    --card-demo: 244 21% 18%;
+    --card-demo-foreground: 244 21% 83%;
+    --popover-demo: 244 21% 13%;
+    --popover-demo-foreground: 244 21% 83%;
+    --primary-demo: 140 84% 45%;
+    --primary-demo-foreground: 324 84% 100%;
+    --secondary-demo: 199 94% 47%;
+    --secondary-demo-foreground: 199 94% 100%;
+    --muted-demo: 244 21% 53%;
+    --muted-demo-foreground: 244 24% 48%;
+    --accent-demo: 158 100% 21%;
+    --accent-demo-foreground: 158 100% 100%;
+    --destructive-demo: 0 80% 30%;
+    --destructive-demo-foreground: 0 80% 90%;
+    --border-demo: 244 21% 53%;
+    --input-demo: 244 21% 53%;
+    --ring-demo: 324 84% 100%;
+    --chart-1-demo: 324 84% 45%;
+    --chart-2-demo: 199 94% 47%;
+    --chart-3-demo: 158 100% 21%;
+    --chart-4-demo: 158 100% 31%;
+    --chart-5-demo: 324 84% 55%;
   }
+
 }
 
 @layer base {
