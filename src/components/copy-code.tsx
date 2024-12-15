@@ -61,7 +61,12 @@ export function generateCSS(parsedPalette: ParsedPalette): string {
       `;
   };
 
-  const lightThemeCSS = themeToCSS(colors.light, "light");
+  const hasDarkTheme = Object.keys(colors.dark).length > 0;
+  const hasLightTheme = Object.keys(colors.light).length > 0;
+
+  const lightThemeCSS = hasLightTheme
+    ? themeToCSS(colors.light, "light")
+    : themeToCSS(colors.dark, "light");
   const darkThemeCSS = themeToCSS(colors.dark, "dark");
 
   return `@layer base {

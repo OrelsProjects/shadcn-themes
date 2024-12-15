@@ -111,12 +111,12 @@ const PaletteCard = ({
       onMouseEnter={() => setIsHover(true)}
       onMouseLeave={() => setIsHover(false)}
       className={cn(
-        "p-2 rounded-lg cursor-pointer hover:bg-muted/40 flex flex-col justify-between border border-foreground/5",
+        "w-full p-2 rounded-lg cursor-pointer hover:bg-muted/40 flex flex-col justify-between border border-foreground/5",
         isSelected && "bg-muted/20",
       )}
     >
-      <div className="flex justify-between items-start mb-2 max-w-[80%] truncate">
-        <h3 className="text-sm font-medium text-foreground">
+      <div className="flex justify-between items-start mb-2 ">
+        <h3 className="max-w-[80%] text-sm font-medium text-foreground truncate">
           {palette.name
             .split("-")
             .map(x => x[0].toUpperCase() + x.slice(1))
@@ -158,11 +158,16 @@ export function ThemesDialog() {
     resetPaging,
     loadingThemes,
   } = usePalette();
-  const { selectedPaletteName, selectedThemeType, showThemePalette } =
-    useAppSelector(state => state.palette);
+  const {
+    selectedPaletteName,
+    selectedThemeType,
+    showThemePalette,
+    hideThemePalette,
+  } = useAppSelector(state => state.palette);
 
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);
   const themesButtonRef = useRef<HTMLButtonElement | null>(null);
+  const closeTimeoutRef = useRef<HTMLButtonElement | null>(null);
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
@@ -170,6 +175,14 @@ export function ThemesDialog() {
       themesButtonRef.current?.click();
     }
   }, [showThemePalette]);
+
+  useEffect(() => {
+    if (hideThemePalette) {
+      if (isOpen) {
+        closeTimeoutRef.current?.click();
+      }
+    }
+  }, [hideThemePalette]);
 
   const handleScroll = useCallback(() => {
     if (!scrollContainerRef.current || !hasMore) return;
@@ -231,7 +244,7 @@ export function ThemesDialog() {
             ref={scrollContainerRef}
             key="themes-dialog"
             className={cn(
-              "absolute bottom-12 w-[42rem] h-[26rem] bg-card shadow-lg transition-all rounded-lg border border-border/5 p-4 overflow-y-auto",
+              "absolute bottom-16 w-[42rem] h-[26rem] bg-card shadow-lg transition-all rounded-lg border border-border/5 p-4 overflow-y-auto",
             )}
           >
             <Button
@@ -239,6 +252,7 @@ export function ThemesDialog() {
               onClick={() => {
                 handleClose();
               }}
+              ref={closeTimeoutRef}
               className="absolute top-2 right-2 bg-transparent"
             >
               <X className="h-4 w-4" />

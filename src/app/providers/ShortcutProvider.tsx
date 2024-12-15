@@ -2,6 +2,7 @@
 
 import {
   changeThemeType,
+  setHideThemePalette,
   setShowThemePalette,
 } from "@/lib/features/theme/paletteSlice";
 import { useAppDispatch, useAppSelector } from "@/hooks/redux";
@@ -30,10 +31,9 @@ export function ShortcutProvider({ children }: ShortcutProviderProps) {
   };
 
   useHotkeys(
-    ["l", "t"],
+    ["l", "t", "Escape"],
     (event, handler) => {
       console.log(event.key);
-      console.log(event.type);
       switch (event.key) {
         case "l":
           if (event.type === "keydown") {
@@ -47,6 +47,14 @@ export function ShortcutProvider({ children }: ShortcutProviderProps) {
             dispatch(setShowThemePalette(true));
             setTimeout(() => {
               dispatch(setShowThemePalette(false));
+            }, 200);
+            break;
+          }
+        case "Escape":
+          if (event.type === "keyup") {
+            dispatch(setHideThemePalette(true));
+            setTimeout(() => {
+              dispatch(setHideThemePalette(false));
             }, 200);
           }
           break;

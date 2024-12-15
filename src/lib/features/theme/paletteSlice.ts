@@ -11,6 +11,7 @@ export interface ThemeState {
   selectedThemeType: ThemeType;
   allPalettes: ParsedPalette[];
   showThemePalette?: boolean;
+  hideThemePalette?: boolean;
 }
 
 export const initialState: ThemeState = {
@@ -19,6 +20,7 @@ export const initialState: ThemeState = {
   selectedPaletteName: "base",
   selectedPalette: basePalette,
   showThemePalette: false,
+  hideThemePalette: false,
 };
 
 const paletteSlice = createSlice({
@@ -58,6 +60,9 @@ const paletteSlice = createSlice({
     setShowThemePalette(state, action: PayloadAction<boolean>) {
       state.showThemePalette = action.payload;
     },
+    setHideThemePalette(state, action: PayloadAction<boolean>) {
+      state.hideThemePalette = action.payload;
+    },
   },
 });
 
@@ -66,6 +71,7 @@ export const {
   addPalettes,
   changeThemeType,
   setShowThemePalette,
+  setHideThemePalette,
 } = paletteSlice.actions;
 
 export default paletteSlice.reducer;
