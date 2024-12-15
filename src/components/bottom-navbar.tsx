@@ -18,7 +18,7 @@ export function BottomNavbar() {
         stiffness: 100,
         duration: 0.3,
         ease: "easeOut",
-        // delay: 0.5,
+        delay: 0.5,
       }}
       className="fixed bottom-8 left-0 w-full flex justify-center items-center"
     >
