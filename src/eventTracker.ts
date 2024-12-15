@@ -2,7 +2,6 @@
 
 import posthog from "posthog-js";
 import { Logger } from "@/logger";
-import AppUser from "@/models/appUser";
 
 enum TimeoutLength {
   SHORT = 100,
@@ -22,19 +21,6 @@ export const initEventTracker = () => {
     });
   } catch (error: any) {
     Logger.error("Error initializing event tracker", {
-      error,
-    });
-  }
-};
-
-export const setUserEventTracker = (user?: AppUser | null) => {
-  try {
-    posthog.identify(user?.userId);
-  } catch (error: any) {
-    Logger.error("Error setting user for event tracker", {
-      data: {
-        user,
-      },
       error,
     });
   }

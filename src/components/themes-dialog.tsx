@@ -1,6 +1,4 @@
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import {
-  addPalettes,
   selectPalette,
   setShowThemePalette,
 } from "@/lib/features/theme/paletteSlice";
@@ -8,18 +6,72 @@ import { useAppSelector, useAppDispatch } from "@/hooks/redux";
 import { cn, getThemeColor } from "@/lib/utils";
 import { ParsedPalette, ThemeType } from "@/models/palette";
 import { Moon, Palette, Sun, X } from "lucide-react";
-import React, { useState, useMemo, useEffect, useRef } from "react";
+import React, {
+  useState,
+  useMemo,
+  useEffect,
+  useRef,
+  useCallback,
+} from "react";
 import { Button } from "@/components/ui/button";
 import { AnimatePresence, motion } from "framer-motion";
-import axios from "axios";
-import { Skeleton } from "@/components/ui-demo/skeleton";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import CopyComponent from "@/components/ui/copy";
+import { usePalette } from "@/hooks/usePalette";
+import { Skeleton } from "@/components/ui/skeleton";
 
-const ColorSwatch = ({ color }: { color: string }) => (
-  <div
-    className="w-6 h-6 rounded-full border border-gray-300"
-    style={{ backgroundColor: color }}
-  />
-);
+interface ColorSwatchProps {
+  color: string;
+  isHover?: boolean;
+}
+
+const ColorSwatch = ({ color, isHover }: ColorSwatchProps) => {
+  return isHover ? (
+    <ColorSwatchTooltip color={color} />
+  ) : (
+    <div
+      className="w-6 h-6 rounded-full border border-border/40"
+      style={{ backgroundColor: color }}
+    />
+  );
+};
+
+export const ColorSwatchTooltip = ({ color }: ColorSwatchProps) => {
+  const [isTooltipOpen, setIsTooltipOpen] = useState(false);
+
+  return (
+    <TooltipProvider>
+      <Tooltip onOpenChange={setIsTooltipOpen}>
+        <TooltipTrigger>
+          <div
+            className="w-6 h-6 rounded-full border border-border/40"
+            style={{ backgroundColor: color }}
+          />
+        </TooltipTrigger>
+        {isTooltipOpen && (
+          <TooltipContent
+            side="bottom"
+            className="flex items-center gap-2 relative bg-muted/70"
+          >
+            <div
+              className="absolute top-0 left-0 w-1 h-full rounded-lg"
+              style={{
+                backgroundColor: color,
+              }}
+            />
+            <span className="text-sm font-mono text-foreground">{color}</span>
+            <CopyComponent text={color} className="h-4 w-4" />
+          </TooltipContent>
+        )}
+      </Tooltip>
+    </TooltipProvider>
+  );
+};
 
 const PaletteCard = ({
   palette,
@@ -32,6 +84,7 @@ const PaletteCard = ({
   onPaletteSelected: (e: any) => void;
   selectedThemeType: ThemeType;
 }) => {
+  const [isHover, setIsHover] = useState(false);
 
   const colors = useMemo(() => {
     const isSelectedThemeTypeDark = selectedThemeType === "dark";
@@ -55,12 +108,14 @@ const PaletteCard = ({
   return (
     <div
       onClick={onPaletteSelected}
+      onMouseEnter={() => setIsHover(true)}
+      onMouseLeave={() => setIsHover(false)}
       className={cn(
         "p-2 rounded-lg cursor-pointer hover:bg-muted/40 flex flex-col justify-between border border-foreground/5",
         isSelected && "bg-muted/20",
       )}
     >
-      <div className="flex justify-between items-start mb-2">
+      <div className="flex justify-between items-start mb-2 max-w-[80%] truncate">
         <h3 className="text-sm font-medium text-foreground">
           {palette.name
             .split("-")
@@ -68,105 +123,97 @@ const PaletteCard = ({
             .join(" ")}
         </h3>
         <div className="flex space-x-1">
-          {hasLightTheme && <Sun className="w-3 h-3 text-foreground/50" />}
-          {hasDarkTheme && <Moon className="w-3 h-3 text-foreground/50" />}
+          {hasLightTheme && <Sun className="w-3 h-3 text-foreground/50 mt-1" />}
+          {hasDarkTheme && <Moon className="w-3 h-3 text-foreground/50 mt-1" />}
         </div>
       </div>
       <div className="flex space-x-2">
-        <ColorSwatch color={getThemeColor("primary", colors, true)} />
-        <ColorSwatch color={getThemeColor("secondary", colors, true)} />
-        <ColorSwatch color={getThemeColor("background", colors, true)} />
-        <ColorSwatch color={getThemeColor("card", colors, true)} />
+        <ColorSwatch
+          isHover={isHover}
+          color={getThemeColor("primary", colors, true)}
+        />
+        <ColorSwatch
+          isHover={isHover}
+          color={getThemeColor("secondary", colors, true)}
+        />
+        <ColorSwatch
+          isHover={isHover}
+          color={getThemeColor("background", colors, true)}
+        />
+        <ColorSwatch
+          isHover={isHover}
+          color={getThemeColor("card", colors, true)}
+        />
       </div>
     </div>
   );
 };
 
 export function ThemesDialog() {
-  const [isOpen, setIsOpen] = useState(false);
-  const [isHover, setIsHover] = useState(false);
-  const [loadingThemes, setLoadingThemes] = useState(false);
-  const loadingRef = useRef(false);
-
-  const mouseOutTimeout = useRef<NodeJS.Timeout | null>(null);
-  const paletteButtonRef = useRef<HTMLButtonElement | null>(null);
-
-  useEffect(() => {
-    if (loadingRef.current) return;
-    loadingRef.current = true;
-    setLoadingThemes(true);
-    axios
-      .get<ParsedPalette[]>("/api/themes")
-      .then(({ data: palettes }) => {
-        const parsedPalettes: ParsedPalette[] = palettes.map(theme => ({
-          id: theme.id,
-          name: theme.name,
-          colors: {
-            ...theme.colors,
-          },
-          owner: theme.owner,
-        }));
-
-        dispatch(addPalettes(parsedPalettes));
-      })
-      .finally(() => {
-        setLoadingThemes(false);
-        loadingRef.current = false;
-      });
-  }, []);
-
-  const {
-    selectedPaletteName,
-    allPalettes,
-    selectedThemeType,
-    showThemePalette,
-  } = useAppSelector(state => state.palette);
   const dispatch = useAppDispatch();
+  const {
+    currentPalettes,
+    loadMorePalettes,
+    hasMore,
+    resetPaging,
+    loadingThemes,
+  } = usePalette();
+  const { selectedPaletteName, selectedThemeType, showThemePalette } =
+    useAppSelector(state => state.palette);
+
+  const scrollContainerRef = useRef<HTMLDivElement | null>(null);
+  const themesButtonRef = useRef<HTMLButtonElement | null>(null);
+  const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
     if (showThemePalette) {
-      paletteButtonRef.current?.click();
-      dispatch(setShowThemePalette(false));
+      themesButtonRef.current?.click();
     }
   }, [showThemePalette]);
 
+  const handleScroll = useCallback(() => {
+    if (!scrollContainerRef.current || !hasMore) return;
+
+    const { scrollTop, scrollHeight, clientHeight } =
+      scrollContainerRef.current;
+    const scrollPosition = scrollTop + clientHeight;
+    if (scrollPosition / scrollHeight > 0.7) {
+      loadMorePalettes();
+    }
+  }, [hasMore, loadMorePalettes]);
+
+  useEffect(() => {
+    const container = scrollContainerRef.current;
+    if (!container) return;
+
+    container.addEventListener("scroll", handleScroll);
+    return () => {
+      container.removeEventListener("scroll", handleScroll);
+    };
+  }, [handleScroll]);
+
   const groupedPalettes = useMemo(() => {
     const groups: Record<string, ParsedPalette[]> = {};
-    allPalettes.forEach(palette => {
+    currentPalettes.forEach(palette => {
       if (!groups[palette.owner]) {
         groups[palette.owner] = [];
       }
       groups[palette.owner].push(palette);
     });
+    console.log("groups", groups);
     return groups;
-  }, [allPalettes, selectedThemeType]);
+  }, [currentPalettes, selectedThemeType]);
 
-  // 200ms delay to prevent flickering
-  const handleMouseLeave = () => {
-    mouseOutTimeout.current = setTimeout(() => {
-      setIsHover(false);
-    }, 200);
-  };
+  const toggleDialog = () => setIsOpen(prev => !prev);
 
-  const handleMouseEnter = () => {
-    if (mouseOutTimeout.current) {
-      clearTimeout(mouseOutTimeout.current);
-    }
-    setIsHover(true);
+  const handleClose = () => {
+    setIsOpen(false);
+    resetPaging();
   };
 
   return (
-    <div
-      className="relative w-fit h-fit flex items-end justify-center"
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-      // onBlur={() => setIsOpen(false)}
-    >
-      <Button
-        ref={paletteButtonRef}
-        variant="outline"
-        onClick={() => setIsOpen(!isOpen)}
-      >
+    <div className="relative w-fit h-fit flex items-end justify-center">
+      <Button variant="outline" onClick={toggleDialog} ref={themesButtonRef}>
         <Palette className="mr-2 h-4 w-4" />
         Themes <kbd>(T)</kbd>
       </Button>
@@ -181,18 +228,16 @@ export function ThemesDialog() {
               transition: { duration: 0.1, ease: "easeOut" },
             }}
             transition={{ duration: 0.2, ease: "easeInOut" }}
+            ref={scrollContainerRef}
             key="themes-dialog"
             className={cn(
-              "absolute bottom-12 w-[42rem] h-[26rem] bg-card/5 transition-all rounded-lg border border-border/5 p-4 overflow-y-auto",
-              {
-                "bg-card border-border/40 shadow-lg": isHover || !isHover,
-              },
+              "absolute bottom-12 w-[42rem] h-[26rem] bg-card shadow-lg transition-all rounded-lg border border-border/5 p-4 overflow-y-auto",
             )}
           >
             <Button
               variant="outline"
               onClick={() => {
-                setIsOpen(false);
+                handleClose();
               }}
               className="absolute top-2 right-2 bg-transparent"
             >
@@ -219,8 +264,8 @@ export function ThemesDialog() {
               </div>
             ) : (
               <div
-                className={cn("p-4 pb-0 opacity-5 transition-opacity", {
-                  "opacity-100": isHover || !isHover,
+                className={cn("p-4 pb-0 opacity-100 transition-opacity", {
+                  // "opacity-100": isHover || !isHover,
                 })}
               >
                 {Object.entries(groupedPalettes).map(([owner, palettes]) => (

@@ -45,6 +45,9 @@ export function ShortcutProvider({ children }: ShortcutProviderProps) {
         case "t":
           if (event.type === "keyup") {
             dispatch(setShowThemePalette(true));
+            setTimeout(() => {
+              dispatch(setShowThemePalette(false));
+            }, 200);
           }
           break;
       }

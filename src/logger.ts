@@ -1,5 +1,4 @@
 import { StatusType, datadogLogs } from "@datadog/browser-logs";
-import AppUser from "@/models/appUser";
 
 interface Dict {
   [key: string]: any;
@@ -26,14 +25,6 @@ export const initLogger = () => {
       error,
     });
   }
-};
-
-export const setUserLogger = (user?: AppUser | null) => {
-  datadogLogs.setUser({
-    id: user?.userId,
-    name: user?.displayName || "",
-    email: user?.email || "",
-  });
 };
 
 const log = (
