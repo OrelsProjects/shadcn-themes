@@ -1,6 +1,9 @@
 "use client";
 
-import { changeThemeType } from "@/lib/features/theme/paletteSlice";
+import {
+  changeThemeType,
+  setShowThemePalette,
+} from "@/lib/features/theme/paletteSlice";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks/redux";
 import { useCallback, ReactNode } from "react";
 import { useHotkeys } from "react-hotkeys-hook";
@@ -27,13 +30,23 @@ export function ShortcutProvider({ children }: ShortcutProviderProps) {
   };
 
   useHotkeys(
-    "l",
+    ["l", "t"],
     (event, handler) => {
+      console.log(event.key);
       console.log(event.type);
-      if (event.type === "keydown") {
-        handleLPress();
-      } else if (event.type === "keyup") {
-        handleLRelease();
+      switch (event.key) {
+        case "l":
+          if (event.type === "keydown") {
+            handleLPress();
+          } else if (event.type === "keyup") {
+            handleLRelease();
+          }
+          break;
+        case "t":
+          if (event.type === "keyup") {
+            dispatch(setShowThemePalette(true));
+          }
+          break;
       }
     },
     {

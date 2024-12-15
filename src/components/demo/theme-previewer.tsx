@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Minus, Plus, Send } from "lucide-react";
+import { Minus, Moon, Plus, Send, Sun } from "lucide-react";
 
 // Upper Section: Import components from /ui-demo
 import {
@@ -290,8 +290,31 @@ const MoveGoalCard = () => (
 );
 
 export default function Dashboard() {
+  const { selectedPalette, selectedThemeType } = useAppSelector(
+    state => state.palette,
+  );
+
+  const hasDarkTheme = Object.keys(selectedPalette.colors.dark).length > 0;
+  const hasLightTheme = Object.keys(selectedPalette.colors.light).length > 0;
+
   return (
-    <div className="container w-full h-full bg-background-demo rounded-lg border border-foreground/30 p-2">
+    <div className="relative container w-full h-full bg-background-demo rounded-lg border border-foreground/30 p-2">
+      <div className="absolute space-x-1 -top-5 right-2 flex gap-1">
+        {hasLightTheme && (
+          <Sun
+            className={cn("w-3.5 h-3.5 text-foreground/50", {
+              "text-foreground": selectedThemeType === "light" || !hasDarkTheme,
+            })}
+          />
+        )}
+        {hasDarkTheme && (
+          <Moon
+            className={cn("w-3.5 h-3.5 text-foreground/50", {
+              "text-foreground": selectedThemeType === "dark" || !hasLightTheme,
+            })}
+          />
+        )}
+      </div>
       <div className="w-full grid gap-4 p-4 md:grid-cols-2 lg:grid-cols-3 overflow-y-auto">
         <div className="flex flex-col justify-start items-center w-full gap-6">
           {/* Revenue Card */}
@@ -325,6 +348,9 @@ export default function Dashboard() {
         <div className="flex flex-col justify-start items-center w-full gap-6">
           {/* Goal Setting Card */}
           <MoveGoalCard />
+
+          {/* Chat Card */}
+          <Chat />
 
           {/* Team Members Card */}
           <Card className="h-fit w-full">
@@ -394,9 +420,6 @@ export default function Dashboard() {
               ))}
             </CardContent>
           </Card>
-
-          {/* Chat Card */}
-          <Chat />
         </div>
         <div className="flex flex-col justify-start items-center w-full gap-6">
           {/* Exercise Minutes Card */}
@@ -435,7 +458,7 @@ export default function Dashboard() {
           {/* Cookie Settings Card */}
           <div
             id="colors"
-            className="w-full h-fit flex flex-row gap-2 overflow-x-auto"
+            className="w-full h-fit flex flex-row gap-2 overflow-x-auto pb-2"
           >
             <Button>Primary</Button>
             <Button variant="secondary">Secondary</Button>

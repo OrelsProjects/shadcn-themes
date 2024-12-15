@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Palette, ParsedPalette, ThemeType } from "@/models/palette";
 import { basePalette } from "@/lib/consts";
+import { set } from "lodash";
 
 type PaletteName = string;
 
@@ -9,6 +10,7 @@ export interface ThemeState {
   selectedPaletteName: PaletteName;
   selectedThemeType: ThemeType;
   allPalettes: ParsedPalette[];
+  showThemePalette?: boolean;
 }
 
 export const initialState: ThemeState = {
@@ -16,6 +18,7 @@ export const initialState: ThemeState = {
   selectedThemeType: "dark",
   selectedPaletteName: "base",
   selectedPalette: basePalette,
+  showThemePalette: false,
 };
 
 const paletteSlice = createSlice({
@@ -26,12 +29,14 @@ const paletteSlice = createSlice({
       state,
       action: PayloadAction<{ name: PaletteName; type?: ThemeType }>,
     ) {
-      const newType = action.payload.type || state.selectedThemeType;
+      // const hasLightMode = Object.keys(state.selectedPalette.colors.light).length;
       const newPalette = state.allPalettes.find(
         palette => palette.name === action.payload.name,
       );
 
       if (newPalette) {
+        const hasDarkMode = Object.keys(newPalette.colors.dark).length;
+        const newType = action.payload.type || hasDarkMode ? "dark" : "light";
         state.selectedPaletteName = action.payload.name;
         state.selectedPalette = newPalette;
         state.selectedThemeType = newType;
@@ -50,10 +55,17 @@ const paletteSlice = createSlice({
     addPalettes(state, action: PayloadAction<ParsedPalette[]>) {
       state.allPalettes = [...state.allPalettes, ...action.payload];
     },
+    setShowThemePalette(state, action: PayloadAction<boolean>) {
+      state.showThemePalette = action.payload;
+    },
   },
 });
 
-export const { selectPalette, addPalettes, changeThemeType } =
-  paletteSlice.actions;
+export const {
+  selectPalette,
+  addPalettes,
+  changeThemeType,
+  setShowThemePalette,
+} = paletteSlice.actions;
 
 export default paletteSlice.reducer;
