@@ -1,7 +1,3 @@
-import {
-  selectPalette,
-  setShowThemePalette,
-} from "@/lib/features/theme/paletteSlice";
 import { useAppSelector, useAppDispatch } from "@/hooks/redux";
 import { cn, getThemeColor } from "@/lib/utils";
 import { ParsedPalette, ThemeType } from "@/models/palette";
@@ -144,20 +140,19 @@ const PaletteCard = ({
 };
 
 export function ThemesDialog() {
-  const dispatch = useAppDispatch();
   const {
     currentPalettes,
     loadMorePalettes,
     hasMore,
     resetPaging,
     loadingThemes,
+    selectPalette,
   } = usePalette();
   const {
     selectedPaletteName,
     selectedThemeType,
     showThemePalette,
     hideThemePalette,
-    allPalettes,
   } = useAppSelector(state => state.palette);
 
   console.log("Rendered at ThemesDialog", new Date().toLocaleTimeString());
@@ -296,7 +291,6 @@ export function ThemesDialog() {
                     // "opacity-100": isHover || !isHover,
                   })}
                 >
-                  <p>Count: {allPalettes.length}</p>
                   {Object.entries(groupedPalettes).map(([owner, palettes]) => (
                     <div key={owner} className="mb-8">
                       <h2 className="text-2xl font-semibold mb-1 text-foreground">
@@ -315,7 +309,7 @@ export function ThemesDialog() {
                             palette={palette}
                             isSelected={palette.name === selectedPaletteName}
                             onPaletteSelected={(e: any) => {
-                              dispatch(selectPalette({ name: palette.name }));
+                              selectPalette(palette.name);
                             }}
                           />
                         ))}

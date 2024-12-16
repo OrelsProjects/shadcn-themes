@@ -4,13 +4,21 @@ export type PaletteName = string;
 
 export type Palette = Record<PaletteName, Record<ThemeType, ThemePalette>>;
 
+export type EncryptedPalette = {
+  id: string;
+  name: string;
+  owner: string;
+  iv: string;
+  encryptedKey: string;
+  encryptedColors: string;
+};
+
 export type ParsedPalette = {
   id: string;
   name: string;
   owner: string;
   colors: Record<ThemeType, ThemePalette>;
 };
-
 
 export interface ThemePalette {
   background: HSL;

@@ -1,4 +1,6 @@
-import { HSL, ThemePalette } from "@/models/palette";
+import { decrypt } from "@/lib/encryption";
+import { HSL, ParsedPalette, ThemePalette, ThemeType } from "@/models/palette";
+import { Theme, ThemeOwner } from "@prisma/client";
 
 export interface Palettes {
   light?: ThemePalette;

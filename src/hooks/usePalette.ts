@@ -1,13 +1,14 @@
-import { useState, useMemo, useEffect, useRef } from "react";
-import { useAppDispatch, useAppSelector } from "@/hooks/redux";
-import { addPalettes } from "@/lib/features/theme/paletteSlice";
-import { ParsedPalette, ThemeType } from "@/models/palette";
+import { useState, useMemo, useEffect, useRef, useCallback } from "react";
+import { EncryptedPalette, ParsedPalette } from "@/models/palette";
 import axios from "axios";
-import { generatePalette } from "@/lib/palette/utils";
+import { decrypt } from "@/lib/encryption";
+import { selectPalette as selectPaletteAction } from "@/lib/features/theme/paletteSlice";
+import { useAppDispatch } from "@/hooks/redux";
 
 export function usePalette() {
   const dispatch = useAppDispatch();
-  const { allPalettes } = useAppSelector(state => state.palette);
+  const [allPalettes, setAllPalettes] = useState<ParsedPalette[]>([]);
+  const [currentPalettes, setCurrentPalettes] = useState<ParsedPalette[]>([]);
   const [loadingThemes, setLoadingThemes] = useState(true);
   const [page, setPage] = useState(1);
   const loadingRef = useRef(false);
@@ -15,63 +16,29 @@ export function usePalette() {
   const itemsPerPage = 20;
 
   useEffect(() => {
-    if(loadingRef.current) return;
+    if (loadingRef.current) return;
     loadingRef.current = true;
     if (allPalettes.length === 0) {
       axios
-        .get<ParsedPalette[]>("/api/themes")
-        .then(({ data: palettes }) => {
-          let parsedPalettes: ParsedPalette[] = palettes.map(theme => ({
-            id: theme.id,
-            name: theme.name,
-            colors: {
-              ...theme.colors,
-            },
-            owner: theme.owner,
-          }));
-          // .map(palette => {
-          //   const hasLight = Object.keys(palette.colors.light).length > 0;
-          //   const hasDark = Object.keys(palette.colors.dark).length > 0;
-          //   let themeToGenerate = "";
-          //   if (!hasDark || !hasLight) {
-          //     if (hasDark) {
-          //       themeToGenerate = "light";
-          //     } else if (hasLight) {
-          //       themeToGenerate = "dark";
-          //     }
-          //   }
-          //   // debugger;
-          //   if (themeToGenerate === "light" || themeToGenerate === "dark") {
-          //     const existingTheme =
-          //       themeToGenerate === "light" ? "dark" : "light";
-          //     const newTheme = generatePalette({
-          //       primary: palette.colors[existingTheme].primary,
-          //       secondary: palette.colors[existingTheme].secondary,
-          //       accent: palette.colors[existingTheme].accent,
-          //       background: palette.colors[existingTheme].background,
-          //       error: palette.colors[existingTheme].destructive,
-          //       card: palette.colors[existingTheme].card,
-          //       text: palette.colors[existingTheme].foreground,
-          //       theme: existingTheme as ThemeType,
-          //     });
-          //     return {
-          //       ...palette,
-          //       colors: {
-          //         dark:
-          //           themeToGenerate === "dark"
-          //             ? newTheme.dark
-          //             : palette.colors.dark,
-          //         light:
-          //           themeToGenerate === "light"
-          //             ? newTheme.light
-          //             : palette.colors.light,
-          //       },
-          //     };
-          //   }
-          //   return palette;
-          // });
-
-          dispatch(addPalettes(parsedPalettes));
+        .get<EncryptedPalette[]>("/api/themes")
+        .then(({ data }) => {
+          const parsePalettes = async () => {
+            const parsedPalettes = data.map(palette => ({
+              id: palette.id,
+              name: palette.name,
+              owner: palette.owner,
+              colors: JSON.parse(
+                decrypt(
+                  palette.encryptedKey,
+                  palette.iv,
+                  palette.encryptedColors,
+                ),
+              ),
+            }));
+            setAllPalettes(parsedPalettes);
+            updateCurrentPalettes(1, parsedPalettes);
+          };
+          parsePalettes();
         })
         .finally(() => {
           setLoadingThemes(false);
@@ -80,21 +47,24 @@ export function usePalette() {
     }
   }, []);
 
-  // Paginated themes from the Redux state
-  const currentPalettes = useMemo(() => {
-    return allPalettes.slice(0, page * itemsPerPage);
-  }, [allPalettes, page]);
+  const updateCurrentPalettes = useCallback(
+    async (page: number, palettes: ParsedPalette[]) => {
+      const newPalettes = palettes.slice(0, page * itemsPerPage);
+      setCurrentPalettes(newPalettes);
+    },
+    [allPalettes],
+  );
 
-  const loadMorePalettes = () => {
+  const loadMorePalettes = async () => {
     if (loadingPagingRef.current) return;
     loadingPagingRef.current = true;
     if (currentPalettes.length < allPalettes.length) {
       setPage(prev => prev + 1);
     }
-
+    updateCurrentPalettes(page + 1, allPalettes);
     setTimeout(() => {
       loadingPagingRef.current = false;
-    }, 250);
+    }, 50);
   };
 
   const resetPaging = () => {
@@ -103,8 +73,16 @@ export function usePalette() {
 
   const hasMore = currentPalettes.length < allPalettes.length;
 
+  const selectPalette = useCallback((name: string) => {
+    const newPalette = currentPalettes.find(palette => palette.name === name);
+    if (newPalette) {
+      dispatch(selectPaletteAction({ newPalette }));
+    }
+  }, []);
+
   return {
     currentPalettes,
+    selectPalette,
     loadMorePalettes,
     hasMore,
     loadingThemes,

@@ -7,7 +7,7 @@ import { ThemePalette } from "@/models/palette";
 import { basePalette } from "@/lib/consts";
 
 const ThemeUpdate = () => {
-  const { selectedPalette, allPalettes, selectedThemeType } = useAppSelector(
+  const { selectedPalette, selectedThemeType } = useAppSelector(
     state => state.palette,
   );
 
@@ -34,7 +34,7 @@ const ThemeUpdate = () => {
       }
       root.style.setProperty(`--${demoKey}`, hslString);
     });
-  }, [selectedPalette, allPalettes, selectedThemeType]);
+  }, [selectedPalette, selectedThemeType]);
 
   return null;
 };

@@ -28,18 +28,12 @@ const paletteSlice = createSlice({
   name: "palette",
   initialState,
   reducers: {
-    selectPalette(state, action: PayloadAction<{ name: PaletteName }>) {
-      // const hasLightMode = Object.keys(state.selectedPalette.colors.light).length;
-      const newPalette = state.allPalettes.find(
-        palette => palette.name === action.payload.name,
-      );
+    selectPalette(state, action: PayloadAction<{ newPalette: ParsedPalette }>) {
+      const newType = state.selectedThemeType;
 
-      if (newPalette) {
-        const newType = state.selectedThemeType;
-        state.selectedPaletteName = action.payload.name;
-        state.selectedPalette = newPalette;
-        state.selectedThemeType = newType;
-      }
+      state.selectedPaletteName = action.payload.newPalette.name;
+      state.selectedPalette = action.payload.newPalette;
+      state.selectedThemeType = newType;
     },
     changeThemeType(state, action: PayloadAction<ThemeType>) {
       state.selectedThemeType = action.payload;
