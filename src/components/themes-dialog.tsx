@@ -1,7 +1,8 @@
+import { selectPalette } from "@/lib/features/theme/paletteSlice";
 import { useAppSelector, useAppDispatch } from "@/hooks/redux";
 import { cn, getThemeColor } from "@/lib/utils";
 import { ParsedPalette, ThemeType } from "@/models/palette";
-import { Moon, Palette, Sun, X } from "lucide-react";
+import { Palette, X } from "lucide-react";
 import React, {
   useState,
   useMemo,
@@ -32,7 +33,7 @@ const ColorSwatch = ({ color, isHover }: ColorSwatchProps) => {
     <ColorSwatchTooltip color={color} />
   ) : (
     <div
-      className="w-6 h-6 rounded-full border border-border/40"
+      className="w-6 h-6 rounded-full opacity-50"
       style={{ backgroundColor: color }}
     />
   );
@@ -46,7 +47,7 @@ export const ColorSwatchTooltip = ({ color }: ColorSwatchProps) => {
       <Tooltip onOpenChange={setIsTooltipOpen}>
         <TooltipTrigger>
           <div
-            className="w-6 h-6 rounded-full border border-border/40"
+            className="w-6 h-6 rounded-full hover:scale-105"
             style={{ backgroundColor: color }}
           />
         </TooltipTrigger>
@@ -105,12 +106,12 @@ const PaletteCard = ({
       onMouseEnter={() => setIsHover(true)}
       onMouseLeave={() => setIsHover(false)}
       className={cn(
-        "w-full p-2 rounded-lg cursor-pointer hover:bg-muted/40 flex flex-col justify-between border border-foreground/5",
+        "w-full p-2 rounded-lg hover:cursor-pointer hover:bg-muted/40 flex flex-col justify-between border border-foreground/5",
         isSelected && "bg-muted/20",
       )}
     >
       <div className="flex justify-between items-start mb-2 ">
-        <h3 className="max-w-[80%] text-sm font-medium text-foreground truncate">
+        <h3 className="max-w-[80%] text-sm font-semibold text-foreground truncate">
           {palette.name
             .split("-")
             .map(x => x[0].toUpperCase() + x.slice(1))
@@ -139,14 +140,26 @@ const PaletteCard = ({
   );
 };
 
+const LoadingPalettes = () => (
+  <div className="flex flex-col gap-1">
+    <Skeleton className="h-6 w-40 rounded-full" />
+    <div className="grid grid-cols-4 gap-4">
+      {[...new Array(12)].map((_, i) => (
+        <Skeleton key={i} className="h-20 w-32 rounded-lg" />
+      ))}
+    </div>
+  </div>
+);
+
 export function ThemesDialog() {
+  const dispatch = useAppDispatch();
   const {
     currentPalettes,
     loadMorePalettes,
     hasMore,
     resetPaging,
     loadingThemes,
-    selectPalette,
+    loadingPaging,
   } = usePalette();
   const {
     selectedPaletteName,
@@ -179,10 +192,10 @@ export function ThemesDialog() {
 
   const handleScroll = useCallback(() => {
     if (!scrollContainerRef.current || !hasMore) return;
-
     const { scrollTop, scrollHeight, clientHeight } =
       scrollContainerRef.current;
     const scrollPosition = scrollTop + clientHeight;
+
     if (scrollPosition / scrollHeight > 0.7) {
       loadMorePalettes();
     }
@@ -268,14 +281,7 @@ export function ThemesDialog() {
               </Button>
               {loadingThemes ? (
                 <div className="flex flex-col gap-8 p-4 pt-6">
-                  <div className="flex flex-col gap-2">
-                    <Skeleton className="h-6 w-40 rounded-full" />
-                    <div className="grid grid-cols-4 gap-4">
-                      {[...new Array(12)].map((_, i) => (
-                        <Skeleton key={i} className="h-16 w-32 rounded-lg" />
-                      ))}
-                    </div>
-                  </div>
+                  <LoadingPalettes />
                   <div className="flex flex-col gap-1">
                     <Skeleton className="h-6 w-40 rounded-full" />
                     <div className="grid grid-cols-4 gap-4">
@@ -287,13 +293,16 @@ export function ThemesDialog() {
                 </div>
               ) : (
                 <div
-                  className={cn("p-4 pb-0 opacity-100 transition-opacity", {
-                    // "opacity-100": isHover || !isHover,
-                  })}
+                  className={cn(
+                    "p-4 pb-0 opacity-100 transition-opacity flex flex-col",
+                    {
+                      // "opacity-100": isHover || !isHover,
+                    },
+                  )}
                 >
                   {Object.entries(groupedPalettes).map(([owner, palettes]) => (
                     <div key={owner} className="mb-8">
-                      <h2 className="text-2xl font-semibold mb-1 text-foreground">
+                      <h2 className="text-2xl font-semibold mb-1 text-foreground pointer-events-none">
                         {owner}
                       </h2>
                       <div
@@ -309,13 +318,14 @@ export function ThemesDialog() {
                             palette={palette}
                             isSelected={palette.name === selectedPaletteName}
                             onPaletteSelected={(e: any) => {
-                              selectPalette(palette.name);
+                              dispatch(selectPalette({ newPalette: palette }));
                             }}
                           />
                         ))}
                       </div>
                     </div>
                   ))}
+                  {loadingPaging && <LoadingPalettes />}
                 </div>
               )}
             </motion.div>
