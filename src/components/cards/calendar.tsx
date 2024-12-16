@@ -1,15 +1,15 @@
-"use client"
+"use client";
 
-import { addDays } from "date-fns"
+import { addDays } from "date-fns";
 
-import { Calendar } from "@/components/ui-demo/calendar"
-import { Card, CardContent } from "@/components/ui-demo/card"
+import { Calendar } from "@/components/ui-demo/calendar";
+import { Card, CardContent } from "@/components/ui-demo/card";
 
-const start = new Date(2023, 5, 5)
+const start = new Date(2023, 5, 5);
 
 export function CardsCalendar() {
   return (
-    <Card className="max-w-[260px]">
+    <Card className="max-w-[260px] mx-auto sm:mx-0">
       <CardContent className="p-1">
         <Calendar
           numberOfMonths={1}
@@ -22,5 +22,5 @@ export function CardsCalendar() {
         />
       </CardContent>
     </Card>
-  )
+  );
 }

@@ -17,9 +17,10 @@ import {
 } from "@/components/ui/tooltip";
 import { useAppSelector } from "@/hooks/redux";
 import { HSL, ParsedPalette, ThemePalette, ThemeType } from "@/models/palette";
-import { Close, DialogClose } from "@radix-ui/react-dialog";
 import { Copy } from "lucide-react";
 import { useMemo, useState } from "react";
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import { oneDark } from "react-syntax-highlighter/dist/esm/styles/prism";
 
 export function generateCSS(parsedPalette: ParsedPalette): string {
   const { colors } = parsedPalette;
@@ -32,33 +33,32 @@ export function generateCSS(parsedPalette: ParsedPalette): string {
   };
 
   const themeToCSS = (theme: ThemePalette, themeType: ThemeType): string => {
-    return `
-          --background: ${colorToHSL(theme.background)};
-          --foreground: ${colorToHSL(theme.foreground)};
-          --card: ${colorToHSL(theme.card)};
-          --card-foreground: ${colorToHSL(theme["card-foreground"])};
-          --popover: ${colorToHSL(theme.popover)};
-          --popover-foreground: ${colorToHSL(theme["popover-foreground"])};
-          --primary: ${colorToHSL(theme.primary)};
-          --primary-foreground: ${colorToHSL(theme["primary-foreground"])};
-          --secondary: ${colorToHSL(theme.secondary)};
-          --secondary-foreground: ${colorToHSL(theme["secondary-foreground"])};
-          --muted: ${colorToHSL(theme.muted)};
-          --muted-foreground: ${colorToHSL(theme["muted-foreground"])};
-          --accent: ${colorToHSL(theme.accent)};
-          --accent-foreground: ${colorToHSL(theme["accent-foreground"])};
-          --destructive: ${colorToHSL(theme.destructive)};
-          --destructive-foreground: ${colorToHSL(theme["destructive-foreground"])};
-          --border: ${colorToHSL(theme.border)};
-          --input: ${colorToHSL(theme.input)};
-          --ring: ${colorToHSL(theme.ring)};
-          --radius: ${theme.radius || "0.5rem"};
-          --chart-1: ${colorToHSL(theme["chart-1"])};
-          --chart-2: ${colorToHSL(theme["chart-2"])};
-          --chart-3: ${colorToHSL(theme["chart-3"])};
-          --chart-4: ${colorToHSL(theme["chart-4"])};
-          --chart-5: ${colorToHSL(theme["chart-5"])};
-      `;
+    return `--background: ${colorToHSL(theme.background)};
+    --foreground: ${colorToHSL(theme.foreground)};
+    --card: ${colorToHSL(theme.card)};
+    --card-foreground: ${colorToHSL(theme["card-foreground"])};
+    --popover: ${colorToHSL(theme.popover)};
+    --popover-foreground: ${colorToHSL(theme["popover-foreground"])};
+    --primary: ${colorToHSL(theme.primary)};
+    --primary-foreground: ${colorToHSL(theme["primary-foreground"])};
+    --secondary: ${colorToHSL(theme.secondary)};
+    --secondary-foreground: ${colorToHSL(theme["secondary-foreground"])};
+    --muted: ${colorToHSL(theme.muted)};
+    --muted-foreground: ${colorToHSL(theme["muted-foreground"])};
+    --accent: ${colorToHSL(theme.accent)};
+    --accent-foreground: ${colorToHSL(theme["accent-foreground"])};
+    --destructive: ${colorToHSL(theme.destructive)};
+    --destructive-foreground: ${colorToHSL(theme["destructive-foreground"])};
+    --border: ${colorToHSL(theme.border)};
+    --input: ${colorToHSL(theme.input)};
+    --ring: ${colorToHSL(theme.ring)};
+    --radius: ${theme.radius || "0.5rem"};
+    --chart-1: ${colorToHSL(theme["chart-1"])};
+    --chart-2: ${colorToHSL(theme["chart-2"])};
+    --chart-3: ${colorToHSL(theme["chart-3"])};
+    --chart-4: ${colorToHSL(theme["chart-4"])};
+    --chart-5: ${colorToHSL(theme["chart-5"])};
+    `;
   };
 
   const hasDarkTheme = Object.keys(colors.dark).length > 0;
@@ -67,13 +67,21 @@ export function generateCSS(parsedPalette: ParsedPalette): string {
   const lightThemeCSS = hasLightTheme
     ? themeToCSS(colors.light, "light")
     : themeToCSS(colors.dark, "light");
-  const darkThemeCSS = themeToCSS(colors.dark, "dark");
+  const darkThemeCSS = hasDarkTheme
+    ? themeToCSS(colors.dark, "dark")
+    : themeToCSS(colors.light, "dark");
 
-  return `@layer base {
-        :root {${lightThemeCSS}  }
-  
-        .dark {${darkThemeCSS}  }
-}`;
+  return `
+@layer base {
+  :root {
+    ${lightThemeCSS}
+  }
+
+  .dark {
+    ${darkThemeCSS}
+  }
+}
+  `.trim();
 }
 
 export default function CopyCode() {
@@ -82,32 +90,45 @@ export default function CopyCode() {
 
   const codeString = useMemo(() => {
     if (!selectedPalette) return "";
-
     return generateCSS(selectedPalette);
   }, [selectedPalette]);
 
   const handleCopy = () => {
     navigator.clipboard.writeText(codeString);
     setShowTooltip(true);
-    setTimeout(() => setShowTooltip(false), 2000); // Hide tooltip after 2 seconds
+    setTimeout(() => setShowTooltip(false), 2000);
   };
 
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline">Copy code</Button>
+        <Button variant="outline">
+          <Copy className="h-4 w-4 sm:mr-2" />
+          <span className="hidden sm:inline">Copy code</span>
+        </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[600px] max-h-[80vh] overflow-clip">
+      <DialogContent className="sm:max-w-[600px] overflow-clip">
         <DialogHeader className="flex flex-row items-center justify-between">
           <DialogTitle className="text-foreground">Theme</DialogTitle>
         </DialogHeader>
-        <DialogDescription>
+        <DialogDescription className="text-foreground/50 mt-2">
           Copy and paste the following code into your CSS file.
         </DialogDescription>
-        <div className="mt-4 rounded-md bg-card relative">
-          <pre className="max-h-[60vh] w-full text-sm text-foreground overflow-y-auto p-4">
-            <code>{codeString}</code>
-          </pre>
+        <div className="rounded-md bg-card relative overflow-auto">
+          <SyntaxHighlighter
+            language="css"
+            style={oneDark}
+            customStyle={{
+              maxHeight: "60vh",
+              overflow: "auto",
+              padding: "1rem",
+              borderRadius: "0.375rem",
+            }}
+            showLineNumbers={true}
+            wrapLines={true}
+          >
+            {codeString}
+          </SyntaxHighlighter>
           <TooltipProvider>
             <Tooltip open={showTooltip}>
               <TooltipTrigger asChild className="w-full h-full relative">

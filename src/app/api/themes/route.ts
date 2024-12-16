@@ -40,6 +40,7 @@ export async function GET(req: NextRequest) {
       if (isDark && isLight) {
         return theme;
       }
+
       return {
         ...theme,
         colors: {

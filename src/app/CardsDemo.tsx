@@ -1,3 +1,4 @@
+import { BottomNavbar } from "@/components/bottom-navbar";
 import { CardsActivityGoal } from "@/components/cards/activity-goal";
 import { CardsCalendar } from "@/components/cards/calendar";
 import { CardsChat } from "@/components/cards/chat";
@@ -13,6 +14,7 @@ import { CardsTeamMembers } from "@/components/cards/team-members";
 import { Button } from "@/components/ui-demo/button";
 import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 import { changeBaseThemeType } from "@/lib/features/theme/paletteSlice";
+import { cn } from "@/lib/utils";
 import { useAnimation, motion } from "framer-motion";
 import { LampDesk, Moon, Sun } from "lucide-react";
 import { useMemo, useState } from "react";
@@ -20,7 +22,9 @@ import { useMemo, useState } from "react";
 const TIME_TO_CHANGE_THEME = 200;
 
 export function CardsDemo() {
-  const { baseThemeType } = useAppSelector(state => state.palette);
+  const { baseThemeType, selectedThemeType } = useAppSelector(
+    state => state.palette,
+  );
 
   const lightDarkText = useMemo(() => {
     if (baseThemeType === "light") {
@@ -38,7 +42,7 @@ export function CardsDemo() {
   const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
     if (new Date() < timeToChangeTheme) return;
     setIsPressed(true);
-    const newY = currentY + 4; // Incrementally increase the downward movement
+    const newY = currentY + 6; // Incrementally increase the downward movement
     setCurrentY(newY); // Update the state
     controls.start({
       y: newY,
@@ -69,15 +73,15 @@ export function CardsDemo() {
   };
 
   return (
-    <div className="relative container w-full h-full bg-background-demo rounded-lg border border-foreground/30 px-0 py-0">
+    <div className="relative md:container w-full h-full bg-background-demo rounded-lg border border-foreground/10 sm:border-foreground/30 px-0 pb-4">
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         transition={{ duration: 0.5, ease: "easeInOut" }}
-        className="w-full h-full flex flex-col gap-4 relative pbkl-4"
+        className="w-full h-full flex flex-col gap-4 relative"
       >
-        <div className="sticky top-0 w-full flex justify-between bg-background-demo items-center p-4 rounded-t-lg border-b border-foreground-demo/20 z-10">
+        <div className="sticky top-4 sm:top-0 w-full flex justify-center sm:justify-between bg-background-demo items-center p-4 px-8 rounded-t-lg border-b border-foreground-demo/80 z-10">
           <motion.div
             id="header"
             animate={controls}
@@ -91,10 +95,17 @@ export function CardsDemo() {
               variant={"outline"}
               className="shadow-lg ring-foreground-demo/0"
             >
-              <LampDesk className="!w-5 !h-5 text-foreground-demo" />
+              <LampDesk className="!w-7 !h-7 !sm:w-5 sm:!h-5 text-foreground-demo" />
             </Button>
           </motion.div>
-          <div className="w-fit p-4 pointer-events-none h-5 select-none items-center gap-1 rounded border border-foreground-demo/60 bg-background-demo font-mono text-[10px] font-medium opacity-100 hidden sm:flex">
+          <div
+            className={cn(
+              "w-fit p-4 pointer-events-none h-5 select-none items-center gap-1 rounded border border-foreground-demo/20 bg-background-demo font-mono text-[10px] font-medium opacity-100 hidden sm:flex",
+              {
+                "border-foreground-demo/60": baseThemeType === "light",
+              },
+            )}
+          >
             <p className="text-sm text-foreground-demo">
               Hold <kbd className="border border-border p-1 px-2">L</kbd> to{" "}
               {lightDarkText}
@@ -107,7 +118,7 @@ export function CardsDemo() {
             )}
           </div>
         </div>
-        <div className="md:grids-col-2 grid md:gap-4 lg:grid-cols-10 xl:grid-cols-11 xl:gap-4 px-8">
+        <div className="flex flex-col items-center md:grid md:grids-col-2 md:gap-4 lg:grid-cols-10 xl:grid-cols-11 xl:gap-4 px-8">
           <div className="space-y-4 lg:col-span-4 xl:col-span-6 xl:space-y-4">
             <CardsStats />
             <div className="grid gap-1 sm:grid-cols-[260px_1fr] md:hidden">

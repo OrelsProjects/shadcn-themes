@@ -1,5 +1,10 @@
 import { ParsedPalette } from "@/models/palette";
 
+export const TWITTER_URL = "https://x.com/orelzman/";
+export const LINKEDIN_URL =
+  "https://www.linkedin.com/in/orel-zilberman-225a37137";
+export const SUBSTACK_URL = "https://theindiepreneur.substack.com/";
+
 export const basePalette: ParsedPalette = {
   name: "base",
   owner: "system",

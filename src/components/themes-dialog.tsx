@@ -43,7 +43,7 @@ export const ColorSwatchTooltip = ({ color }: ColorSwatchProps) => {
   const [isTooltipOpen, setIsTooltipOpen] = useState(false);
 
   return (
-    <TooltipProvider>
+    <TooltipProvider delayDuration={150}>
       <Tooltip onOpenChange={setIsTooltipOpen}>
         <TooltipTrigger>
           <div
@@ -249,8 +249,10 @@ export function ThemesDialog() {
       )}
       <div className="relative w-fit h-fit flex items-end justify-center">
         <Button variant="outline" onClick={toggleDialog} ref={themesButtonRef}>
-          <Palette className="mr-2 h-4 w-4" />
-          Themes <kbd>(T)</kbd>
+          <Palette className="sm:mr-2 h-4 w-4" />
+          <span className="hidden sm:inline">
+            Themes <kbd>(T)</kbd>
+          </span>
         </Button>
         <AnimatePresence>
           {isOpen && (

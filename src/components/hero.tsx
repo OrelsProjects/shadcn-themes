@@ -8,7 +8,7 @@ const themeSources = [
     name: "DaisyUI",
     src: "/theme-sources/daisy-ui.png",
     width: 200,
-    height: 100,
+    height: 40,
   },
   { name: "Shadcn", src: "/theme-sources/shadcn.png", width: 230, height: 100 },
 //   {
@@ -21,23 +21,23 @@ const themeSources = [
 
 export default function Hero() {
   return (
-    <div className="container flex flex-col justify-center items-center gap-4">
+    <div className="container flex flex-col justify-center items-center gap-8">
       <motion.h1
         className="text-4xl md:text-6xl font-bold text-center"
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
       >
-        Curated Color Themes
+        All the themes you love
         <span className="block mt-2 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-          Ready to Copy & Paste
+          The Shadcn way
         </span>
       </motion.h1>
       <motion.div
-        className="flex flex-col items-center gap-8"
+        className="flex flex-col items-center gap-2"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.8, duration: 0.8 }}
+        transition={{ duration: 0.8 }}
       >
         <h2 className="text-2xl font-semibold text-center">
           Featuring Themes From
@@ -50,7 +50,7 @@ export default function Hero() {
               whileTap={{ scale: 0.95 }}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 1 + index * 0.1, duration: 0.5 }}
+              transition={{ delay: index * 0.1, duration: 0.5 }}
             >
               <Image
                 src={source.src}
