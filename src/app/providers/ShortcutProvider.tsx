@@ -6,7 +6,7 @@ import {
   setShowThemePalette,
 } from "@/lib/features/theme/paletteSlice";
 import { useAppDispatch, useAppSelector } from "@/hooks/redux";
-import { useCallback, ReactNode } from "react";
+import { ReactNode, useState } from "react";
 import { useHotkeys } from "react-hotkeys-hook";
 
 interface ShortcutProviderProps {
@@ -15,34 +15,43 @@ interface ShortcutProviderProps {
 
 export function ShortcutProvider({ children }: ShortcutProviderProps) {
   const dispatch = useAppDispatch();
-  const { selectedThemeType } = useAppSelector(state => state.palette);
+  const { baseThemeType } = useAppSelector(state => state.palette);
+  const [previousKey, setPreviousKey] = useState<{
+    keyCode: string;
+    type: string;
+  } | null>(null);
 
   const handleLPress = () => {
-    if (selectedThemeType === "light") {
-      return;
-    }
-    dispatch(changeThemeType());
+    dispatch(changeThemeType(baseThemeType === "dark" ? "light" : "dark"));
   };
   const handleLRelease = () => {
-    if (selectedThemeType === "dark") {
-      return;
-    }
-    dispatch(changeThemeType());
+    dispatch(changeThemeType(baseThemeType));
   };
 
   useHotkeys(
     ["l", "t", "Escape"],
-    (event, handler) => {
-      console.log(event.key);
-      switch (event.key) {
-        case "l":
+    event => {
+      const allowDoubles = ["keyT", "Escape"];
+      const keyCode = event.code;
+      console.log("keyCode", keyCode);
+      if (
+        !allowDoubles.includes(keyCode) &&
+        keyCode === previousKey?.keyCode &&
+        event.type === previousKey?.type
+      ) {
+        return;
+      }
+      setPreviousKey({ keyCode, type: event.type });
+      switch (keyCode) {
+        case "KeyL":
+          console.log("L pressed", event.type);
           if (event.type === "keydown") {
             handleLPress();
           } else if (event.type === "keyup") {
             handleLRelease();
           }
           break;
-        case "t":
+        case "KeyT":
           if (event.type === "keyup") {
             dispatch(setShowThemePalette(true));
             setTimeout(() => {

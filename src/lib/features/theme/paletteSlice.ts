@@ -1,13 +1,13 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Palette, ParsedPalette, ThemeType } from "@/models/palette";
+import { ParsedPalette, ThemeType } from "@/models/palette";
 import { basePalette } from "@/lib/consts";
-import { set } from "lodash";
 
 type PaletteName = string;
 
 export interface ThemeState {
   selectedPalette: ParsedPalette;
   selectedPaletteName: PaletteName;
+  baseThemeType: ThemeType;
   selectedThemeType: ThemeType;
   allPalettes: ParsedPalette[];
   showThemePalette?: boolean;
@@ -16,7 +16,8 @@ export interface ThemeState {
 
 export const initialState: ThemeState = {
   allPalettes: [],
-  selectedThemeType: "dark",
+  baseThemeType: "light",
+  selectedThemeType: "light",
   selectedPaletteName: "base",
   selectedPalette: basePalette,
   showThemePalette: false,
@@ -27,26 +28,21 @@ const paletteSlice = createSlice({
   name: "palette",
   initialState,
   reducers: {
-    selectPalette(
-      state,
-      action: PayloadAction<{ name: PaletteName; type?: ThemeType }>,
-    ) {
+    selectPalette(state, action: PayloadAction<{ name: PaletteName }>) {
       // const hasLightMode = Object.keys(state.selectedPalette.colors.light).length;
       const newPalette = state.allPalettes.find(
         palette => palette.name === action.payload.name,
       );
 
       if (newPalette) {
-        const hasDarkMode = Object.keys(newPalette.colors.dark).length;
-        const newType = action.payload.type || hasDarkMode ? "dark" : "light";
+        const newType = state.selectedThemeType;
         state.selectedPaletteName = action.payload.name;
         state.selectedPalette = newPalette;
         state.selectedThemeType = newType;
       }
     },
-    changeThemeType(state) {
-      state.selectedThemeType =
-        state.selectedThemeType === "light" ? "dark" : "light";
+    changeThemeType(state, action: PayloadAction<ThemeType>) {
+      state.selectedThemeType = action.payload;
       const newPalette = state.allPalettes.find(
         palette => palette.name === state.selectedPaletteName,
       );
@@ -63,6 +59,13 @@ const paletteSlice = createSlice({
     setHideThemePalette(state, action: PayloadAction<boolean>) {
       state.hideThemePalette = action.payload;
     },
+    changeBaseThemeType(state) {
+      if (state.selectedThemeType === state.baseThemeType) {
+        state.selectedThemeType =
+          state.selectedThemeType === "light" ? "dark" : "light";
+      }
+      state.baseThemeType = state.baseThemeType === "light" ? "dark" : "light";
+    },
   },
 });
 
@@ -70,6 +73,7 @@ export const {
   selectPalette,
   addPalettes,
   changeThemeType,
+  changeBaseThemeType,
   setShowThemePalette,
   setHideThemePalette,
 } = paletteSlice.actions;

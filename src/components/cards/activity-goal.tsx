@@ -1,10 +1,10 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { Minus, Plus } from "lucide-react"
-import { Bar, BarChart } from "recharts"
+import * as React from "react";
+import { Minus, Plus } from "lucide-react";
+import { Bar, BarChart } from "recharts";
 
-import { Button } from "@/components/ui-demo/button"
+import { Button } from "@/components/ui-demo/button";
 import {
   Card,
   CardContent,
@@ -12,8 +12,17 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui-demo/card"
-import { ChartConfig, ChartContainer } from "@/components/ui-demo/chart"
+} from "@/components/ui-demo/card";
+import { ChartConfig, ChartContainer } from "@/components/ui-demo/chart";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTrigger,
+} from "@/components/ui-demo/dialog";
+import { Slider } from "@/components/ui-demo/slider";
 
 const data = [
   {
@@ -55,23 +64,23 @@ const data = [
   {
     goal: 349,
   },
-]
+];
 
 const chartConfig = {
   goal: {
     label: "Goal",
     theme: {
-      light: "black",
-      dark: "white",
+      light: "hsl(var(--primary-demo))",
+      dark: "hsl(var(--primary-demo))",
     },
   },
-} satisfies ChartConfig
+} satisfies ChartConfig;
 
 export function CardsActivityGoal() {
-  const [goal, setGoal] = React.useState(350)
+  const [goal, setGoal] = React.useState(350);
 
   function onClick(adjustment: number) {
-    setGoal(Math.max(200, Math.min(400, goal + adjustment)))
+    setGoal(Math.max(200, Math.min(400, goal + adjustment)));
   }
 
   return (
@@ -121,8 +130,43 @@ export function CardsActivityGoal() {
         </div>
       </CardContent>
       <CardFooter>
-        <Button className="w-full">Set Goal</Button>
+        <Dialog>
+          <DialogTrigger className="w-full">
+            <Button className="w-full">Set Goal</Button>
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader className="w-full flex justify-center text-xl">
+              Goal: {goal}
+            </DialogHeader>
+            <div className="flex flex-col gap-4">
+              <Slider
+                value={[goal]}
+                max={400}
+                step={10}
+                min={200}
+                className="w-full"
+                onValueChange={(value: number[]) => {
+                  setGoal(value[0]);
+                }}
+              />
+              <div className="flex justify-between flex-col items-center mt-4 gap-2">
+                <DialogClose asChild>
+                  <Button onClick={() => setGoal(goal)} className="w-1/2">
+                    Save
+                  </Button>
+                </DialogClose>
+                <Button
+                  variant="outline"
+                  onClick={() => setGoal(350)}
+                  className="w-1/2"
+                >
+                  Reset
+                </Button>
+              </div>
+            </div>
+          </DialogContent>
+        </Dialog>
       </CardFooter>
     </Card>
-  )
+  );
 }

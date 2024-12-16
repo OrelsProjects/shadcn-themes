@@ -165,9 +165,12 @@ export function ThemesDialog() {
     hideThemePalette,
   } = useAppSelector(state => state.palette);
 
+  console.log("Rendered at ThemesDialog", new Date().toLocaleTimeString());
+
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);
   const themesButtonRef = useRef<HTMLButtonElement | null>(null);
   const closeTimeoutRef = useRef<HTMLButtonElement | null>(null);
+
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
@@ -213,7 +216,7 @@ export function ThemesDialog() {
       }
       groups[palette.owner].push(palette);
     });
-    console.log("groups", groups);
+
     return groups;
   }, [currentPalettes, selectedThemeType]);
 
@@ -240,7 +243,7 @@ export function ThemesDialog() {
               y: 0,
               transition: { duration: 0.1, ease: "easeOut" },
             }}
-            transition={{ duration: 0.2, ease: "easeInOut" }}
+            transition={{ duration: 0.15, ease: "easeInOut" }}
             ref={scrollContainerRef}
             key="themes-dialog"
             className={cn(
@@ -259,7 +262,7 @@ export function ThemesDialog() {
             </Button>
             {loadingThemes ? (
               <div className="flex flex-col gap-8 p-4 pt-6">
-                <div className="flex flex-col gap-1">
+                <div className="flex flex-col gap-2">
                   <Skeleton className="h-6 w-40 rounded-full" />
                   <div className="grid grid-cols-4 gap-4">
                     {[...new Array(12)].map((_, i) => (

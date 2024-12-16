@@ -76,20 +76,14 @@ export default function Layout({ children }: RootLayoutProps) {
         <meta property="og:image:height" content="<generated>" />
       </head>
       <body className="antialiased">
-        <Suspense
-          fallback={<Loading className="absolute top-1/2 left-1/2 h-10 w-10" />}
-        >
-          <StoreProvider>
-            <ThemeProvider>
-              <ThemeUpdate />
-              <TopLoaderProvider />
-              <ShortcutProvider>
-                {children}
-                </ShortcutProvider>
-              {/* <ClientTrackersProvider /> */}
-            </ThemeProvider>
-          </StoreProvider>
-        </Suspense>
+        <StoreProvider>
+          <ThemeProvider>
+            <ThemeUpdate />
+            <TopLoaderProvider />
+            <ShortcutProvider>{children}</ShortcutProvider>
+            {/* <ClientTrackersProvider /> */}
+          </ThemeProvider>
+        </StoreProvider>
       </body>
     </html>
   );

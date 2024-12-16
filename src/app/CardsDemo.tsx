@@ -10,54 +10,106 @@ import { CardsReportIssue } from "@/components/cards/report-issue";
 import { CardsShare } from "@/components/cards/share";
 import { CardsStats } from "@/components/cards/stats";
 import { CardsTeamMembers } from "@/components/cards/team-members";
+import { Button } from "@/components/ui-demo/button";
+import { useAppDispatch } from "@/hooks/redux";
+import { changeBaseThemeType } from "@/lib/features/theme/paletteSlice";
+import { useAnimation, motion } from "framer-motion";
+import { LampDesk } from "lucide-react";
+import { useState } from "react";
 
 export function CardsDemo() {
-  console.log("Rendered at CardsDemo: ", new Date());
+  const dispatch = useAppDispatch();
+  const [isPressed, setIsPressed] = useState(false);
+  const [currentY, setCurrentY] = useState(0); // Track the current Y position
+  const controls = useAnimation();
+
+  const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
+    setIsPressed(true);
+    const newY = currentY + 5; // Incrementally increase the downward movement
+    setCurrentY(newY); // Update the state
+    controls.start({
+      y: newY,
+      transition: {
+        type: "spring",
+        duration: 0.3,
+      },
+    });
+  };
+
+  const handleMouseUp = () => {
+    setIsPressed(false);
+    controls.start({
+      y: [currentY, -currentY, 0], // Overshoot and return to the initial position
+      transition: {
+        type: "spring",
+        duration: 0.2,
+      },
+    });
+    setCurrentY(0); // Reset position to 0
+  };
+
+  const handleThemeChange = () => {
+    dispatch(changeBaseThemeType());
+  };
 
   return (
-    <div className="md:grids-col-2 grid md:gap-4 lg:grid-cols-10 xl:grid-cols-11 xl:gap-4">
-      <div className="space-y-4 lg:col-span-4 xl:col-span-6 xl:space-y-4">
-        <CardsStats />
-        <div className="grid gap-1 sm:grid-cols-[260px_1fr] md:hidden">
-          <CardsCalendar />
-          <div className="pt-3 sm:pl-2 sm:pt-0 xl:pl-4">
-            <CardsActivityGoal />
+    <div className="w-full h-full flex flex-col gap-4">
+      <motion.div
+        animate={controls}
+        initial={{ y: 0 }}
+        onClick={handleThemeChange}
+        onMouseDown={handleMouseDown}
+        onMouseUp={handleMouseUp}
+        onMouseLeave={() => isPressed && handleMouseUp()}
+      >
+        <Button variant={"outline"} className="shadow-lg">
+          <LampDesk className="!w-5 !h-5 text-foreground-demo" />
+        </Button>
+      </motion.div>
+      <div className="md:grids-col-2 grid md:gap-4 lg:grid-cols-10 xl:grid-cols-11 xl:gap-4">
+        <div className="space-y-4 lg:col-span-4 xl:col-span-6 xl:space-y-4">
+          <CardsStats />
+          <div className="grid gap-1 sm:grid-cols-[260px_1fr] md:hidden">
+            <CardsCalendar />
+            <div className="pt-3 sm:pl-2 sm:pt-0 xl:pl-4">
+              <CardsActivityGoal />
+            </div>
+            <div className="pt-3 sm:col-span-2 xl:pt-4">
+              <CardsMetric />
+            </div>
           </div>
-          <div className="pt-3 sm:col-span-2 xl:pt-4">
-            <CardsMetric />
-          </div>
-        </div>
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
-          <div className="space-y-4 xl:space-y-4">
-            <CardsTeamMembers />
-            <CardsCookieSettings />
-            <CardsPaymentMethod />
-          </div>
-          <div className="space-y-4 xl:space-y-4">
-            <CardsChat />
-            <CardsCreateAccount />
-            <div className="hidden xl:block">
-              <CardsReportIssue />
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
+            <div className="space-y-4 xl:space-y-4">
+              <CardsTeamMembers />
+              <CardsCookieSettings />
+              <CardsPaymentMethod />
+            </div>
+            <div className="space-y-4 xl:space-y-4">
+              <CardsChat />
+              <CardsCreateAccount />
+              <div className="hidden xl:block">
+                <CardsReportIssue />
+              </div>
             </div>
           </div>
         </div>
-      </div>
-      <div className="space-y-4 lg:col-span-6 xl:col-span-5 xl:space-y-4">
-        <div className="hidden gap-1 sm:grid-cols-[260px_1fr] md:grid">
-          <CardsCalendar />
-          <div className="pt-3 sm:pl-2 sm:pt-0 xl:pl-3">
-            <CardsActivityGoal />
+        <div className="space-y-4 lg:col-span-6 xl:col-span-5 xl:space-y-4">
+          <div className="hidden gap-1 sm:grid-cols-[260px_1fr] md:grid">
+            <CardsCalendar />
+            <div className="pt-3 sm:pl-2 sm:pt-0 xl:pl-3">
+              <CardsActivityGoal />
+            </div>
+            <div className="pt-3 sm:col-span-2 xl:pt-3">
+              <CardsMetric />
+            </div>
           </div>
-          <div className="pt-3 sm:col-span-2 xl:pt-3">
-            <CardsMetric />
+          <div className="hidden md:block">
+            <CardsDataTable />
           </div>
-        </div>
-        <div className="hidden md:block">
-          <CardsDataTable />
-        </div>
-        <CardsShare />
-        <div className="xl:hidden">
-          <CardsReportIssue />
+          <CardsShare />
+          <div className="xl:hidden">
+            <CardsReportIssue />
+          </div>
         </div>
       </div>
     </div>

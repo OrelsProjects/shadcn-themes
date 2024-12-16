@@ -49,15 +49,15 @@ const chartConfig = {
   revenue: {
     label: "Revenue",
     theme: {
-      light: "black",
-      dark: "white",
+      light: "hsl(var(--primary-demo))",
+      dark: "hsl(var(--primary-demo))",
     },
   },
   subscription: {
     label: "Subscriptions",
     theme: {
-      light: "black",
-      dark: "white",
+      light: "hsl(var(--primary-demo))",
+      dark: "hsl(var(--primary-demo))",
     },
   },
 } satisfies ChartConfig

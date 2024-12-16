@@ -19,56 +19,55 @@ export function usePalette() {
       axios
         .get<ParsedPalette[]>("/api/themes")
         .then(({ data: palettes }) => {
-          let parsedPalettes: ParsedPalette[] = palettes
-            .map(theme => ({
-              id: theme.id,
-              name: theme.name,
-              colors: {
-                ...theme.colors,
-              },
-              owner: theme.owner,
-            }))
-            // .map(palette => {
-            //   const hasLight = Object.keys(palette.colors.light).length > 0;
-            //   const hasDark = Object.keys(palette.colors.dark).length > 0;
-            //   let themeToGenerate = "";
-            //   if (!hasDark || !hasLight) {
-            //     if (hasDark) {
-            //       themeToGenerate = "light";
-            //     } else if (hasLight) {
-            //       themeToGenerate = "dark";
-            //     }
-            //   }
-            //   // debugger;
-            //   if (themeToGenerate === "light" || themeToGenerate === "dark") {
-            //     const existingTheme =
-            //       themeToGenerate === "light" ? "dark" : "light";
-            //     const newTheme = generatePalette({
-            //       primary: palette.colors[existingTheme].primary,
-            //       secondary: palette.colors[existingTheme].secondary,
-            //       accent: palette.colors[existingTheme].accent,
-            //       background: palette.colors[existingTheme].background,
-            //       error: palette.colors[existingTheme].destructive,
-            //       card: palette.colors[existingTheme].card,
-            //       text: palette.colors[existingTheme].foreground,
-            //       theme: existingTheme as ThemeType,
-            //     });
-            //     return {
-            //       ...palette,
-            //       colors: {
-            //         dark:
-            //           themeToGenerate === "dark"
-            //             ? newTheme.dark
-            //             : palette.colors.dark,
-            //         light:
-            //           themeToGenerate === "light"
-            //             ? newTheme.light
-            //             : palette.colors.light,
-            //       },
-            //     };
-            //   }
-            //   return palette;
-            // });
+          let parsedPalettes: ParsedPalette[] = palettes.map(theme => ({
+            id: theme.id,
+            name: theme.name,
+            colors: {
+              ...theme.colors,
+            },
+            owner: theme.owner,
+          }));
+          // .map(palette => {
+          //   const hasLight = Object.keys(palette.colors.light).length > 0;
+          //   const hasDark = Object.keys(palette.colors.dark).length > 0;
+          //   let themeToGenerate = "";
+          //   if (!hasDark || !hasLight) {
+          //     if (hasDark) {
+          //       themeToGenerate = "light";
+          //     } else if (hasLight) {
+          //       themeToGenerate = "dark";
+          //     }
+          //   }
+          //   // debugger;
+          //   if (themeToGenerate === "light" || themeToGenerate === "dark") {
+          //     const existingTheme =
+          //       themeToGenerate === "light" ? "dark" : "light";
+          //     const newTheme = generatePalette({
+          //       primary: palette.colors[existingTheme].primary,
+          //       secondary: palette.colors[existingTheme].secondary,
+          //       accent: palette.colors[existingTheme].accent,
+          //       background: palette.colors[existingTheme].background,
+          //       error: palette.colors[existingTheme].destructive,
+          //       card: palette.colors[existingTheme].card,
+          //       text: palette.colors[existingTheme].foreground,
+          //       theme: existingTheme as ThemeType,
+          //     });
+          //     return {
+          //       ...palette,
+          //       colors: {
+          //         dark:
+          //           themeToGenerate === "dark"
+          //             ? newTheme.dark
+          //             : palette.colors.dark,
+          //         light:
+          //           themeToGenerate === "light"
+          //             ? newTheme.light
+          //             : palette.colors.light,
+          //       },
+          //     };
+          //   }
+          //   return palette;
+          // });
 
           dispatch(addPalettes(parsedPalettes));
         })
@@ -77,7 +76,7 @@ export function usePalette() {
           loadingRef.current = false;
         });
     }
-  }, [allPalettes]);
+  }, []);
 
   // Paginated themes from the Redux state
   const currentPalettes = useMemo(() => {
@@ -93,7 +92,7 @@ export function usePalette() {
 
     setTimeout(() => {
       loadingPagingRef.current = false;
-    }, 500);
+    }, 50);
   };
 
   const resetPaging = () => {
