@@ -16,8 +16,8 @@ export interface ThemeState {
 
 export const initialState: ThemeState = {
   allPalettes: [],
-  baseThemeType: "light",
-  selectedThemeType: "light",
+  baseThemeType: "dark",
+  selectedThemeType: "dark",
   selectedPaletteName: "base",
   selectedPalette: basePalette,
   showThemePalette: false,

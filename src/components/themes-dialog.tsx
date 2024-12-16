@@ -1,11 +1,8 @@
-import {
-  selectPalette,
-  setShowThemePalette,
-} from "@/lib/features/theme/paletteSlice";
+import { selectPalette } from "@/lib/features/theme/paletteSlice";
 import { useAppSelector, useAppDispatch } from "@/hooks/redux";
 import { cn, getThemeColor } from "@/lib/utils";
 import { ParsedPalette, ThemeType } from "@/models/palette";
-import { Moon, Palette, Sun, X } from "lucide-react";
+import { Palette, X } from "lucide-react";
 import React, {
   useState,
   useMemo,
@@ -35,10 +32,7 @@ const ColorSwatch = ({ color, isHover }: ColorSwatchProps) => {
   return isHover ? (
     <ColorSwatchTooltip color={color} />
   ) : (
-    <div
-      className="w-6 h-6 rounded-full border border-border/40"
-      style={{ backgroundColor: color }}
-    />
+    <div className="w-6 h-6 rounded-full" style={{ backgroundColor: color }} />
   );
 };
 
@@ -50,7 +44,7 @@ export const ColorSwatchTooltip = ({ color }: ColorSwatchProps) => {
       <Tooltip onOpenChange={setIsTooltipOpen}>
         <TooltipTrigger>
           <div
-            className="w-6 h-6 rounded-full border border-border/40"
+            className="w-6 h-6 rounded-full hover:scale-105"
             style={{ backgroundColor: color }}
           />
         </TooltipTrigger>
@@ -109,7 +103,7 @@ const PaletteCard = ({
       onMouseEnter={() => setIsHover(true)}
       onMouseLeave={() => setIsHover(false)}
       className={cn(
-        "w-full p-2 rounded-lg cursor-pointer hover:bg-muted/40 flex flex-col justify-between border border-foreground/5",
+        "w-full p-2 rounded-lg hover:cursor-pointer hover:bg-muted/40 flex flex-col justify-between border border-foreground/5",
         isSelected && "bg-muted/20",
       )}
     >
@@ -306,7 +300,7 @@ export function ThemesDialog() {
                 >
                   {Object.entries(groupedPalettes).map(([owner, palettes]) => (
                     <div key={owner} className="mb-8">
-                      <h2 className="text-2xl font-semibold mb-1 text-foreground">
+                      <h2 className="text-2xl font-semibold mb-1 text-foreground pointer-events-none">
                         {owner}
                       </h2>
                       <div
