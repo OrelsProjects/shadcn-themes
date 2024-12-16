@@ -75,6 +75,7 @@ model ThemeOwner {
   name String @unique
 
   position Int
+  visible  Boolean @default(true)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

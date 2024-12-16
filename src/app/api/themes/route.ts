@@ -7,6 +7,9 @@ export async function GET(req: NextRequest) {
     const themes = await prisma.theme.findMany({
       where: {
         visible: true,
+        owner: {
+          visible: true,
+        },
       },
       orderBy: {
         owner: {

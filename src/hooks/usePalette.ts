@@ -10,11 +10,13 @@ export function usePalette() {
   const { allPalettes } = useAppSelector(state => state.palette);
   const [loadingThemes, setLoadingThemes] = useState(true);
   const [page, setPage] = useState(1);
-  const loadingRef = useRef(true);
+  const loadingRef = useRef(false);
   const loadingPagingRef = useRef(false);
   const itemsPerPage = 20;
 
   useEffect(() => {
+    if(loadingRef.current) return;
+    loadingRef.current = true;
     if (allPalettes.length === 0) {
       axios
         .get<ParsedPalette[]>("/api/themes")
@@ -92,7 +94,7 @@ export function usePalette() {
 
     setTimeout(() => {
       loadingPagingRef.current = false;
-    }, 50);
+    }, 250);
   };
 
   const resetPaging = () => {

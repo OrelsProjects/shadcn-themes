@@ -102,9 +102,6 @@ const PaletteCard = ({
     }
   }, [palette, selectedThemeType]);
 
-  const hasLightTheme = Object.keys(palette.colors.light).length > 0;
-  const hasDarkTheme = Object.keys(palette.colors.dark).length > 0;
-
   return (
     <div
       onClick={onPaletteSelected}
@@ -122,10 +119,6 @@ const PaletteCard = ({
             .map(x => x[0].toUpperCase() + x.slice(1))
             .join(" ")}
         </h3>
-        <div className="flex space-x-1">
-          {hasLightTheme && <Sun className="w-3 h-3 text-foreground/50 mt-1" />}
-          {hasDarkTheme && <Moon className="w-3 h-3 text-foreground/50 mt-1" />}
-        </div>
       </div>
       <div className="flex space-x-2">
         <ColorSwatch
@@ -163,6 +156,7 @@ export function ThemesDialog() {
     selectedThemeType,
     showThemePalette,
     hideThemePalette,
+    allPalettes,
   } = useAppSelector(state => state.palette);
 
   console.log("Rendered at ThemesDialog", new Date().toLocaleTimeString());
@@ -285,6 +279,7 @@ export function ThemesDialog() {
                   // "opacity-100": isHover || !isHover,
                 })}
               >
+                <p>Count: {allPalettes.length}</p>
                 {Object.entries(groupedPalettes).map(([owner, palettes]) => (
                   <div key={owner} className="mb-8">
                     <h2 className="text-2xl font-semibold mb-1 text-foreground">
