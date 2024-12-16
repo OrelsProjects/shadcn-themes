@@ -18,8 +18,8 @@ export function usePalette() {
   const fetchAndSetPalettes = async (page: number) => {
     try {
       if (loadingRef.current) return;
-      console.log("fetching themes");
       loadingRef.current = true;
+
       const resposne = await axios.get<{
         palettes: ParsedPalette[];
         hasMore: boolean;
@@ -28,8 +28,11 @@ export function usePalette() {
           page,
         },
       });
+
       const { palettes, hasMore } = resposne.data;
+
       setHasMore(hasMore);
+
       let parsedPalettes: ParsedPalette[] = palettes.map(theme => ({
         id: theme.id,
         name: theme.name,
@@ -38,6 +41,7 @@ export function usePalette() {
         },
         owner: theme.owner,
       }));
+
       dispatch(addPalettes(parsedPalettes));
     } catch (e) {
       console.error(e);

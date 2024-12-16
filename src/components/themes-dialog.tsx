@@ -141,7 +141,7 @@ const PaletteCard = ({
 };
 
 const LoadingPalettes = () => (
-  <div className="flex flex-col gap-1">
+  <div className="flex flex-col gap-2 pt-2">
     <Skeleton className="h-6 w-40 rounded-full" />
     <div className="grid grid-cols-4 gap-4">
       {[...new Array(12)].map((_, i) => (
@@ -266,10 +266,10 @@ export function ThemesDialog() {
               ref={scrollContainerRef}
               key="themes-dialog"
               className={cn(
-                "absolute bottom-16 w-[42rem] h-[26rem] bg-card shadow-lg transition-all rounded-lg border border-border/5 p-4 overflow-y-auto z-20",
+                "absolute bottom-16 w-[42rem] h-[26rem] bg-card shadow-lg transition-all rounded-lg border border-foreground/15 p-4 overflow-y-auto z-20",
               )}
             >
-              <Button
+              {/* <Button
                 variant="outline"
                 onClick={() => {
                   handleClose();
@@ -278,31 +278,21 @@ export function ThemesDialog() {
                 className="absolute top-2 right-2 bg-transparent"
               >
                 <X className="h-4 w-4" />
-              </Button>
+              </Button> */}
               {loadingThemes ? (
-                <div className="flex flex-col gap-8 p-4 pt-6">
-                  <LoadingPalettes />
-                  <div className="flex flex-col gap-1">
-                    <Skeleton className="h-6 w-40 rounded-full" />
-                    <div className="grid grid-cols-4 gap-4">
-                      {[...new Array(12)].map((_, i) => (
-                        <Skeleton key={i} className="h-20 w-32 rounded-lg" />
-                      ))}
-                    </div>
-                  </div>
-                </div>
+                <LoadingPalettes />
               ) : (
                 <div
                   className={cn(
-                    "p-4 pb-0 opacity-100 transition-opacity flex flex-col",
+                    "opacity-100 transition-opacity flex flex-col",
                     {
                       // "opacity-100": isHover || !isHover,
                     },
                   )}
                 >
                   {Object.entries(groupedPalettes).map(([owner, palettes]) => (
-                    <div key={owner} className="mb-8">
-                      <h2 className="text-2xl font-semibold mb-1 text-foreground pointer-events-none">
+                    <div key={owner} className="relative mb-8">
+                      <h2 className="sticky -top-4 py-2 w-full bg-card text-2xl font-semibold mb-1 text-foreground pointer-events-none z-50">
                         {owner}
                       </h2>
                       <div
