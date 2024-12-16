@@ -37,3 +37,6 @@ next-env.d.ts
 
 # template api
 /src/app/api/template/*
+
+# test endpoints
+/src/app/api/test/*
