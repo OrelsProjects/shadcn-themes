@@ -2,8 +2,13 @@ import prisma from "@/app/api/_db/db";
 import { ParsedPalette, ThemePalette, ThemeType } from "@/models/palette";
 import { NextRequest, NextResponse } from "next/server";
 
+const PALETTES_PER_PAGE = 20;
+
 export async function GET(req: NextRequest) {
   try {
+    const pageString = req.nextUrl.searchParams.get("page") || "1";
+    const page = parseInt(pageString, 10);
+
     const themes = await prisma.theme.findMany({
       where: {
         visible: true,
@@ -17,6 +22,8 @@ export async function GET(req: NextRequest) {
         },
       },
       include: { owner: true },
+      skip: (page - 1) * PALETTES_PER_PAGE,
+      take: PALETTES_PER_PAGE,
     });
 
     let parsedThemes: ParsedPalette[] = themes.map(theme => ({
@@ -42,7 +49,10 @@ export async function GET(req: NextRequest) {
       };
     });
 
-    return NextResponse.json(parsedThemes);
+    return NextResponse.json({
+      palettes: parsedThemes,
+      hasMore: themes.length === PALETTES_PER_PAGE,
+    });
   } catch (error: any) {
     console.log(error);
     return NextResponse.json({ error: error.message }, { status: 500 });
