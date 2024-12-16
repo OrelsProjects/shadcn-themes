@@ -24,6 +24,7 @@ import {
 import CopyComponent from "@/components/ui/copy";
 import { usePalette } from "@/hooks/usePalette";
 import { Skeleton } from "@/components/ui/skeleton";
+import ReactDOM from "react-dom";
 
 interface ColorSwatchProps {
   color: string;
@@ -221,95 +222,112 @@ export function ThemesDialog() {
     resetPaging();
   };
 
+  const Background = ({ onClick }: { onClick?: () => void }) =>
+    ReactDOM.createPortal(
+      <div
+        onClick={onClick}
+        className="fixed top-0 left-0 w-screen h-screen z-10 overflow-clip"
+      />,
+      document.getElementById("themes-dialog-portal")!,
+    );
   return (
-    <div className="relative w-fit h-fit flex items-end justify-center">
-      <Button variant="outline" onClick={toggleDialog} ref={themesButtonRef}>
-        <Palette className="mr-2 h-4 w-4" />
-        Themes <kbd>(T)</kbd>
-      </Button>
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: 0 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{
-              opacity: 0,
-              y: 0,
-              transition: { duration: 0.1, ease: "easeOut" },
-            }}
-            transition={{ duration: 0.15, ease: "easeInOut" }}
-            ref={scrollContainerRef}
-            key="themes-dialog"
-            className={cn(
-              "absolute bottom-16 w-[42rem] h-[26rem] bg-card shadow-lg transition-all rounded-lg border border-border/5 p-4 overflow-y-auto",
-            )}
-          >
-            <Button
-              variant="outline"
-              onClick={() => {
-                handleClose();
+    <div className="w-full h-full flex items-center relative">
+      {isOpen && (
+        <Background
+          onClick={() => {
+            handleClose();
+          }}
+        />
+      )}
+      <div className="relative w-fit h-fit flex items-end justify-center">
+        <Button variant="outline" onClick={toggleDialog} ref={themesButtonRef}>
+          <Palette className="mr-2 h-4 w-4" />
+          Themes <kbd>(T)</kbd>
+        </Button>
+        <AnimatePresence>
+          {isOpen && (
+            <motion.div
+              initial={{ opacity: 0, y: 0 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{
+                opacity: 0,
+                y: 0,
+                transition: { duration: 0.1, ease: "easeOut" },
               }}
-              ref={closeTimeoutRef}
-              className="absolute top-2 right-2 bg-transparent"
+              transition={{ duration: 0.15, ease: "easeInOut" }}
+              ref={scrollContainerRef}
+              key="themes-dialog"
+              className={cn(
+                "absolute bottom-16 w-[42rem] h-[26rem] bg-card shadow-lg transition-all rounded-lg border border-border/5 p-4 overflow-y-auto z-20",
+              )}
             >
-              <X className="h-4 w-4" />
-            </Button>
-            {loadingThemes ? (
-              <div className="flex flex-col gap-8 p-4 pt-6">
-                <div className="flex flex-col gap-2">
-                  <Skeleton className="h-6 w-40 rounded-full" />
-                  <div className="grid grid-cols-4 gap-4">
-                    {[...new Array(12)].map((_, i) => (
-                      <Skeleton key={i} className="h-16 w-32 rounded-lg" />
-                    ))}
-                  </div>
-                </div>
-                <div className="flex flex-col gap-1">
-                  <Skeleton className="h-6 w-40 rounded-full" />
-                  <div className="grid grid-cols-4 gap-4">
-                    {[...new Array(12)].map((_, i) => (
-                      <Skeleton key={i} className="h-20 w-32 rounded-lg" />
-                    ))}
-                  </div>
-                </div>
-              </div>
-            ) : (
-              <div
-                className={cn("p-4 pb-0 opacity-100 transition-opacity", {
-                  // "opacity-100": isHover || !isHover,
-                })}
+              <Button
+                variant="outline"
+                onClick={() => {
+                  handleClose();
+                }}
+                ref={closeTimeoutRef}
+                className="absolute top-2 right-2 bg-transparent"
               >
-                <p>Count: {allPalettes.length}</p>
-                {Object.entries(groupedPalettes).map(([owner, palettes]) => (
-                  <div key={owner} className="mb-8">
-                    <h2 className="text-2xl font-semibold mb-1 text-foreground">
-                      {owner}
-                    </h2>
-                    <div
-                      className="grid grid-cols-4 gap-4"
-                      onClick={e => {
-                        e.stopPropagation();
-                      }}
-                    >
-                      {palettes.map(palette => (
-                        <PaletteCard
-                          key={palette.name}
-                          selectedThemeType={selectedThemeType}
-                          palette={palette}
-                          isSelected={palette.name === selectedPaletteName}
-                          onPaletteSelected={(e: any) => {
-                            dispatch(selectPalette({ name: palette.name }));
-                          }}
-                        />
+                <X className="h-4 w-4" />
+              </Button>
+              {loadingThemes ? (
+                <div className="flex flex-col gap-8 p-4 pt-6">
+                  <div className="flex flex-col gap-2">
+                    <Skeleton className="h-6 w-40 rounded-full" />
+                    <div className="grid grid-cols-4 gap-4">
+                      {[...new Array(12)].map((_, i) => (
+                        <Skeleton key={i} className="h-16 w-32 rounded-lg" />
                       ))}
                     </div>
                   </div>
-                ))}
-              </div>
-            )}
-          </motion.div>
-        )}
-      </AnimatePresence>
+                  <div className="flex flex-col gap-1">
+                    <Skeleton className="h-6 w-40 rounded-full" />
+                    <div className="grid grid-cols-4 gap-4">
+                      {[...new Array(12)].map((_, i) => (
+                        <Skeleton key={i} className="h-20 w-32 rounded-lg" />
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div
+                  className={cn("p-4 pb-0 opacity-100 transition-opacity", {
+                    // "opacity-100": isHover || !isHover,
+                  })}
+                >
+                  <p>Count: {allPalettes.length}</p>
+                  {Object.entries(groupedPalettes).map(([owner, palettes]) => (
+                    <div key={owner} className="mb-8">
+                      <h2 className="text-2xl font-semibold mb-1 text-foreground">
+                        {owner}
+                      </h2>
+                      <div
+                        className="grid grid-cols-4 gap-4"
+                        onClick={e => {
+                          e.stopPropagation();
+                        }}
+                      >
+                        {palettes.map(palette => (
+                          <PaletteCard
+                            key={palette.name}
+                            selectedThemeType={selectedThemeType}
+                            palette={palette}
+                            isSelected={palette.name === selectedPaletteName}
+                            onPaletteSelected={(e: any) => {
+                              dispatch(selectPalette({ name: palette.name }));
+                            }}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
     </div>
   );
 }

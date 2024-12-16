@@ -20,7 +20,7 @@ export function BottomNavbar() {
         ease: "easeOut",
         delay: 0.5,
       }}
-      className="fixed bottom-8 left-0 w-full flex justify-center items-center"
+      className="fixed bottom-8 left-0 w-full flex justify-center items-center z-40"
     >
       <Card className="w-fit h-16 bg-background/80 backdrop-blur-md border border-border/80 shadow-sm px-6 py-2 flex items-center gap-4">
         <CopyCode />
