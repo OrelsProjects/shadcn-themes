@@ -104,7 +104,10 @@ export default function CopyCode() {
 
   return (
     <Dialog>
-      <DialogTrigger asChild>
+      <DialogTrigger
+        asChild
+        onClick={() => EventTracker.track("Open copy button clicked")}
+      >
         <Button variant="outline">
           <Copy className="h-4 w-4 sm:mr-2" />
           <span className="hidden sm:inline">Copy code</span>

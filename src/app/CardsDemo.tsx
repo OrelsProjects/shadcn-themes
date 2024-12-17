@@ -1,5 +1,6 @@
 import { CardsDemo } from "@/components/cards";
 import { Button } from "@/components/ui-demo/button";
+import { EventTracker } from "@/eventTracker";
 import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 import { changeBaseThemeType } from "@/lib/features/theme/paletteSlice";
 import { LampDesk } from "@/lib/icons";
@@ -55,7 +56,8 @@ const Header = () => {
     setCurrentY(0); // Reset position to 0
   };
 
-  const handleThemeChange = () => {
+  const handleThemeChange = (source: string) => {
+    EventTracker.track("theme_change", { source });
     if (new Date() < timeToChangeTheme) return;
     setTimeToChangeTheme(new Date(Date.now() + TIME_TO_CHANGE_THEME));
     dispatch(changeBaseThemeType());
@@ -73,7 +75,9 @@ const Header = () => {
         id="header"
         animate={controls}
         initial={{ y: 0 }}
-        onClick={handleThemeChange}
+        onClick={() => {
+          handleThemeChange("lamp");
+        }}
         onMouseDown={handleMouseDown}
         onMouseUp={handleMouseUp}
         onMouseLeave={() => isPressed && handleMouseUp()}
@@ -94,7 +98,9 @@ const Header = () => {
         </Button>
       </motion.div>
       <div
-        onClick={handleThemeChange}
+        onClick={() => {
+          handleThemeChange("text");
+        }}
         onMouseDown={handleMouseDown}
         onMouseUp={handleMouseUp}
         className={cn(

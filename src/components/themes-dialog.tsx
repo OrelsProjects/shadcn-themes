@@ -24,6 +24,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import ReactDOM from "react-dom";
 import { HoverBorderGradient } from "@/components/ui/hover-border-gradient";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
+import { EventTracker } from "@/eventTracker";
 
 const dialogVariants = {
   initial: { opacity: 0, y: 0 },
@@ -49,6 +50,7 @@ interface PaletteDialogProps {
   selectedPaletteName: string;
   loadingThemes?: boolean;
   className?: string;
+  onClose: () => void;
   loading?: boolean;
   ref?: React.Ref<HTMLDivElement>;
 }
@@ -66,6 +68,7 @@ const PaletteDialog = React.forwardRef<HTMLDivElement, PaletteDialogProps>(
       selectedThemeType,
       onPaletteSelected,
       selectedPaletteName,
+      onClose,
       className,
       loadingThemes,
       loading,
@@ -82,17 +85,23 @@ const PaletteDialog = React.forwardRef<HTMLDivElement, PaletteDialogProps>(
           className,
         )}
       >
+        <Button
+          variant="outline"
+          className="absolute top-2 right-2 z-50"
+          onClick={() => {
+            EventTracker.track("Themes Dialog close button clicked");
+            onClose();
+          }}
+        >
+          <X className="h-4 w-4 text-foreground" />
+        </Button>
         {loadingThemes ? (
           <LoadingPalettes />
         ) : (
-          <div
-            className={cn("opacity-100 transition-opacity flex flex-col", {
-              // "opacity-100": isHover || !isHover,
-            })}
-          >
+          <div className={cn("opacity-100 transition-opacity flex flex-col")}>
             {Object.entries(groupedPalettes).map(([owner, palettes]) => (
               <div key={owner} className="relative mb-8">
-                <h2 className="sticky -top-8 sm:-top-4 py-2 w-full bg-card text-xl sm:text-2xl font-semibold mb-1 text-foreground pointer-events-none z-50">
+                <h2 className="sticky -top-8 sm:-top-4 py-2 w-full bg-card text-xl sm:text-2xl font-semibold mb-1 text-foreground pointer-events-none z-40">
                   {owner}
                 </h2>
                 <div
@@ -331,7 +340,12 @@ export function ThemesDialog() {
     return groups;
   }, [currentPalettes, selectedThemeType]);
 
-  const toggleDialog = () => setIsOpen(prev => !prev);
+  const toggleDialog = () => {
+    EventTracker.track("Themes Dialog", {
+      action: isOpen ? "close" : "open",
+    });
+    setIsOpen(prev => !prev);
+  };
 
   const handleClose = () => {
     setIsOpen(false);
@@ -357,6 +371,7 @@ export function ThemesDialog() {
       {isOpen && (
         <Background
           onClick={() => {
+            EventTracker.track("Themes Dialog outside click");
             handleClose();
           }}
         />
@@ -394,6 +409,7 @@ export function ThemesDialog() {
           {isOpen && (
             <>
               <PaletteDialog
+                onClose={handleClose}
                 groupedPalettes={groupedPalettes}
                 selectedThemeType={selectedThemeType}
                 onPaletteSelected={handlePaletteSelected}
@@ -404,6 +420,7 @@ export function ThemesDialog() {
                 className="hidden sm:block"
               />
               <PaletteDialogMobile
+                onClose={handleClose}
                 groupedPalettes={groupedPalettes}
                 selectedThemeType={selectedThemeType}
                 onPaletteSelected={handlePaletteSelected}

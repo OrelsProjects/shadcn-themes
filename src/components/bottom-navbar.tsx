@@ -10,6 +10,7 @@ import { Separator } from "@/components/ui/separator";
 import { Linkedin, Twitter } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { TWITTER_URL, LINKEDIN_URL, SUBSTACK_URL } from "@/lib/consts";
+import { EventTracker } from "@/eventTracker";
 
 export function BottomNavbar() {
   return (
@@ -37,6 +38,7 @@ export function BottomNavbar() {
             passHref
             target="_blank"
             rel="noopener noreferrer"
+            onClick={() => EventTracker.track("twitter_clicked")}
           >
             <Twitter />
           </Link>
@@ -47,6 +49,7 @@ export function BottomNavbar() {
             passHref
             target="_blank"
             rel="noopener noreferrer"
+            onClick={() => EventTracker.track("linkedin_clicked")}
           >
             <Linkedin />
           </Link>
@@ -57,6 +60,7 @@ export function BottomNavbar() {
             passHref
             target="_blank"
             rel="noopener noreferrer"
+            onClick={() => EventTracker.track("substack_clicked")}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
