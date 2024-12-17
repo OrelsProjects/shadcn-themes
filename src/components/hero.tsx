@@ -42,7 +42,7 @@ export default function Hero() {
         <h2 className="text-2xl font-semibold text-center text-foreground/60">
           Featuring Themes From
         </h2>
-        <div className="w-full justify-center items-center px-auto flex flex-wrap gap-4">
+        <div className="w-full justify-center items-center px-auto flex flex-wrap  gap-4 sm:gap-8">
           {themeSources.map((source, index) => (
             <motion.div
               key={source.name}
