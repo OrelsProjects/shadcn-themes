@@ -1,5 +1,6 @@
 import React from "react";
 import Logo from "@/components/logo";
+import Link from "next/link";
 
 const Header = () => {
   return (
@@ -10,7 +11,13 @@ const Header = () => {
         <Logo />
         <div className="flex flex-row gap-2 items-center">
           <div className="flex flex-col">
-            <span className="text-xs text-muted flex flex-row gap-1 items-center mt-1"></span>
+            <Link
+              href="/blog/the-shadcn-way"
+              className="text-foreground/60 hover:text-foreground/80"
+            >
+              <span className="hidden sm:block">What is the Shadcn way?</span>
+              <span className="block sm:hidden">The Shadcn way</span>
+            </Link>
           </div>
         </div>
       </div>

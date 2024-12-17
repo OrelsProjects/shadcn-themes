@@ -22,6 +22,8 @@ import CopyComponent from "@/components/ui/copy";
 import { usePalette } from "@/hooks/usePalette";
 import { Skeleton } from "@/components/ui/skeleton";
 import ReactDOM from "react-dom";
+import { HoverBorderGradient } from "@/components/ui/hover-border-gradient";
+import { useLocalStorage } from "@/hooks/useLocalStorage";
 
 const dialogVariants = {
   initial: { opacity: 0, y: 0 },
@@ -57,61 +59,69 @@ const PaletteDialogMobile = ({ ...props }: PaletteDialogProps) =>
     document.getElementById("themes-dialog-portal")!,
   );
 
-const PaletteDialog = ({
-  groupedPalettes,
-  selectedThemeType,
-  onPaletteSelected,
-  selectedPaletteName,
-  className,
-  loadingThemes,
-  loading,
-  ref,
-}: PaletteDialogProps) => (
-  <motion.div
-    {...dialogVariants}
-    ref={ref}
-    key="themes-dialog"
-    className={cn(
-      "fixed bottom-20 w-[calc(100%-1rem)] h-[30%] max-sm:left-2 sm:w-[42rem] sm:h-[26rem] bg-card shadow-lg transition-all rounded-lg border border-foreground/15 p-4 overflow-y-auto z-20",
+const PaletteDialog = React.forwardRef<HTMLDivElement, PaletteDialogProps>(
+  (
+    {
+      groupedPalettes,
+      selectedThemeType,
+      onPaletteSelected,
+      selectedPaletteName,
       className,
-    )}
-  >
-    {loadingThemes ? (
-      <LoadingPalettes />
-    ) : (
-      <div
-        className={cn("opacity-100 transition-opacity flex flex-col", {
-          // "opacity-100": isHover || !isHover,
-        })}
+      loadingThemes,
+      loading,
+    },
+    ref,
+  ) => {
+    return (
+      <motion.div
+        ref={ref} // <-- pass the forwarded ref here
+        {...dialogVariants}
+        key="themes-dialog"
+        className={cn(
+          "fixed bottom-20 w-[calc(100%-1rem)] h-[30%] max-sm:left-2 sm:w-[42rem] sm:h-[26rem] bg-card shadow-lg transition-all rounded-lg border border-foreground/15 p-4 overflow-y-auto z-20",
+          className,
+        )}
       >
-        {Object.entries(groupedPalettes).map(([owner, palettes]) => (
-          <div key={owner} className="relative mb-8">
-            <h2 className="sticky -top-8 sm:-top-4 py-2 w-full bg-card text-xl sm:text-2xl font-semibold mb-1 text-foreground pointer-events-none z-50">
-              {owner}
-            </h2>
-            <div
-              className="grid grid-cols-4 gap-4"
-              onClick={e => {
-                e.stopPropagation();
-              }}
-            >
-              {palettes.map(palette => (
-                <PaletteCard
-                  key={palette.name}
-                  selectedThemeType={selectedThemeType}
-                  palette={palette}
-                  isSelected={palette.name === selectedPaletteName}
-                  onPaletteSelected={onPaletteSelected}
-                />
-              ))}
-            </div>
+        {loadingThemes ? (
+          <LoadingPalettes />
+        ) : (
+          <div
+            className={cn("opacity-100 transition-opacity flex flex-col", {
+              // "opacity-100": isHover || !isHover,
+            })}
+          >
+            {Object.entries(groupedPalettes).map(([owner, palettes]) => (
+              <div key={owner} className="relative mb-8">
+                <h2 className="sticky -top-8 sm:-top-4 py-2 w-full bg-card text-xl sm:text-2xl font-semibold mb-1 text-foreground pointer-events-none z-50">
+                  {owner}
+                </h2>
+                <div
+                  className="grid grid-cols-4 gap-4"
+                  onClick={e => {
+                    e.stopPropagation();
+                  }}
+                >
+                  {palettes.map(palette => (
+                    <PaletteCard
+                      key={palette.name}
+                      selectedThemeType={selectedThemeType}
+                      palette={palette}
+                      isSelected={palette.name === selectedPaletteName}
+                      onPaletteSelected={onPaletteSelected}
+                    />
+                  ))}
+                </div>
+              </div>
+            ))}
+            {loading && <LoadingPalettes />}
           </div>
-        ))}
-        {loading && <LoadingPalettes />}
-      </div>
-    )}
-  </motion.div>
+        )}
+      </motion.div>
+    );
+  },
 );
+
+PaletteDialog.displayName = "PaletteDialog";
 
 const ColorSwatch = ({ color, isHover, className }: ColorSwatchProps) => {
   return isHover ? (
@@ -240,6 +250,11 @@ const LoadingPalettes = () => (
 
 export function ThemesDialog() {
   const dispatch = useAppDispatch();
+  const [themeClicked, setThemeClicked] = useLocalStorage(
+    "theme-clicked",
+    false,
+  );
+
   const {
     currentPalettes,
     loadMorePalettes,
@@ -260,6 +275,17 @@ export function ThemesDialog() {
   const closeTimeoutRef = useRef<HTMLButtonElement | null>(null);
 
   const [isOpen, setIsOpen] = useState(false);
+  const [wasThemeClicked, setWasThemeClicked] = useState(false);
+
+  useEffect(() => {
+    setWasThemeClicked(themeClicked);
+  }, [themeClicked]);
+
+  useEffect(() => {
+    if (!themeClicked && isOpen) {
+      setThemeClicked(true);
+    }
+  }, [isOpen]);
 
   useEffect(() => {
     if (showThemePalette) {
@@ -289,7 +315,6 @@ export function ThemesDialog() {
   useEffect(() => {
     const container = scrollContainerRef.current;
     if (!container) return;
-
     container.addEventListener("scroll", handleScroll);
     return () => {
       container.removeEventListener("scroll", handleScroll);
@@ -334,10 +359,32 @@ export function ThemesDialog() {
         />
       )}
       <div className="relative w-fit h-fit flex items-end justify-center">
-        <Button variant="outline" onClick={toggleDialog} ref={themesButtonRef}>
+        <Button
+          variant={wasThemeClicked ? "outline" : "default"}
+          onClick={toggleDialog}
+          ref={themesButtonRef}
+          className={cn("ring-ring/0", {
+            "border-primary": !wasThemeClicked,
+          })}
+        >
+          <div
+            className={cn(
+              "shimmer-animation hover:opacity-0 transition-all rounded-md",
+              {
+                hidden: wasThemeClicked,
+              },
+            )}
+          />
           <Palette className="sm:mr-2 h-4 w-4" />
           <span className="hidden sm:inline">
-            Themes <kbd>(T)</kbd>
+            Themes{" "}
+            <kbd
+              className={cn("border border-border p-1 px-2 ml-1", {
+                "border-primary-foreground": !wasThemeClicked,
+              })}
+            >
+              T
+            </kbd>
           </span>
         </Button>
         <AnimatePresence>

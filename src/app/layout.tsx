@@ -2,8 +2,6 @@ import type { Viewport } from "next";
 import "./globals.css";
 import StoreProvider from "@/app/providers/StoreProvider";
 import TopLoaderProvider from "@/app/providers/TopLoaderProvider";
-import { Suspense } from "react";
-import Loading from "@/components/ui/loading";
 import { ThemeProvider } from "@/app/providers/ThemeProvider";
 import ThemeUpdate from "@/app/providers/ThemeUpdate";
 import { ShortcutProvider } from "@/app/providers/ShortcutProvider";

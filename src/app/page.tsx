@@ -5,10 +5,9 @@ import { CardsDemoContainer } from "@/app/CardsDemo";
 import Header from "@/components/header";
 import Hero from "@/components/hero";
 import Footer from "@/components/footer";
+import CodeFastAdBanner from "@/components/banners/codefast-ad";
 
 export default function Dashboard() {
-  console.log("Rendered at dashbaord: ", new Date());
-
   return (
     <main className="min-h-screen w-full bg-background text-foreground relative flex flex-col space-y-8 scroll-y-auto sm:scroll-auto">
       <Header />
@@ -16,6 +15,10 @@ export default function Dashboard() {
         <Hero />
         <CardsDemoContainer />
       </div>
+      <CodeFastAdBanner
+        isVertical
+        className="fixed -top-8 sm:top-20 right-4 mx-auto z-50 w-full sm:max-w-48"
+      />
       <BottomNavbar />
       <Footer />
     </main>

@@ -10,7 +10,7 @@ import { useMemo, useState } from "react";
 
 const TIME_TO_CHANGE_THEME = 200;
 
-export function CardsDemoContainer() {
+const Header = () => {
   const { baseThemeType, selectedThemeType } = useAppSelector(
     state => state.palette,
   );
@@ -60,7 +60,66 @@ export function CardsDemoContainer() {
     setTimeToChangeTheme(new Date(Date.now() + TIME_TO_CHANGE_THEME));
     dispatch(changeBaseThemeType());
   };
+  return (
+    <div
+      className={cn(
+        "sticky top-0 sm:top-0 w-full flex justify-center sm:justify-between bg-muted-demo items-center p-4 rounded-t-lg shadow-md sm:border-foreground-demo/40 z-10",
+        {
+          "border-b border-foreground-demo/30": baseThemeType === "dark",
+        },
+      )}
+    >
+      <motion.div
+        id="header"
+        animate={controls}
+        initial={{ y: 0 }}
+        onClick={handleThemeChange}
+        onMouseDown={handleMouseDown}
+        onMouseUp={handleMouseUp}
+        onMouseLeave={() => isPressed && handleMouseUp()}
+      >
+        <Button
+          variant={"outline"}
+          className={cn(
+            "rounded-lg active:translate-y-1 transition-all w-fit inline-flex items-center border-foreground/30",
+            {
+              "shadow-md": selectedThemeType === "light",
+            },
+          )}
+        >
+          <LampDesk
+            className="!w-7 !h-7 !sm:w-5 sm:!h-5 text-foreground-demo"
+            isDark={selectedThemeType === "dark"}
+          />
+        </Button>
+      </motion.div>
+      <div
+        onClick={handleThemeChange}
+        onMouseDown={handleMouseDown}
+        onMouseUp={handleMouseUp}
+        className={cn(
+          "w-fit p-4 h-5 select-none items-center gap-1 rounded border border-foreground-demo/20 bg-background-demo font-mono text-[10px] font-medium opacity-100 hidden sm:flex",
+          {
+            "border-foreground-demo/60": baseThemeType === "light",
+          },
+        )}
+      >
+        <p className="text-sm text-foreground-demo">
+          Hold <kbd className="border border-border p-1 px-2">L</kbd> to{" "}
+          {lightDarkText}
+        </p>
+        {baseThemeType === "dark" && (
+          <Sun className="w-4 h-4 text-foreground-demo" />
+        )}
+        {baseThemeType === "light" && (
+          <Moon className="w-4 h-4 text-foreground-demo" />
+        )}
+      </div>
+    </div>
+  );
+};
 
+export function CardsDemoContainer() {
   return (
     <div className="relative md:container md:!px-0 w-full h-full bg-background-demo rounded-lg border border-foreground/10 sm:border-foreground/30 px-0 pb-4">
       <motion.div
@@ -70,46 +129,7 @@ export function CardsDemoContainer() {
         transition={{ duration: 0.5, ease: "easeInOut" }}
         className="w-full h-full flex flex-col gap-4 relative"
       >
-        <div className="sticky top-0 sm:top-0 w-full flex justify-center sm:justify-between bg-background-demo items-center p-4 rounded-t-lg border-b border-foreground-demo/80 sm:border-foreground-demo/40 z-10">
-          <motion.div
-            id="header"
-            animate={controls}
-            initial={{ y: 0 }}
-            onClick={handleThemeChange}
-            onMouseDown={handleMouseDown}
-            onMouseUp={handleMouseUp}
-            onMouseLeave={() => isPressed && handleMouseUp()}
-          >
-            <Button
-              variant={"outline"}
-              className="rounded-lg active:translate-y-1 transition-all w-fit inline-flex items-center"
-            >
-              <LampDesk
-                className="!w-7 !h-7 !sm:w-5 sm:!h-5 text-foreground-demo"
-                isDark={selectedThemeType === "dark"}
-              />
-            </Button>
-          </motion.div>
-          <div
-            className={cn(
-              "w-fit p-4 h-5 select-none items-center gap-1 rounded border border-foreground-demo/20 bg-background-demo font-mono text-[10px] font-medium opacity-100 hidden sm:flex",
-              {
-                "border-foreground-demo/60": baseThemeType === "light",
-              },
-            )}
-          >
-            <p className="text-sm text-foreground-demo">
-              Hold <kbd className="border border-border p-1 px-2">L</kbd> to{" "}
-              {lightDarkText}
-            </p>
-            {baseThemeType === "dark" && (
-              <Sun className="w-4 h-4 text-foreground-demo" />
-            )}
-            {baseThemeType === "light" && (
-              <Moon className="w-4 h-4 text-foreground-demo" />
-            )}
-          </div>
-        </div>
+        <Header />
         <div className="w-full flex justify-center px-4">
           <div className="max-w-full">
             <CardsDemo />
