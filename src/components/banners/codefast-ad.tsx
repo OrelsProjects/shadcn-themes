@@ -9,6 +9,7 @@ import { useLocalStorage } from "@/hooks/useLocalStorage";
 import Link from "next/link";
 import { motion, AnimatePresence, useAnimation } from "framer-motion";
 import { cn } from "@/lib/utils";
+import { EventTracker } from "@/eventTracker";
 
 interface CodeFastAdBannerProps {
   isVertical?: boolean;
@@ -129,7 +130,11 @@ export default function CodeFastAdBanner({
                     className="bg-primary/90 hover:bg-primary text-foreground text-xs py-1 h-7"
                     asChild
                   >
-                    <Link href="https://codefa.st/?via=orel" target="_blank">
+                    <Link
+                      href="https://codefa.st/?via=orel"
+                      target="_blank"
+                      onClick={() => EventTracker.track("codefast_ad_clicked")}
+                    >
                       <div className="flex items-center">
                         Learn More
                         <ArrowRight className="w-3 h-3 ml-1" />
