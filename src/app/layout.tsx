@@ -1,4 +1,4 @@
-import type { Viewport } from "next";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import StoreProvider from "@/app/providers/StoreProvider";
 import TopLoaderProvider from "@/app/providers/TopLoaderProvider";
@@ -12,16 +12,18 @@ interface RootLayoutProps {
   locale: never;
 }
 
-const OG_IMAGE_URL = process.env.NEXT_PUBLIC_OG_IMAGE_URL;
-const APP_NAME = process.env.NEXT_PUBLIC_APP_NAME;
-const APP_DEFAULT_TITLE = process.env.NEXT_PUBLIC_APP_DEFAULT_TITLE;
-const APP_TITLE_TEMPLATE = process.env.NEXT_PUBLIC_APP_TITLE_TEMPLATE;
-const APP_DESCRIPTION = process.env.NEXT_PUBLIC_APP_DESCRIPTION;
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL;
-const APP_STARTUP_IMAGE = process.env.NEXT_PUBLIC_APP_STARTUP_IMAGE;
-const TWITTER_OG_IMAGE_URL = process.env.NEXT_PUBLIC_TWITTER_OG_IMAGE_URL;
+const OG_IMAGE_URL = process.env.NEXT_PUBLIC_OG_IMAGE_URL as string;
+const APP_NAME = process.env.NEXT_PUBLIC_APP_NAME as string;
+const APP_DEFAULT_TITLE = process.env.NEXT_PUBLIC_APP_DEFAULT_TITLE as string;
+const APP_TITLE_TEMPLATE = process.env.NEXT_PUBLIC_APP_TITLE_TEMPLATE as string;
+const APP_DESCRIPTION = process.env.NEXT_PUBLIC_APP_DESCRIPTION as string;
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL as string;
+const APP_STARTUP_IMAGE = process.env.NEXT_PUBLIC_APP_STARTUP_IMAGE as string;
+// const TWITTER_OG_IMAGE_URL = process.env
+// .NEXT_PUBLIC_TWITTER_OG_IMAGE_URL as string;
+const TWITTER_OG_IMAGE_URL = "/shadcn-themes-social.png";
 
-export const metadata = {
+export const metadata: Metadata = {
   applicationName: APP_NAME, // Name of the application, used in app manifest files and app listing.
   title: {
     default: APP_DEFAULT_TITLE, // The default title shown on the browser tab if a specific page title is not set.
