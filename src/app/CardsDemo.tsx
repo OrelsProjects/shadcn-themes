@@ -73,7 +73,7 @@ export function CardsDemo() {
   };
 
   return (
-    <div className="relative md:container w-full h-full bg-background-demo rounded-lg border border-foreground/10 sm:border-foreground/30 px-0 pb-4">
+    <div className="relative md:container md:!px-0 w-full h-full bg-background-demo rounded-lg border border-foreground/10 sm:border-foreground/30 px-0 pb-4">
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -81,7 +81,7 @@ export function CardsDemo() {
         transition={{ duration: 0.5, ease: "easeInOut" }}
         className="w-full h-full flex flex-col gap-4 relative"
       >
-        <div className="sticky top-4 sm:top-0 w-full flex justify-center sm:justify-between bg-background-demo items-center p-4 px-8 rounded-t-lg border-b border-foreground-demo/80 z-10">
+        <div className="sticky top-4 sm:top-0 w-full flex justify-center sm:justify-between bg-background-demo items-center p-4 rounded-t-lg border-b border-foreground-demo/80 sm:border-foreground-demo/40 z-10">
           <motion.div
             id="header"
             animate={controls}
@@ -96,7 +96,7 @@ export function CardsDemo() {
               className="shadow-lg ring-foreground-demo/0"
             >
               <LampDesk className="!w-7 !h-7 !sm:w-5 sm:!h-5 text-foreground-demo" />
-            </Button>
+            </Button>t
           </motion.div>
           <div
             className={cn(
@@ -118,7 +118,7 @@ export function CardsDemo() {
             )}
           </div>
         </div>
-        <div className="flex flex-col items-center md:grid md:grids-col-2 md:gap-4 lg:grid-cols-10 xl:grid-cols-11 xl:gap-4 px-8">
+        <div className="flex flex-col items-center md:grid md:grids-col-2 md:gap-4 lg:grid-cols-10 xl:grid-cols-11 xl:gap-4 px-4">
           <div className="space-y-4 lg:col-span-4 xl:col-span-6 xl:space-y-4">
             <CardsStats />
             <div className="grid gap-1 sm:grid-cols-[260px_1fr] md:hidden">

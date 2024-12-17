@@ -20,6 +20,7 @@ import {
   DialogContent,
   DialogFooter,
   DialogHeader,
+  DialogTitle,
   DialogTrigger,
 } from "@/components/ui-demo/dialog";
 import { Slider } from "@/components/ui-demo/slider";
@@ -131,12 +132,10 @@ export function CardsActivityGoal() {
       </CardContent>
       <CardFooter>
         <Dialog>
-          <DialogTrigger className="w-full">
-            <Button className="w-full">Set Goal</Button>
-          </DialogTrigger>
+          <DialogTrigger className="w-full">Set Goal</DialogTrigger>
           <DialogContent>
             <DialogHeader className="w-full flex justify-center text-xl">
-              Goal: {goal}
+              <DialogTitle>Goal: {goal}</DialogTitle>
             </DialogHeader>
             <div className="flex flex-col gap-4">
               <Slider
