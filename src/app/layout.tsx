@@ -56,7 +56,12 @@ export const metadata = {
       template: APP_TITLE_TEMPLATE, // Template for Twitter title formatting to include specific page names.
     },
     description: APP_DESCRIPTION, // Description displayed in Twitter card previews.
-    images: { url: TWITTER_OG_IMAGE_URL, width: 1200, height: 630 }, // Image used in Twitter preview card with dimensions.
+    images: {
+      url: TWITTER_OG_IMAGE_URL,
+      width: 1200,
+      height: 630,
+      alt: APP_DESCRIPTION,
+    }, // Image used in Twitter preview card with dimensions.
   },
 };
 
