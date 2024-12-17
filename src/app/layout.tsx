@@ -81,7 +81,9 @@ export default function Layout({ children }: RootLayoutProps) {
             <ThemeUpdate />
             <TopLoaderProvider />
             <ShortcutProvider>{children}</ShortcutProvider>
+
             <div id="themes-dialog-portal" />
+            <div id="themes-dialog-background-portal" />
             {/* <ClientTrackersProvider /> */}
           </ThemeProvider>
         </StoreProvider>

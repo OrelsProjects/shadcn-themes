@@ -10,7 +10,6 @@ import { Separator } from "@/components/ui/separator";
 import { Linkedin, Twitter } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { TWITTER_URL, LINKEDIN_URL, SUBSTACK_URL } from "@/lib/consts";
-import Image from "next/image";
 
 export function BottomNavbar() {
   return (
@@ -26,7 +25,7 @@ export function BottomNavbar() {
         ease: "easeOut",
         delay: 1,
       }}
-      className="sticky bottom-8 left-0 sm:w-full flex justify-center items-center z-40 px-3"
+      className="sticky bottom-2 sm:bottom-8 left-0 sm:w-full flex justify-center items-center z-40 px-3"
     >
       <Card className="w-fit h-16 bg-background/80 backdrop-blur-md border border-border/80 shadow-sm px-6 py-2 flex items-center gap-4">
         <CopyCode />

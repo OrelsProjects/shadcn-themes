@@ -220,6 +220,7 @@
   body {
     @apply bg-background-demo text-foreground-demo;
   }
+
 }
 
 @media (min-width: 768px) {

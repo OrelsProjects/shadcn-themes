@@ -90,6 +90,7 @@ export default function CopyCode() {
 
   const codeString = useMemo(() => {
     if (!selectedPalette) return "";
+
     return generateCSS(selectedPalette);
   }, [selectedPalette]);
 

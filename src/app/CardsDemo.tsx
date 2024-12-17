@@ -11,6 +11,7 @@ import { CardsReportIssue } from "@/components/cards/report-issue";
 import { CardsShare } from "@/components/cards/share";
 import { CardsStats } from "@/components/cards/stats";
 import { CardsTeamMembers } from "@/components/cards/team-members";
+import { CardsDemo } from "@/components/cards";
 import { Button } from "@/components/ui-demo/button";
 import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 import { changeBaseThemeType } from "@/lib/features/theme/paletteSlice";
@@ -21,10 +22,8 @@ import { useMemo, useState } from "react";
 
 const TIME_TO_CHANGE_THEME = 200;
 
-export function CardsDemo() {
-  const { baseThemeType, selectedThemeType } = useAppSelector(
-    state => state.palette,
-  );
+export function CardsDemoContainer() {
+  const { baseThemeType } = useAppSelector(state => state.palette);
 
   const lightDarkText = useMemo(() => {
     if (baseThemeType === "light") {
@@ -81,7 +80,7 @@ export function CardsDemo() {
         transition={{ duration: 0.5, ease: "easeInOut" }}
         className="w-full h-full flex flex-col gap-4 relative"
       >
-        <div className="sticky top-4 sm:top-0 w-full flex justify-center sm:justify-between bg-background-demo items-center p-4 rounded-t-lg border-b border-foreground-demo/80 sm:border-foreground-demo/40 z-10">
+        <div className="sticky top-0 sm:top-0 w-full flex justify-center sm:justify-between bg-background-demo items-center p-4 rounded-t-lg border-b border-foreground-demo/80 sm:border-foreground-demo/40 z-10">
           <motion.div
             id="header"
             animate={controls}
@@ -96,11 +95,11 @@ export function CardsDemo() {
               className="shadow-lg ring-foreground-demo/0"
             >
               <LampDesk className="!w-7 !h-7 !sm:w-5 sm:!h-5 text-foreground-demo" />
-            </Button>t
+            </Button>
           </motion.div>
           <div
             className={cn(
-              "w-fit p-4 pointer-events-none h-5 select-none items-center gap-1 rounded border border-foreground-demo/20 bg-background-demo font-mono text-[10px] font-medium opacity-100 hidden sm:flex",
+              "w-fit p-4 h-5 select-none items-center gap-1 rounded border border-foreground-demo/20 bg-background-demo font-mono text-[10px] font-medium opacity-100 hidden sm:flex",
               {
                 "border-foreground-demo/60": baseThemeType === "light",
               },
@@ -109,7 +108,7 @@ export function CardsDemo() {
             <p className="text-sm text-foreground-demo">
               Hold <kbd className="border border-border p-1 px-2">L</kbd> to{" "}
               {lightDarkText}
-            </p>{" "}
+            </p>
             {baseThemeType === "dark" && (
               <Sun className="w-4 h-4 text-foreground-demo" />
             )}
@@ -118,50 +117,9 @@ export function CardsDemo() {
             )}
           </div>
         </div>
-        <div className="flex flex-col items-center md:grid md:grids-col-2 md:gap-4 lg:grid-cols-10 xl:grid-cols-11 xl:gap-4 px-4">
-          <div className="space-y-4 lg:col-span-4 xl:col-span-6 xl:space-y-4">
-            <CardsStats />
-            <div className="grid gap-1 sm:grid-cols-[260px_1fr] md:hidden">
-              <CardsCalendar />
-              <div className="pt-3 sm:pl-2 sm:pt-0 xl:pl-4">
-                <CardsActivityGoal />
-              </div>
-              <div className="pt-3 sm:col-span-2 xl:pt-4">
-                <CardsMetric />
-              </div>
-            </div>
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
-              <div className="space-y-4 xl:space-y-4">
-                <CardsTeamMembers />
-                <CardsCookieSettings />
-                <CardsPaymentMethod />
-              </div>
-              <div className="space-y-4 xl:space-y-4">
-                <CardsChat />
-                <CardsCreateAccount />
-                <div className="hidden xl:block">
-                  <CardsReportIssue />
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="space-y-4 lg:col-span-6 xl:col-span-5 xl:space-y-4">
-            <div className="hidden gap-1 sm:grid-cols-[260px_1fr] md:grid">
-              <CardsCalendar />
-              <div className="pt-3 sm:pl-2 sm:pt-0 xl:pl-3">
-                <CardsActivityGoal />
-              </div>
-              <div className="pt-3 sm:col-span-2 xl:pt-3">
-                <CardsMetric />
-              </div>
-            </div>
-            <div className="hidden md:block">
-              <CardsDataTable />
-            </div>
-            <CardsShare />
-            <div className="xl:hidden">
-              <CardsReportIssue />
-            </div>
+        <div className="w-full flex justify-center px-4">
+          <div className="max-w-full">
+            <CardsDemo />
           </div>
         </div>
       </motion.div>

@@ -4,7 +4,7 @@ import Logo from "@/components/logo";
 const Header = () => {
   return (
     <nav
-      className={`top-0 w-full z-50 transition-all duration-300 flex justify-center items-center h-16 border-b border-border bg-background/70 backdrop-blur-md shadow-md py-2`}
+      className={`w-full transition-all duration-300 flex justify-center items-center h-16 border-b border-border bg-background/70 backdrop-blur-md shadow-md py-2`}
     >
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
         <Logo />
