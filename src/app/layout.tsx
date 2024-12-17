@@ -70,10 +70,6 @@ export default function Layout({ children }: RootLayoutProps) {
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         <meta name="theme-color" content="#00000000" />
-        <meta property="og:image" content="<generated>" />
-        <meta property="og:image:type" content="<generated>" />
-        <meta property="og:image:width" content="<generated>" />
-        <meta property="og:image:height" content="<generated>" />
       </head>
       <body className="antialiased">
         <StoreProvider>
