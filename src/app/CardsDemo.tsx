@@ -1,29 +1,19 @@
-import { BottomNavbar } from "@/components/bottom-navbar";
-import { CardsActivityGoal } from "@/components/cards/activity-goal";
-import { CardsCalendar } from "@/components/cards/calendar";
-import { CardsChat } from "@/components/cards/chat";
-import { CardsCookieSettings } from "@/components/cards/cookie-settings";
-import { CardsCreateAccount } from "@/components/cards/create-account";
-import { CardsDataTable } from "@/components/cards/data-table";
-import { CardsMetric } from "@/components/cards/metric";
-import { CardsPaymentMethod } from "@/components/cards/payment-method";
-import { CardsReportIssue } from "@/components/cards/report-issue";
-import { CardsShare } from "@/components/cards/share";
-import { CardsStats } from "@/components/cards/stats";
-import { CardsTeamMembers } from "@/components/cards/team-members";
 import { CardsDemo } from "@/components/cards";
 import { Button } from "@/components/ui-demo/button";
 import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 import { changeBaseThemeType } from "@/lib/features/theme/paletteSlice";
+import { LampDesk } from "@/lib/icons";
 import { cn } from "@/lib/utils";
 import { useAnimation, motion } from "framer-motion";
-import { LampDesk, Moon, Sun } from "lucide-react";
+import { Moon, Sun } from "lucide-react";
 import { useMemo, useState } from "react";
 
 const TIME_TO_CHANGE_THEME = 200;
 
 export function CardsDemoContainer() {
-  const { baseThemeType } = useAppSelector(state => state.palette);
+  const { baseThemeType, selectedThemeType } = useAppSelector(
+    state => state.palette,
+  );
 
   const lightDarkText = useMemo(() => {
     if (baseThemeType === "light") {
@@ -92,9 +82,12 @@ export function CardsDemoContainer() {
           >
             <Button
               variant={"outline"}
-              className="shadow-lg ring-foreground-demo/0"
+              className="rounded-lg active:translate-y-1 transition-all w-fit inline-flex items-center"
             >
-              <LampDesk className="!w-7 !h-7 !sm:w-5 sm:!h-5 text-foreground-demo" />
+              <LampDesk
+                className="!w-7 !h-7 !sm:w-5 sm:!h-5 text-foreground-demo"
+                isDark={selectedThemeType === "dark"}
+              />
             </Button>
           </motion.div>
           <div
