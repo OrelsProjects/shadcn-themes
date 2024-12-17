@@ -34,7 +34,7 @@ const TermsOfServiceAndPolicy: React.FC = () => {
         <ul className="list-disc pl-6 mt-2 text-gray-700">
           <li>
             You may explore, preview, and copy the themes we provide solely
-            through the designated "Copy" button on our website.
+            through the designated &quot;Copy&quot; button on our website.
           </li>
           <li>
             Accessing or extracting themes or data via unauthorized methods,
@@ -45,7 +45,7 @@ const TermsOfServiceAndPolicy: React.FC = () => {
             who violate these terms.
           </li>
           <li>
-            All themes are provided "as-is," and {COMPANY_NAME} is not
+            All themes are provided &quot;as-is,&quot; and {COMPANY_NAME} is not
             responsible for any misuse or unintended consequences of their use.
           </li>
         </ul>
@@ -54,7 +54,7 @@ const TermsOfServiceAndPolicy: React.FC = () => {
       <section className="mb-6">
         <h2 className="text-xl font-bold mb-2">Privacy Policy</h2>
         <p className="text-gray-700">
-          Your privacy is important to us. It is {COMPANY_NAME}'s policy to
+          Your privacy is important to us. It is {COMPANY_NAME}&apos;s policy to
           respect your privacy regarding any information we may collect from you
           across our website,
           <a href={WEBSITE_URL} className="text-blue-500 underline">
@@ -68,7 +68,7 @@ const TermsOfServiceAndPolicy: React.FC = () => {
         <p className="text-gray-700">
           We only ask for personal information when we truly need it to provide
           a service to you. We collect it by fair and lawful means, with your
-          knowledge and consent. We also let you know why we’re collecting it
+          knowledge and consent. We also let you know why we&apos;re collecting it
           and how it will be used.
         </p>
       </section>
@@ -85,7 +85,7 @@ const TermsOfServiceAndPolicy: React.FC = () => {
 
       <section className="mb-6">
         <p className="text-gray-700">
-          We don’t share any personally identifying information publicly or with
+          We don&apos;t share any personally identifying information publicly or with
           third parties, except when required to by law.
         </p>
       </section>
