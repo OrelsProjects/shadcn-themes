@@ -12,8 +12,6 @@ const ThemeUpdate = () => {
   );
 
   useEffect(() => {
-    const now = new Date();
-    console.log("ThemeUpdate", now);
     const root = document.documentElement;
     const colors: ThemePalette =
       selectedPalette?.colors[selectedThemeType] || basePalette.colors.dark;

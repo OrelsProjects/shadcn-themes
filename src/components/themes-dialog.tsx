@@ -45,7 +45,7 @@ interface ColorSwatchProps {
 interface PaletteDialogProps {
   groupedPalettes: Record<string, ParsedPalette[]>;
   selectedThemeType: ThemeType;
-  onPaletteSelected: (e: ParsedPalette) => void;
+  onPaletteSelected: (parsedPalette: ParsedPalette) => void;
   selectedPaletteName: string;
   loadingThemes?: boolean;
   className?: string;
@@ -134,7 +134,7 @@ const ColorSwatch = ({ color, isHover, className }: ColorSwatchProps) => {
   );
 };
 
-export const ColorSwatchTooltip = ({ color }: ColorSwatchProps) => {
+export const ColorSwatchTooltip = ({ color, className }: ColorSwatchProps) => {
   const [isTooltipOpen, setIsTooltipOpen] = useState(false);
 
   return (
@@ -142,7 +142,10 @@ export const ColorSwatchTooltip = ({ color }: ColorSwatchProps) => {
       <Tooltip onOpenChange={setIsTooltipOpen}>
         <TooltipTrigger>
           <div
-            className="w-6 h-6 rounded-full hover:scale-105"
+            className={cn(
+              "w-4 h-4 sm:w-6 sm:h-6 rounded-full opacity-50",
+              className,
+            )}
             style={{ backgroundColor: color }}
           />
         </TooltipTrigger>
@@ -224,13 +227,8 @@ const PaletteCard = ({
         />
         <ColorSwatch
           isHover={isHover}
-          // className="hidden sm:block"
-          color={getThemeColor("background", colors, true)}
-        />
-        <ColorSwatch
-          isHover={isHover}
           className="hidden sm:block"
-          color={getThemeColor("card", colors, true)}
+          color={getThemeColor("background", colors, true)}
         />
       </div>
     </div>
@@ -258,10 +256,10 @@ export function ThemesDialog() {
   const {
     currentPalettes,
     loadMorePalettes,
-    hasMore,
     resetPaging,
     loadingThemes,
     loadingPaging,
+    visitTheme,
   } = usePalette();
   const {
     selectedPaletteName,
@@ -302,7 +300,7 @@ export function ThemesDialog() {
   }, [hideThemePalette]);
 
   const handleScroll = useCallback(() => {
-    if (!scrollContainerRef.current || !hasMore) return;
+    if (!scrollContainerRef.current) return;
     const { scrollTop, scrollHeight, clientHeight } =
       scrollContainerRef.current;
     const scrollPosition = scrollTop + clientHeight;
@@ -310,7 +308,7 @@ export function ThemesDialog() {
     if (scrollPosition / scrollHeight > 0.7) {
       loadMorePalettes();
     }
-  }, [hasMore, loadMorePalettes]);
+  }, [loadMorePalettes]);
 
   useEffect(() => {
     const container = scrollContainerRef.current;
@@ -338,6 +336,11 @@ export function ThemesDialog() {
   const handleClose = () => {
     setIsOpen(false);
     resetPaging();
+  };
+
+  const handlePaletteSelected = (parsedPalette: ParsedPalette) => {
+    dispatch(selectPalette({ newPalette: parsedPalette }));
+    visitTheme(parsedPalette);
   };
 
   const Background = ({ onClick }: { onClick?: () => void }) =>
@@ -393,9 +396,7 @@ export function ThemesDialog() {
               <PaletteDialog
                 groupedPalettes={groupedPalettes}
                 selectedThemeType={selectedThemeType}
-                onPaletteSelected={(e: any) => {
-                  dispatch(selectPalette({ newPalette: e }));
-                }}
+                onPaletteSelected={handlePaletteSelected}
                 selectedPaletteName={selectedPaletteName}
                 loadingThemes={loadingThemes}
                 loading={loadingPaging}
@@ -405,9 +406,7 @@ export function ThemesDialog() {
               <PaletteDialogMobile
                 groupedPalettes={groupedPalettes}
                 selectedThemeType={selectedThemeType}
-                onPaletteSelected={(e: ParsedPalette) => {
-                  dispatch(selectPalette({ newPalette: e }));
-                }}
+                onPaletteSelected={handlePaletteSelected}
                 selectedPaletteName={selectedPaletteName}
                 loadingThemes={loadingThemes}
                 loading={loadingPaging}

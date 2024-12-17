@@ -2,10 +2,15 @@ import { useState, useMemo, useEffect, useRef } from "react";
 import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 import { addPalettes } from "@/lib/features/theme/paletteSlice";
 import { ParsedPalette } from "@/models/palette";
-import axios from "axios";
+import { useLocalStorage } from "@/hooks/useLocalStorage";
+import cuid from "cuid";
+import { Logger } from "@/logger";
+import { throttle } from "lodash";
+import axiosInstance from "@/lib/axiosInstance";
 
 export function usePalette() {
   const dispatch = useAppDispatch();
+  const [userId, setUserId] = useLocalStorage("shadcn-themes-user-id", "");
   const { allPalettes } = useAppSelector(state => state.palette);
   const [loadingThemes, setLoadingThemes] = useState(false);
   const [loadingPaging, setLoadingPaging] = useState(false);
@@ -15,12 +20,19 @@ export function usePalette() {
   const loadingPagingRef = useRef(false);
   const itemsPerPage = 20;
 
+  useEffect(() => {
+    if (!userId) {
+      const newUserId = cuid();
+      setUserId(newUserId);
+    }
+  }, []);
+
   const fetchAndSetPalettes = async (page: number) => {
     try {
       if (loadingRef.current) return;
       loadingRef.current = true;
 
-      const resposne = await axios.get<{
+      const resposne = await axiosInstance.get<{
         palettes: ParsedPalette[];
         hasMore: boolean;
       }>("/api/themes", {
@@ -71,6 +83,14 @@ export function usePalette() {
   }, [allPalettes, page]);
 
   const loadMorePalettes = () => {
+    console.log("loadMorePalettes");
+    if (!hasMore) {
+      const maxPage = Math.ceil(allPalettes.length / itemsPerPage);
+      if (page < maxPage) {
+        setPage(maxPage);
+      }
+      return;
+    }
     if (loadingPagingRef.current) return;
     setLoadingPaging(true);
     loadingPagingRef.current = true;
@@ -88,12 +108,32 @@ export function usePalette() {
     setPage(1);
   };
 
+  const visitTheme = useMemo(
+    () =>
+      throttle(async (theme: ParsedPalette) => {
+        console.log("visitTheme");
+        if (!userId) {
+          Logger.error("No user id found", userId);
+          return;
+        }
+        try {
+          await axiosInstance.post("/api/themes/visit", {
+            themeId: theme.id,
+            userId,
+          });
+        } catch (e) {
+          Logger.error("Failed to visit theme", e);
+        }
+      }, 2000),
+    [userId],
+  );
+
   return {
     currentPalettes,
     loadMorePalettes,
-    hasMore,
     loadingThemes,
     resetPaging,
     loadingPaging,
+    visitTheme,
   };
 }

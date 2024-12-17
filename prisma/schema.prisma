@@ -91,12 +91,15 @@ model Theme {
   themeName    String
   themeColors  String // JSON stringified object, Record<ThemeType, ThemePalette>
 
+  primaryColor String?
+
   visible Boolean @default(true)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  owner ThemeOwner @relation(fields: [themeOwnerId], references: [id], onDelete: Cascade)
+  owner      ThemeOwner   @relation(fields: [themeOwnerId], references: [id], onDelete: Cascade)
+  visits     ThemeVisit[]
 
   @@map("theme")
 }
@@ -104,10 +107,12 @@ model Theme {
 model ThemeVisit {
   id String @id @default(auto()) @map("_id") @db.ObjectId
 
-  themeId String
+  themeId String @db.ObjectId
   userId  String?
 
   visitedAt DateTime @default(now()) @map("visited_at")
+
+  theme Theme @relation(fields: [themeId], references: [id], onDelete: Cascade)
 
   @@map("themesVisits")
 }

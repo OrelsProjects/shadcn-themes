@@ -39,7 +39,7 @@ export default function Hero() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
       >
-        <h2 className="text-2xl font-semibold text-center text-foreground/60">
+        <h2 className="text-xl sm:text-2xl font-semibold text-center text-foreground/60">
           Featuring Themes From
         </h2>
         <div className="w-full justify-center items-center px-auto flex flex-wrap  gap-4 sm:gap-8">
@@ -57,7 +57,7 @@ export default function Hero() {
                 src={source.src}
                 alt={`${source.name} themes`}
                 fill
-                className="!relative !w-fit !h-12 sm:!h-16 object-contain"
+                className="!relative !w-fit !h-8 sm:!h-16 object-contain"
               />
             </motion.div>
           ))}
