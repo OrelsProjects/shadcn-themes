@@ -19,6 +19,7 @@ const APP_TITLE_TEMPLATE = process.env.NEXT_PUBLIC_APP_TITLE_TEMPLATE;
 const APP_DESCRIPTION = process.env.NEXT_PUBLIC_APP_DESCRIPTION;
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL;
 const APP_STARTUP_IMAGE = process.env.NEXT_PUBLIC_APP_STARTUP_IMAGE;
+const TWITTER_OG_IMAGE_URL = process.env.NEXT_PUBLIC_TWITTER_OG_IMAGE_URL;
 
 export const metadata = {
   applicationName: APP_NAME, // Name of the application, used in app manifest files and app listing.
@@ -46,7 +47,7 @@ export const metadata = {
       template: APP_TITLE_TEMPLATE, // Template for title formatting in Open Graph to create page-specific titles.
     },
     description: APP_DESCRIPTION, // Description used in Open Graph for richer social media previews.
-    images: { url: OG_IMAGE_URL, width: 1200, height: 630 }, // Default Open Graph image with recommended size.
+    images: { url: TWITTER_OG_IMAGE_URL, width: 1200, height: 675 }, // Default Open Graph image with recommended size.
   },
   twitter: {
     card: "summary", // Sets Twitter card type to 'summary', showing a small preview image and description.
@@ -55,7 +56,7 @@ export const metadata = {
       template: APP_TITLE_TEMPLATE, // Template for Twitter title formatting to include specific page names.
     },
     description: APP_DESCRIPTION, // Description displayed in Twitter card previews.
-    images: { url: OG_IMAGE_URL, width: 1200, height: 630 }, // Image used in Twitter preview card with dimensions.
+    images: { url: TWITTER_OG_IMAGE_URL, width: 1200, height: 675 }, // Image used in Twitter preview card with dimensions.
   },
 };
 
