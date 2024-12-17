@@ -47,7 +47,7 @@ export const metadata = {
       template: APP_TITLE_TEMPLATE, // Template for title formatting in Open Graph to create page-specific titles.
     },
     description: APP_DESCRIPTION, // Description used in Open Graph for richer social media previews.
-    images: { url: TWITTER_OG_IMAGE_URL, width: 1200, height: 675 }, // Default Open Graph image with recommended size.
+    images: { url: TWITTER_OG_IMAGE_URL, width: 1200, height: 630 }, // Default Open Graph image with recommended size.
   },
   twitter: {
     card: "summary", // Sets Twitter card type to 'summary', showing a small preview image and description.
@@ -56,7 +56,7 @@ export const metadata = {
       template: APP_TITLE_TEMPLATE, // Template for Twitter title formatting to include specific page names.
     },
     description: APP_DESCRIPTION, // Description displayed in Twitter card previews.
-    images: { url: TWITTER_OG_IMAGE_URL, width: 1200, height: 675 }, // Image used in Twitter preview card with dimensions.
+    images: { url: TWITTER_OG_IMAGE_URL, width: 1200, height: 630 }, // Image used in Twitter preview card with dimensions.
   },
 };
 
