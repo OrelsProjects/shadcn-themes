@@ -50,7 +50,7 @@ export const metadata = {
     images: { url: TWITTER_OG_IMAGE_URL, width: 1200, height: 630 }, // Default Open Graph image with recommended size.
   },
   twitter: {
-    card: "summary", // Sets Twitter card type to 'summary', showing a small preview image and description.
+    card: "summary_large_image", // Sets Twitter card type to 'summary', showing a small preview image and description. To show big image, use 'summary_large_image'.
     title: {
       default: APP_DEFAULT_TITLE, // Default title used in Twitter metadata for page previews.
       template: APP_TITLE_TEMPLATE, // Template for Twitter title formatting to include specific page names.
