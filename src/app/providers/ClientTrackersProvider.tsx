@@ -5,7 +5,7 @@ import { initEventTracker } from "@/eventTracker";
 import { initLogger } from "@/logger";
 
 export default function ClientTrackersProvider() {
-  initLogger();
+  // initLogger();
   initEventTracker();
   return null;
 }

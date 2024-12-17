@@ -15,6 +15,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { EventTracker } from "@/eventTracker";
 import { useAppSelector } from "@/hooks/redux";
 import { HSL, ParsedPalette, ThemePalette, ThemeType } from "@/models/palette";
 import { Copy } from "lucide-react";
@@ -95,6 +96,7 @@ export default function CopyCode() {
   }, [selectedPalette]);
 
   const handleCopy = () => {
+    EventTracker.track("Copied CSS code");
     navigator.clipboard.writeText(codeString);
     setShowTooltip(true);
     setTimeout(() => setShowTooltip(false), 2000);

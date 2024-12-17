@@ -5,6 +5,7 @@ import TopLoaderProvider from "@/app/providers/TopLoaderProvider";
 import { ThemeProvider } from "@/app/providers/ThemeProvider";
 import ThemeUpdate from "@/app/providers/ThemeUpdate";
 import { ShortcutProvider } from "@/app/providers/ShortcutProvider";
+import ClientTrackersProvider from "@/app/providers/ClientTrackersProvider";
 
 interface RootLayoutProps {
   children: React.ReactNode;
@@ -82,7 +83,7 @@ export default function Layout({ children }: RootLayoutProps) {
 
             <div id="themes-dialog-portal" />
             <div id="themes-dialog-background-portal" />
-            {/* <ClientTrackersProvider /> */}
+            <ClientTrackersProvider />
           </ThemeProvider>
         </StoreProvider>
         {/* Portal */}
