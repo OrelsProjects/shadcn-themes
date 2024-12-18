@@ -172,7 +172,11 @@ export default function CodeFastAdBanner({
               }`}
             >
               <button
-                onClick={handleClose}
+                onClick={(e: any) => {
+                  // stop propagation to prevent the card from closing
+                  e.stopPropagation();
+                  handleClose();
+                }}
                 className="absolute top-2 right-2 bg-background rounded-full p-1 shadow-md border border-foreground/30 hover:bg-muted"
                 aria-label="Close ad"
               >
