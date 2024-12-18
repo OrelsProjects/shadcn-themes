@@ -266,6 +266,7 @@ export function ThemesDialog() {
     currentPalettes,
     loadMorePalettes,
     resetPaging,
+    init,
     loadingThemes,
     loadingPaging,
     visitTheme,
@@ -344,6 +345,9 @@ export function ThemesDialog() {
     EventTracker.track("Themes Dialog", {
       action: isOpen ? "close" : "open",
     });
+    if (!isOpen) {
+      init();
+    }
     setIsOpen(prev => !prev);
   };
 

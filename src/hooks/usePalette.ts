@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect, useRef } from "react";
+import { useState, useMemo, useEffect, useRef, useCallback } from "react";
 import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 import { addPalettes } from "@/lib/features/theme/paletteSlice";
 import { ParsedPalette } from "@/models/palette";
@@ -14,6 +14,7 @@ export function usePalette() {
   const { allPalettes } = useAppSelector(state => state.palette);
   const [loadingThemes, setLoadingThemes] = useState(false);
   const [loadingPaging, setLoadingPaging] = useState(false);
+  const [wasInitialized, setWasInitialized] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const [page, setPage] = useState(1);
   const loadingRef = useRef(false);
@@ -62,14 +63,15 @@ export function usePalette() {
     }
   };
 
-  useEffect(() => {
-    if (allPalettes.length === 0) {
+  const init = useCallback(() => {
+    if (allPalettes.length === 0 && !wasInitialized) {
       setLoadingThemes(true);
       fetchAndSetPalettes(1).finally(() => {
         setLoadingThemes(false);
+        setWasInitialized(true);
       });
     }
-  }, []);
+  }, [allPalettes]);
 
   // Paginated themes from the Redux state
   const currentPalettes = useMemo(() => {
@@ -127,6 +129,7 @@ export function usePalette() {
   );
 
   return {
+    init,
     currentPalettes,
     loadMorePalettes,
     loadingThemes,
