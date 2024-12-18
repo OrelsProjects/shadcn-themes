@@ -91,7 +91,7 @@ export default function ShadcnVsMUIComparison() {
       <p className="lead">
         When it comes to building modern web applications, choosing the right UI
         library can significantly impact your development process and the final
-        product. In this article, we'll compare two popular options: Shadcn UI
+        product. In this article, we&apos;ll compare two popular options: Shadcn UI
         and Material UI (MUI), highlighting their strengths and differences to
         help you make an informed decision for your next project.
       </p>
@@ -197,7 +197,7 @@ export default function ShadcnVsMUIComparison() {
             <CardContent>
               <p>
                 Material UI is a better choice for those seeking a pre-built
-                design system aligned with Google's Material Design standards.
+                design system aligned with Google&apos;s Material Design standards.
                 Its strengths include:
               </p>
               <ul className="list-disc pl-6 mt-2 space-y-2">
@@ -222,7 +222,7 @@ export default function ShadcnVsMUIComparison() {
         <ul className="list-disc pl-6 mt-2 space-y-2">
           <li>
             <strong>Project Requirements:</strong> If you need a highly
-            customizable UI that doesn't conform to a specific design system,
+            customizable UI that doesn&apos;t conform to a specific design system,
             Shadcn UI might be the better choice. For projects that benefit from
             a well-established design system, Material UI could be more
             suitable.
@@ -231,18 +231,18 @@ export default function ShadcnVsMUIComparison() {
             <strong>Development Team Experience:</strong> Teams familiar with
             Material Design might find MUI easier to work with initially.
             However, developers who prefer more control and are comfortable with
-            modern web technologies might appreciate Shadcn UI's approach.
+            modern web technologies might appreciate Shadcn UI&apos;s approach.
           </li>
           <li>
             <strong>Performance Considerations:</strong> If minimizing bundle
-            size and optimizing performance are top priorities, Shadcn UI's
+            size and optimizing performance are top priorities, Shadcn UI&apos;s
             lightweight nature gives it an edge.
           </li>
           <li>
             <strong>Long-term Maintainability:</strong> Consider how each
-            library aligns with your project's long-term goals. Shadcn UI's
+            library aligns with your project&apos;s long-term goals. Shadcn UI&apos;s
             modular approach might offer more flexibility for future changes,
-            while MUI's established ecosystem could provide more stability.
+            while MUI&apos;s established ecosystem could provide more stability.
           </li>
         </ul>
       </section>
@@ -257,14 +257,14 @@ export default function ShadcnVsMUIComparison() {
           control, making it an excellent choice for custom designs and
           performance-critical applications. Material UI, with its extensive
           documentation and adherence to Material Design, is ideal for projects
-          that prioritize rapid development and consistency with Google's design
+          that prioritize rapid development and consistency with Google&apos;s design
           language.
         </p>
         <p>
           Ultimately, the choice between Shadcn UI and Material UI depends on
-          your project's specific requirements, your team's expertise, and your
+          your project&apos;s specific requirements, your team&apos;s expertise, and your
           long-term development goals. By carefully considering these factors,
-          you can select the UI library that best aligns with your project's
+          you can select the UI library that best aligns with your project&apos;s
           needs and sets you up for success.
         </p>
       </section>
