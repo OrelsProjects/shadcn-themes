@@ -115,7 +115,7 @@ export default function Footer() {
                     alt="Orel Zilberman"
                     fill
                     quality={100}
-                    className="absolute inset-0 object-fill !w-12 !h-8 mt-1"
+                    className="absolute inset-0 object-contain !w-16 !h-8 mt-1"
                   />
                 </Link>
               </div>

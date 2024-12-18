@@ -8,11 +8,12 @@ import {
   changeBaseThemeType,
   changeThemeType,
 } from "@/lib/features/theme/paletteSlice";
+import { Gabarito } from "@/lib/fonts";
 import { LampDesk } from "@/lib/icons";
 import { cn } from "@/lib/utils";
-import { ParsedPalette, ThemeType } from "@/models/palette";
+import { ThemeType } from "@/models/palette";
 import { useAnimation, motion } from "framer-motion";
-import { Moon, Sun } from "lucide-react";
+import { Moon, Sparkles, Sun } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 
 const TIME_TO_CHANGE_THEME = 200;
@@ -173,7 +174,7 @@ export function CardsDemoContainer({
         />
         <div className="w-full flex justify-center px-4">
           <div className="max-w-full">
-            <CardsDemo minimal={minimal} />
+            <CardsDemo />
           </div>
         </div>
       </motion.div>

@@ -6,6 +6,8 @@ import { ThemeProvider } from "@/providers/ThemeProvider";
 import ThemeUpdate from "@/providers/ThemeUpdate";
 import { ShortcutProvider } from "@/providers/ShortcutProvider";
 import ClientTrackersProvider from "@/providers/ClientTrackersProvider";
+import { cn } from "@/lib/utils";
+import { Gabarito } from "@/lib/fonts";
 
 interface RootLayoutProps {
   children: React.ReactNode;
@@ -76,7 +78,7 @@ export default function Layout({ children }: RootLayoutProps) {
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         <meta name="theme-color" content="#00000000" />
       </head>
-      <body className="antialiased">
+      <body className={cn("antialiased", Gabarito.className)}>
         <StoreProvider>
           <ThemeProvider>
             <ThemeUpdate />

@@ -2,7 +2,7 @@ import { selectPalette } from "@/lib/features/theme/paletteSlice";
 import { useAppSelector, useAppDispatch } from "@/hooks/redux";
 import { cn, getThemeColor } from "@/lib/utils";
 import { ParsedPalette, ThemeType } from "@/models/palette";
-import { Palette, X } from "lucide-react";
+import { ArrowDown, Palette, X } from "lucide-react";
 import React, {
   useState,
   useMemo,
@@ -361,26 +361,54 @@ export function ThemesDialog() {
     visitTheme(parsedPalette);
   };
 
-  const Background = ({ onClick }: { onClick?: () => void }) =>
+  const Background = ({
+    onClick,
+    className,
+  }: {
+    onClick?: () => void;
+    className?: string;
+  }) =>
     ReactDOM.createPortal(
-      <div
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
         onClick={onClick}
-        className="fixed top-0 left-0 w-screen h-screen z-10 overflow-clip"
+        className={cn(
+          "fixed top-0 left-0 w-screen h-screen z-10 overflow-clip",
+          className,
+        )}
       />,
       document.getElementById("themes-dialog-background-portal")!,
     );
 
   return (
     <div className="w-full h-full flex items-center relative">
-      {isOpen && (
+      {(isOpen || !wasThemeClicked) && (
         <Background
           onClick={() => {
             EventTracker.track("Themes Dialog outside click");
             handleClose();
           }}
+          className={cn({
+            "bg-black/60": !wasThemeClicked,
+          })}
         />
       )}
       <div className="relative w-fit h-fit flex items-end justify-center">
+        <AnimatePresence>
+          {!wasThemeClicked && (
+            <motion.div
+              key="arrow-down"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.8, delay: 1.3 }}
+              className="w-full absolute bottom-12 flex flex-col items-center justify-center gap-2 animate-bounce"
+            >
+              <ArrowDown className="h-10 w-10 text-foreground" />
+            </motion.div>
+          )}
+        </AnimatePresence>
         <Button
           variant={wasThemeClicked ? "outline" : "default"}
           onClick={toggleDialog}
