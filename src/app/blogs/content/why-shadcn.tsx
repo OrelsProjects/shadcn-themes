@@ -5,7 +5,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { CardsDemoContainer } from "@/app/CardsDemo";
+import { CardsDemoContainer } from "@/components/CardsDemo";
 
 export const metadata: Metadata = {
   title:

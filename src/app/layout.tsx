@@ -1,18 +1,17 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
-import StoreProvider from "@/app/providers/StoreProvider";
-import TopLoaderProvider from "@/app/providers/TopLoaderProvider";
-import { ThemeProvider } from "@/app/providers/ThemeProvider";
-import ThemeUpdate from "@/app/providers/ThemeUpdate";
-import { ShortcutProvider } from "@/app/providers/ShortcutProvider";
-import ClientTrackersProvider from "@/app/providers/ClientTrackersProvider";
+import StoreProvider from "@/providers/StoreProvider";
+import TopLoaderProvider from "@/providers/TopLoaderProvider";
+import { ThemeProvider } from "@/providers/ThemeProvider";
+import ThemeUpdate from "@/providers/ThemeUpdate";
+import { ShortcutProvider } from "@/providers/ShortcutProvider";
+import ClientTrackersProvider from "@/providers/ClientTrackersProvider";
 
 interface RootLayoutProps {
   children: React.ReactNode;
   locale: never;
 }
 
-const OG_IMAGE_URL = process.env.NEXT_PUBLIC_OG_IMAGE_URL as string;
 const APP_NAME = process.env.NEXT_PUBLIC_APP_NAME as string;
 const APP_DEFAULT_TITLE = process.env.NEXT_PUBLIC_APP_DEFAULT_TITLE as string;
 const APP_TITLE_TEMPLATE = process.env.NEXT_PUBLIC_APP_TITLE_TEMPLATE as string;
