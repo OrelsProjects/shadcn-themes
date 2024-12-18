@@ -55,11 +55,17 @@ interface PaletteDialogProps {
   ref?: React.Ref<HTMLDivElement>;
 }
 
-const PaletteDialogMobile = ({ ...props }: PaletteDialogProps) =>
+const PaletteDialogMobile = React.forwardRef<
+  HTMLDivElement,
+  PaletteDialogProps
+>(({ ...props }) =>
   ReactDOM.createPortal(
-    <PaletteDialog {...props} />,
+    <PaletteDialog {...props} ref={props.ref} />,
     document.getElementById("themes-dialog-portal")!,
-  );
+  ),
+);
+
+PaletteDialogMobile.displayName = "PaletteDialogMobile";
 
 const PaletteDialog = React.forwardRef<HTMLDivElement, PaletteDialogProps>(
   (
@@ -100,12 +106,12 @@ const PaletteDialog = React.forwardRef<HTMLDivElement, PaletteDialogProps>(
         ) : (
           <div className={cn("opacity-100 transition-opacity flex flex-col")}>
             {Object.entries(groupedPalettes).map(([owner, palettes]) => (
-              <div key={owner} className="relative mb-8">
+              <div key={owner} className="relative mb-8 text-sm sm:text-base">
                 <h2 className="sticky -top-8 sm:-top-4 py-2 w-full bg-card text-xl sm:text-2xl font-semibold mb-1 text-foreground pointer-events-none z-40">
                   {owner}
                 </h2>
                 <div
-                  className="grid grid-cols-4 gap-4"
+                  className="grid grid-cols-2 sm:grid-cols-4 gap-4"
                   onClick={e => {
                     e.stopPropagation();
                   }}
@@ -218,7 +224,7 @@ const PaletteCard = ({
       )}
     >
       <div className="flex justify-between items-start mb-2 ">
-        <h3 className="max-w-[80%] text-sm font-semibold text-foreground truncate">
+        <h3 className="max-w-[80%] text-xs sm:text-sm font-semibold text-foreground truncate">
           {palette.name
             .split("-")
             .map(x => x[0].toUpperCase() + x.slice(1))
@@ -247,7 +253,7 @@ const PaletteCard = ({
 const LoadingPalettes = () => (
   <div className="flex flex-col gap-2 pt-2">
     <Skeleton className="h-6 w-40 rounded-full" />
-    <div className="grid grid-cols-4 gap-4">
+    <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
       {[...new Array(12)].map((_, i) => (
         <Skeleton key={i} className="h-20 w-32 rounded-lg" />
       ))}
@@ -310,7 +316,11 @@ export function ThemesDialog() {
   }, [hideThemePalette]);
 
   const handleScroll = useCallback(() => {
-    if (!scrollContainerRef.current) return;
+    if (!scrollContainerRef.current) {
+      console.log("Scroll container ref is not set");
+      return;
+    }
+    console.log("Scrolling");
     const { scrollTop, scrollHeight, clientHeight } =
       scrollContainerRef.current;
     const scrollPosition = scrollTop + clientHeight;
@@ -322,7 +332,12 @@ export function ThemesDialog() {
 
   useEffect(() => {
     const container = scrollContainerRef.current;
-    if (!container) return;
+    if (!container) {
+      console.log("Scroll container ref is not set");
+      return;
+    }
+    console.log("Adding scroll event listener");
+
     container.addEventListener("scroll", handleScroll);
     return () => {
       container.removeEventListener("scroll", handleScroll);

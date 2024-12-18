@@ -7,9 +7,12 @@ import cuid from "cuid";
 import { Logger } from "@/logger";
 import { throttle } from "lodash";
 import axiosInstance from "@/lib/axiosInstance";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
 
 export function usePalette() {
   const dispatch = useAppDispatch();
+  // media query for mobile
+  const matches = useMediaQuery("(max-width: 768px)");
   const [userId, setUserId] = useLocalStorage("shadcn-themes-user-id", "");
   const { allPalettes } = useAppSelector(state => state.palette);
   const [loadingThemes, setLoadingThemes] = useState(false);
@@ -32,13 +35,13 @@ export function usePalette() {
     try {
       if (loadingRef.current) return;
       loadingRef.current = true;
-
       const resposne = await axiosInstance.get<{
         palettes: ParsedPalette[];
         hasMore: boolean;
       }>("/api/themes", {
         params: {
           page,
+          all: matches,
         },
       });
 
@@ -71,7 +74,7 @@ export function usePalette() {
         setWasInitialized(true);
       });
     }
-  }, [allPalettes]);
+  }, [allPalettes, matches]);
 
   // Paginated themes from the Redux state
   const currentPalettes = useMemo(() => {
@@ -81,7 +84,9 @@ export function usePalette() {
       }
       return acc;
     }, [] as ParsedPalette[]);
-    return uniquePalettes.slice(0, page * itemsPerPage);
+    return matches
+      ? uniquePalettes
+      : uniquePalettes.slice(0, page * itemsPerPage);
   }, [allPalettes, page]);
 
   const loadMorePalettes = () => {

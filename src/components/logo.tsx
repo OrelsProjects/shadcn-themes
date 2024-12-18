@@ -23,7 +23,7 @@ export default function Logo({ height, width, animate, className }: LogoProps) {
 
   return (
     <motion.div
-      className={cn("flex items-center gap-2 mr-4", className)}
+      className={cn("flex items-center gap-2", className)}
       {...animation}
     >
       <Image

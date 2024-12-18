@@ -7,6 +7,7 @@ const PALETTES_PER_PAGE = 20;
 export async function GET(req: NextRequest) {
   try {
     const pageString = req.nextUrl.searchParams.get("page") || "1";
+    const getAll = req.nextUrl.searchParams.get("all") === "true";
     const page = parseInt(pageString, 10);
 
     const themes = await prisma.theme.findMany({
@@ -26,7 +27,7 @@ export async function GET(req: NextRequest) {
       },
       include: { owner: true },
       skip: (page - 1) * PALETTES_PER_PAGE,
-      take: PALETTES_PER_PAGE,
+      take: getAll ? PALETTES_PER_PAGE * 100 : PALETTES_PER_PAGE,
     });
 
     let parsedThemes: ParsedPalette[] = themes.map(theme => ({
