@@ -88,7 +88,6 @@ export default function Layout({ children }: RootLayoutProps) {
             <ClientTrackersProvider />
           </ThemeProvider>
         </StoreProvider>
-        {/* Portal */}
       </body>
     </html>
   );

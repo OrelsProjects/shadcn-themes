@@ -8,6 +8,7 @@ import {
 import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 import { ReactNode, useState } from "react";
 import { useHotkeys } from "react-hotkeys-hook";
+import { EventTracker } from "@/eventTracker";
 
 interface ShortcutProviderProps {
   children: ReactNode;
@@ -31,9 +32,9 @@ export function ShortcutProvider() {
   useHotkeys(
     ["l", "t", "Escape"],
     event => {
+      EventTracker.track("shortcut", { key: event.code });
       const allowDoubles = ["keyT", "Escape"];
       const keyCode = event.code;
-      console.log("keyCode", keyCode);
       if (
         !allowDoubles.includes(keyCode) &&
         keyCode === previousKey?.keyCode &&
@@ -44,7 +45,6 @@ export function ShortcutProvider() {
       setPreviousKey({ keyCode, type: event.type });
       switch (keyCode) {
         case "KeyL":
-          console.log("L pressed", event.type);
           if (event.type === "keydown") {
             handleLPress();
           } else if (event.type === "keyup") {

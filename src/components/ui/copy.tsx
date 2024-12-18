@@ -1,5 +1,6 @@
 "use client";
 
+import { EventTracker } from "@/eventTracker";
 import { cn } from "@/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
 import { Check, Copy } from "lucide-react";
@@ -21,6 +22,7 @@ export default function CopyComponent({ text, className }: CopyProps) {
     navigator.clipboard.writeText(text);
     setDidCopy(true);
 
+    EventTracker.track("copy", { text });
     didCopyTimeout.current = setTimeout(() => {
       setDidCopy(false);
     }, 2000);
@@ -48,7 +50,6 @@ export default function CopyComponent({ text, className }: CopyProps) {
           onClick={e => {
             e.preventDefault();
             e.stopPropagation();
-            console.log("clicked");
             handleCopy();
           }}
         >

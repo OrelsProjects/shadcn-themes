@@ -83,7 +83,6 @@ export function usePalette() {
   }, [allPalettes, page]);
 
   const loadMorePalettes = () => {
-    console.log("loadMorePalettes");
     if (!hasMore) {
       const maxPage = Math.ceil(allPalettes.length / itemsPerPage);
       if (page < maxPage) {
@@ -111,7 +110,6 @@ export function usePalette() {
   const visitTheme = useMemo(
     () =>
       throttle(async (theme: ParsedPalette) => {
-        console.log("visitTheme");
         if (!userId) {
           Logger.error("No user id found", userId);
           return;

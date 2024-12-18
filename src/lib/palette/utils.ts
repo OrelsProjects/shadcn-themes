@@ -86,7 +86,6 @@ export function generatePalette({
     // Given colors are for dark mode
     baseDarkBackground = background;
     // Derive light mode by reversing the logic: lighten background by +60
-    console.log("backgrouynd", background);
     baseLightBackground = adjustLightness(background, +60);
     baseForeground = text || [
       baseLightBackground[0],

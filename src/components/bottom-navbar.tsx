@@ -4,13 +4,22 @@ import * as React from "react";
 import Link from "next/link";
 import { Card } from "@/components/ui/card";
 import CopyCode from "@/components/copy-code";
-import { ThemesDialog } from "@/components/themes-dialog";
 import { motion } from "framer-motion";
 import { Separator } from "@/components/ui/separator";
 import { Linkedin, Twitter } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { TWITTER_URL, LINKEDIN_URL, SUBSTACK_URL } from "@/lib/consts";
 import { EventTracker } from "@/eventTracker";
+import dynamic from "next/dynamic";
+import { Skeleton } from "@/components/ui/skeleton";
+
+const ThemesDialog = dynamic(
+  () => import("@/components/themes-dialog").then(mod => mod.ThemesDialog),
+  {
+    ssr: false,
+    loading: () => <Skeleton className="w-40 h-9" />,
+  },
+);
 
 export function BottomNavbar() {
   return (
