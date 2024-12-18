@@ -17,8 +17,11 @@ export async function GET(req: NextRequest) {
         },
       },
       orderBy: {
-        visits: {
-          _count: "desc",
+        // visits: {
+        //   _count: "desc",
+        // },
+        owner: {
+          position: "asc",
         },
       },
       include: { owner: true },
