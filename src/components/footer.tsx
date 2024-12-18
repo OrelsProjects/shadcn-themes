@@ -7,6 +7,8 @@ import { Twitter, Linkedin } from "lucide-react";
 import Link from "next/link";
 import { TWITTER_URL, LINKEDIN_URL, SUBSTACK_URL } from "@/lib/consts";
 
+const appName = process.env.NEXT_PUBLIC_APP_NAME;
+
 export default function Footer() {
   const currentYear = new Date().getFullYear();
 
@@ -26,21 +28,23 @@ export default function Footer() {
             transition={{ delay: 0.2 }}
           >
             <h3 className="text-lg font-semibold mb-4">Stay Updated</h3>
-            <p className="text-muted-foreground mb-4">
+            <p className="text-foreground mb-4">
               Subscribe to our newsletter for the latest theme updates and tips.
             </p>
             <form className="flex gap-2">
               <Button asChild>
-                <Link href={SUBSTACK_URL} target="_blank">
-                  <div className="flex gap-2">
-                    <Image
-                      src="/substack.svg"
-                      alt="Substack"
-                      width={20}
-                      height={20}
-                    />
-                    Read more
-                  </div>
+                <Link
+                  href={SUBSTACK_URL}
+                  target="_blank"
+                  className="flex gap-2"
+                >
+                  <Image
+                    src="/substack.svg"
+                    alt="Substack"
+                    width={20}
+                    height={20}
+                  />
+                  Read more
                 </Link>
               </Button>
             </form>
@@ -64,6 +68,8 @@ export default function Footer() {
               <li>
                 <Link
                   href={TWITTER_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="text-muted-foreground hover:text-primary transition-colors"
                 >
                   About me
@@ -76,34 +82,72 @@ export default function Footer() {
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.4 }}
           >
+            <h3 className="text-lg font-semibold mb-4">
+              Explore Shadcn Themes
+            </h3>
+            <p className="text-foreground mb-4">
+              Browse shadcn/ui components to quickly build your next project.
+            </p>
+            <Link
+              href="https://ui.shadcn.com/docs"
+              className="text-primary font-semibold hover:underline"
+              aria-label="Explore Shadcn components"
+            >
+              View Components →
+            </Link>
+          </motion.div>
+          <motion.div
+            initial={{ y: 20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.5 }}
+            className="col-span-1 md:col-span-4"
+          >
             <h3 className="text-lg font-semibold mb-4">Connect</h3>
-            <div className="flex space-x-4">
-              <Link
-                href={TWITTER_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-muted-foreground hover:text-primary transition-colors"
-              >
-                <Twitter size={24} />
-              </Link>
-              <Link
-                href={LINKEDIN_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-muted-foreground hover:text-primary transition-colors"
-              >
-                <Linkedin size={24} />
-              </Link>
+            <div className="flex items-center gap-4 w-full">
+              <div className="relative flex items-center justify-center rounded-full border-2 border-foreground/60 bg-primary w-12 h-12 overflow-clip">
+                <Link
+                  href={TWITTER_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Image
+                    src={process.env.NEXT_PUBLIC_IMAGE_OF_SELF as string}
+                    alt="Orel Zilberman"
+                    fill
+                    quality={100}
+                    className="absolute inset-0 object-fill !w-12 !h-8 mt-1"
+                  />
+                </Link>
+              </div>
+              <span>
+                {" "}
+                Hey, Orel here! Let&apos;s{" "}
+                <Link
+                  href={TWITTER_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-primary underline"
+                >
+                  connect
+                </Link>{" "}
+                and chat :)
+              </span>
             </div>
           </motion.div>
         </div>
         <motion.div
-          className="mt-8 pt-8 border-t border-muted-foreground/20 text-center text-muted-foreground"
+          className="mt-8 pt-8 border-t border-muted-foreground/20 text-center text-foreground/60"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 0.5 }}
+          transition={{ delay: 0.6 }}
         >
-          <p>&copy; {currentYear} ShadcnThemes. All rights reserved.</p>
+          <p>
+            &copy; {currentYear} {appName}. All rights reserved.
+          </p>
+          <p className="text-xs mt-2">
+            Designed for developers who want elegant, customizable Shadcn themes
+            for React and Next.js projects.
+          </p>
         </motion.div>
       </div>
     </motion.footer>

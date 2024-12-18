@@ -1,6 +1,8 @@
 import React from "react";
 import Logo from "@/components/logo";
 import Link from "next/link";
+import { ArrowRight } from "lucide-react";
+import { motion } from "framer-motion";
 
 const Header = () => {
   return (
@@ -10,15 +12,19 @@ const Header = () => {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
         <Logo />
         <div className="flex flex-row gap-2 items-center">
-          <div className="flex flex-col">
+          <motion.div whileHover={{ x: 5 }} className="flex flex-col">
             <Link
-              href="/blog/the-shadcn-way"
+              href="/blogs"
               className="text-foreground/60 hover:text-foreground/80"
             >
-              <span className="hidden sm:block">What is the Shadcn way?</span>
-              <span className="block sm:hidden">The Shadcn way</span>
+              <span className="flex">
+                Read more
+                <span>
+                  <ArrowRight className="ml-2" />
+                </span>
+              </span>
             </Link>
-          </div>
+          </motion.div>
         </div>
       </div>
     </nav>

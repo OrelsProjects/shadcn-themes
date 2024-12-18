@@ -10,8 +10,9 @@ import { CardsReportIssue } from "@/components/cards/report-issue";
 import { CardsShare } from "@/components/cards/share";
 import { CardsStats } from "@/components/cards/stats";
 import { CardsTeamMembers } from "@/components/cards/team-members";
+import { cn } from "@/lib/utils";
 
-export function CardsDemo() {
+export function CardsDemo({ minimal = false }: { minimal: boolean }) {
   return (
     <div className="md:grid grid-cols-1 lg:grid-cols-10 xl:grid-cols-11 gap-4 w-full">
       <div className="space-y-4 lg:col-span-4 xl:col-span-6 w-full">
@@ -25,8 +26,12 @@ export function CardsDemo() {
             <CardsMetric />
           </div>
         </div>
-        <div className="flex flex-col md:grid gap-4 md:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 w-full">
-          <div className="space-y-4 xl:space-y-4 w-full">
+        <div
+          className={cn(
+            "flex flex-col md:grid gap-4 md:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 w-full",
+          )}
+        >
+          <div className={cn("space-y-4 xl:space-y-4 w-full")}>
             <CardsTeamMembers />
             <CardsCookieSettings />
             <CardsPaymentMethod />

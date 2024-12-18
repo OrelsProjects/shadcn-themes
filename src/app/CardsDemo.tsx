@@ -1,21 +1,29 @@
+"use client";
+
 import { CardsDemo } from "@/components/cards";
 import { Button } from "@/components/ui-demo/button";
 import { EventTracker } from "@/eventTracker";
 import { useAppDispatch, useAppSelector } from "@/hooks/redux";
-import { changeBaseThemeType } from "@/lib/features/theme/paletteSlice";
+import {
+  changeBaseThemeType,
+  changeThemeType,
+} from "@/lib/features/theme/paletteSlice";
 import { LampDesk } from "@/lib/icons";
 import { cn } from "@/lib/utils";
+import { ParsedPalette, ThemeType } from "@/models/palette";
 import { useAnimation, motion } from "framer-motion";
 import { Moon, Sun } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 const TIME_TO_CHANGE_THEME = 200;
 
-const Header = () => {
-  const { baseThemeType, selectedThemeType } = useAppSelector(
-    state => state.palette,
-  );
-
+const Header = ({
+  selectedThemeType,
+  baseThemeType,
+}: {
+  selectedThemeType: ThemeType;
+  baseThemeType: ThemeType;
+}) => {
   const lightDarkText = useMemo(() => {
     if (baseThemeType === "light") {
       return "Dark";
@@ -125,7 +133,31 @@ const Header = () => {
   );
 };
 
-export function CardsDemoContainer() {
+export function CardsDemoContainer({
+  minimal = false,
+  theme,
+}: {
+  minimal?: boolean;
+  theme?: ThemeType;
+}) {
+  const dispatch = useAppDispatch();
+  const { baseThemeType, selectedThemeType } = useAppSelector(
+    state => state.palette,
+  );
+  const [previousTheme, setPreviousTheme] = useState<ThemeType | null>(null);
+
+  useEffect(() => {
+    if (theme && theme !== selectedThemeType) {
+      setPreviousTheme(selectedThemeType);
+      dispatch(changeThemeType(theme));
+    }
+    return () => {
+      if (theme && previousTheme) {
+        dispatch(changeThemeType(previousTheme));
+      }
+    };
+  }, [theme]);
+
   return (
     <div className="relative md:container md:!px-0 w-full h-full bg-background-demo rounded-lg border border-foreground/10 sm:border-foreground/30 px-0 pb-4">
       <motion.div
@@ -135,10 +167,13 @@ export function CardsDemoContainer() {
         transition={{ duration: 0.5, ease: "easeInOut" }}
         className="w-full h-full flex flex-col gap-4 relative"
       >
-        <Header />
+        <Header
+          selectedThemeType={selectedThemeType}
+          baseThemeType={baseThemeType}
+        />
         <div className="w-full flex justify-center px-4">
           <div className="max-w-full">
-            <CardsDemo />
+            <CardsDemo minimal={minimal} />
           </div>
         </div>
       </motion.div>

@@ -19,9 +19,8 @@ const APP_TITLE_TEMPLATE = process.env.NEXT_PUBLIC_APP_TITLE_TEMPLATE as string;
 const APP_DESCRIPTION = process.env.NEXT_PUBLIC_APP_DESCRIPTION as string;
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL as string;
 const APP_STARTUP_IMAGE = process.env.NEXT_PUBLIC_APP_STARTUP_IMAGE as string;
-// const TWITTER_OG_IMAGE_URL = process.env
-// .NEXT_PUBLIC_TWITTER_OG_IMAGE_URL as string;
-const TWITTER_OG_IMAGE_URL = "/shadcn-themes-social.png";
+const TWITTER_OG_IMAGE_URL = process.env
+  .NEXT_PUBLIC_TWITTER_OG_IMAGE_URL as string;
 
 export const metadata: Metadata = {
   applicationName: APP_NAME, // Name of the application, used in app manifest files and app listing.
@@ -83,8 +82,8 @@ export default function Layout({ children }: RootLayoutProps) {
           <ThemeProvider>
             <ThemeUpdate />
             <TopLoaderProvider />
-            <ShortcutProvider>{children}</ShortcutProvider>
-
+            <ShortcutProvider />
+            {children}
             <div id="themes-dialog-portal" />
             <div id="themes-dialog-background-portal" />
             <ClientTrackersProvider />

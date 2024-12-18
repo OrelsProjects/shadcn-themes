@@ -13,7 +13,7 @@ interface ShortcutProviderProps {
   children: ReactNode;
 }
 
-export function ShortcutProvider({ children }: ShortcutProviderProps) {
+export function ShortcutProvider() {
   const dispatch = useAppDispatch();
   const { baseThemeType } = useAppSelector(state => state.palette);
   const [previousKey, setPreviousKey] = useState<{
@@ -76,5 +76,5 @@ export function ShortcutProvider({ children }: ShortcutProviderProps) {
     },
   );
 
-  return children;
+  return null;
 }
