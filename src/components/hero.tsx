@@ -24,7 +24,7 @@ export default function Hero() {
     <div className="w-full flex flex-col justify-center items-center gap-8">
       <motion.div className="text-center">
         <h1 className="text-4xl md:text-6xl font-bold">
-          The most beautiful Themes{" "}
+          The most beautiful themes{" "}
           <span className="block mt-2 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
             The Shadcn way
           </span>
