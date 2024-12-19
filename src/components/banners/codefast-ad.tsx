@@ -47,8 +47,8 @@ export default function CodeFastAdBanner({
     const lastHiddenTime = localStorage.getItem("codefast-ad-hidden-time");
     if (lastHiddenTime) {
       const timeDiff = Date.now() - parseInt(lastHiddenTime, 10);
-      if (timeDiff < 24 * 60 * 60 * 1000) {
-        // Less than 24 hours
+      if (timeDiff < 365 * 24 * 60 * 60 * 10000) {
+        // Less than a year
         setIsHidden(true);
       } else {
         setIsHidden(false);
