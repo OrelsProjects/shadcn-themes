@@ -1,6 +1,7 @@
 "use client";
 
 import { CardsDemo } from "@/components/cards";
+import ReportIssue from "@/components/report-issue";
 import { Button } from "@/components/ui-demo/button";
 import { EventTracker } from "@/eventTracker";
 import { useAppDispatch, useAppSelector } from "@/hooks/redux";
@@ -11,7 +12,7 @@ import {
 import { Gabarito } from "@/lib/fonts";
 import { LampDesk } from "@/lib/icons";
 import { cn } from "@/lib/utils";
-import { ThemeType } from "@/models/palette";
+import { ParsedPalette, ThemeType } from "@/models/palette";
 import { useAnimation, motion } from "framer-motion";
 import { Moon, Sparkles, Sun } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
@@ -19,9 +20,11 @@ import { useEffect, useMemo, useState } from "react";
 const TIME_TO_CHANGE_THEME = 200;
 
 const Header = ({
+  selectedPalette,
   selectedThemeType,
   baseThemeType,
 }: {
+  selectedPalette: ParsedPalette;
   selectedThemeType: ThemeType;
   baseThemeType: ThemeType;
 }) => {
@@ -80,32 +83,39 @@ const Header = ({
         },
       )}
     >
-      <motion.div
-        id="header"
-        animate={controls}
-        initial={{ y: 0 }}
-        onClick={() => {
-          handleThemeChange("lamp");
-        }}
-        onMouseDown={handleMouseDown}
-        onMouseUp={handleMouseUp}
-        onMouseLeave={() => isPressed && handleMouseUp()}
-      >
-        <Button
-          variant={"outline"}
-          className={cn(
-            "rounded-lg active:translate-y-1 transition-all w-fit inline-flex items-center border-foreground/30",
-            {
-              "shadow-md": selectedThemeType === "light",
-            },
-          )}
+      <div className="flex flex-row items-center gap-2">
+        <motion.div
+          id="header"
+          animate={controls}
+          initial={{ y: 0 }}
+          onClick={() => {
+            handleThemeChange("lamp");
+          }}
+          onMouseDown={handleMouseDown}
+          onMouseUp={handleMouseUp}
+          onMouseLeave={() => isPressed && handleMouseUp()}
         >
-          <LampDesk
-            className="!w-7 !h-7 !sm:w-5 sm:!h-5 text-foreground-demo"
-            isDark={selectedThemeType === "dark"}
-          />
-        </Button>
-      </motion.div>
+          <Button
+            variant={"outline"}
+            className={cn(
+              "rounded-lg active:translate-y-1 transition-all w-fit inline-flex items-center border-foreground/30",
+              {
+                "shadow-md": selectedThemeType === "light",
+              },
+            )}
+          >
+            <LampDesk
+              className="!w-5 !h-5 text-foreground-demo"
+              isDark={selectedThemeType === "dark"}
+            />
+          </Button>
+        </motion.div>
+        <ReportIssue
+          themeType={selectedThemeType}
+          selectedPalette={selectedPalette}
+
+        />
+      </div>
       <div
         onClick={() => {
           handleThemeChange("text");
@@ -142,7 +152,7 @@ export function CardsDemoContainer({
   theme?: ThemeType;
 }) {
   const dispatch = useAppDispatch();
-  const { baseThemeType, selectedThemeType } = useAppSelector(
+  const { baseThemeType, selectedThemeType, selectedPalette } = useAppSelector(
     state => state.palette,
   );
   const [previousTheme, setPreviousTheme] = useState<ThemeType | null>(null);
@@ -171,6 +181,7 @@ export function CardsDemoContainer({
         <Header
           selectedThemeType={selectedThemeType}
           baseThemeType={baseThemeType}
+          selectedPalette={selectedPalette}
         />
         <div className="w-full flex justify-center px-4">
           <div className="max-w-full">

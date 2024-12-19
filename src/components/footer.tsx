@@ -3,9 +3,8 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { Twitter, Linkedin } from "lucide-react";
 import Link from "next/link";
-import { TWITTER_URL, LINKEDIN_URL, SUBSTACK_URL } from "@/lib/consts";
+import { TWITTER_URL, SUBSTACK_URL } from "@/lib/consts";
 
 const appName = process.env.NEXT_PUBLIC_APP_NAME;
 
@@ -18,18 +17,23 @@ export default function Footer() {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
+      role="contentinfo"
+      aria-label="Site footer"
     >
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <motion.div
-            className="col-span-1 md:col-span-2"
+            className="col-span-1 md:col-span-2 w-fit"
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.2 }}
           >
-            <h3 className="text-lg font-semibold mb-4">Stay Updated</h3>
+            <h2 className="text-lg font-semibold mb-4">
+              Stay Updated with Shadcn Themes
+            </h2>
             <p className="text-foreground mb-4">
-              Subscribe to our newsletter for the latest theme updates and tips.
+              Subscribe to our newsletter for the latest
+              about my journey as a full-time solopreneur.
             </p>
             <form className="flex gap-2">
               <Button asChild>
@@ -49,12 +53,13 @@ export default function Footer() {
               </Button>
             </form>
           </motion.div>
-          <motion.div
+          <motion.nav
+            aria-label="Footer navigation"
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.3 }}
           >
-            <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
+            <h2 className="text-lg font-semibold mb-4">Quick Links</h2>
             <ul className="space-y-2">
               <li>
                 <Link
@@ -76,17 +81,18 @@ export default function Footer() {
                 </Link>
               </li>
             </ul>
-          </motion.div>
+          </motion.nav>
           <motion.div
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.4 }}
           >
-            <h3 className="text-lg font-semibold mb-4">
+            <h2 className="text-lg font-semibold mb-4">
               Explore Shadcn Themes
-            </h3>
+            </h2>
             <p className="text-foreground mb-4">
-              Browse shadcn/ui components to quickly build your next project.
+              Discover professional themes for your Shadcn UI components.
+              Perfect for React and Next.js projects.
             </p>
             <Link
               href="https://ui.shadcn.com/docs"

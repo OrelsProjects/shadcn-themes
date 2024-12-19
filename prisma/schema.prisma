@@ -98,8 +98,8 @@ model Theme {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  owner      ThemeOwner   @relation(fields: [themeOwnerId], references: [id], onDelete: Cascade)
-  visits     ThemeVisit[]
+  owner  ThemeOwner   @relation(fields: [themeOwnerId], references: [id], onDelete: Cascade)
+  visits ThemeVisit[]
 
   @@map("theme")
 }
@@ -107,7 +107,7 @@ model Theme {
 model ThemeVisit {
   id String @id @default(auto()) @map("_id") @db.ObjectId
 
-  themeId String @db.ObjectId
+  themeId String  @db.ObjectId
   userId  String?
 
   visitedAt DateTime @default(now()) @map("visited_at")
@@ -115,4 +115,31 @@ model ThemeVisit {
   theme Theme @relation(fields: [themeId], references: [id], onDelete: Cascade)
 
   @@map("themesVisits")
+}
+
+model Rating {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  userId   String
+  rating   Int
+  comments String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("ratings")
+}
+
+model Report {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  userId String
+  themeId String
+
+  comments   String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("reports")
 }

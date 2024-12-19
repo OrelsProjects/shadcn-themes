@@ -6,6 +6,7 @@ import Header from "@/components/header";
 import Hero from "@/components/hero";
 import Footer from "@/components/footer";
 import CodeFastAdBanner from "@/components/banners/codefast-ad";
+import { ReviewPopup } from "@/components/ui/review-popup";
 
 export default function Dashboard() {
   return (
@@ -19,6 +20,7 @@ export default function Dashboard() {
         isVertical
         className="fixed -top-8 sm:top-20 right-4 mx-auto z-50 w-full sm:max-w-48"
       />
+      {/* <ReviewPopup /> */}
       <BottomNavbar />
       <Footer />
     </main>
