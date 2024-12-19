@@ -96,7 +96,7 @@ export default function CopyCode() {
   }, [selectedPalette]);
 
   const handleCopy = () => {
-    EventTracker.track("Copied CSS code");
+    EventTracker.track("Copied CSS code", { palette: selectedPalette?.name });
     navigator.clipboard.writeText(codeString);
     setShowTooltip(true);
     setTimeout(() => setShowTooltip(false), 2000);
