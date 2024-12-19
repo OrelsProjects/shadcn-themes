@@ -20,6 +20,7 @@ export default function CodeFastAdBanner({
   isVertical = false,
   className,
 }: CodeFastAdBannerProps) {
+  const [userId] = useLocalStorage("shadcn-themes-user-id", "");
   const [isHidden, setIsHidden] = useLocalStorage("codefast-ad-hidden", false);
   const [shouldRender, setShouldRender] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
@@ -65,6 +66,7 @@ export default function CodeFastAdBanner({
   }, [isHidden, shouldRender]);
 
   const handleClose = () => {
+    EventTracker.track("codefast_ad_closed", { userId });
     controls.start({ y: "-100%", transition: { duration: 0.3 } }).then(() => {
       setIsHidden(true);
       localStorage.setItem("codefast-ad-hidden-time", Date.now().toString());
@@ -133,7 +135,9 @@ export default function CodeFastAdBanner({
                     <Link
                       href="https://codefa.st/?via=orel"
                       target="_blank"
-                      onClick={() => EventTracker.track("codefast_ad_clicked")}
+                      onClick={() =>
+                        EventTracker.track("codefast_ad_clicked", { userId })
+                      }
                     >
                       <div className="flex items-center">
                         Learn More
@@ -207,7 +211,11 @@ export default function CodeFastAdBanner({
                   className="bg-primary/90 hover:bg-primary text-foreground"
                   asChild
                 >
-                  <Link href="https://codefa.st/?via=orel" target="_blank">
+                  <Link
+                    href="https://codefa.st/?via=orel"
+                    target="_blank"
+                    onClick={() => EventTracker.track("codefast_ad_clicked")}
+                  >
                     <div className="flex">
                       I want to code!
                       <ArrowRight className="w-4 h-4 ml-2" />
