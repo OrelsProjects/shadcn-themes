@@ -58,9 +58,9 @@ interface PaletteDialogProps {
 const PaletteDialogMobile = React.forwardRef<
   HTMLDivElement,
   PaletteDialogProps
->(({ ...props }) =>
+>((props, ref) =>
   ReactDOM.createPortal(
-    <PaletteDialog {...props} ref={props.ref} />,
+    <PaletteDialog {...props} ref={ref} />,
     document.getElementById("themes-dialog-portal")!,
   ),
 );

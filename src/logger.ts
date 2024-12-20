@@ -19,8 +19,6 @@ export const initLogger = () => {
       service: process.env.NEXT_PUBLIC_DATADOG_SERVICE ?? "",
       env,
     });
-    debugger;
-    Logger.info("Logger initialized", {});
   } catch (error: any) {
     Logger.error("Error initializing logger", {
       error,
