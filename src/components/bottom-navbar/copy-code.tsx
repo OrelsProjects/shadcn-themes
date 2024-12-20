@@ -98,7 +98,8 @@ export default function CopyCode() {
     return generateCSS(selectedPalette);
   }, [selectedPalette]);
 
-  const handleCopy = () => {
+  const handleCopy = (e: any) => {
+    e.preventDefault();
     EventTracker.track("Copied CSS code", { palette: selectedPalette?.name });
     navigator.clipboard.writeText(codeString);
     setShowTooltip(true);
@@ -112,7 +113,7 @@ export default function CopyCode() {
         asChild
         onClick={() => EventTracker.track("Open copy button clicked")}
       >
-        <Button variant="outline" onClick={handleCopy}>
+        <Button variant="outline">
           <Copy className="h-5 w-5" />
           Copy code
         </Button>
