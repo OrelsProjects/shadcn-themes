@@ -115,7 +115,7 @@ export default function CopyCode() {
       >
         <Button variant="outline">
           <Copy className="h-5 w-5" />
-          Copy code
+          <span className="hidden sm:inline-block">Copy code</span>
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[600px] overflow-clip">
@@ -127,6 +127,7 @@ export default function CopyCode() {
         </DialogDescription>
         <div className="rounded-md bg-card relative overflow-auto">
           <SyntaxHighlighter
+            role="copy-code-syntax-highlighter"
             language="css"
             style={oneDark}
             customStyle={{
@@ -144,6 +145,7 @@ export default function CopyCode() {
             <Tooltip open={showTooltip}>
               <TooltipTrigger asChild className="w-full h-full relative">
                 <Button
+                  role="copy-code-button"
                   size="icon"
                   variant="ghost"
                   className="absolute top-4 right-4 h-6 w-fit rounded-md bg-background/50 p-2.5 py-3.5 border border-background/40 text-foreground/70 hover:bg-card"
@@ -153,7 +155,7 @@ export default function CopyCode() {
                   Copy
                 </Button>
               </TooltipTrigger>
-              <TooltipContent>
+              <TooltipContent role="tooltip-code-copied">
                 <p>Copied!</p>
               </TooltipContent>
             </Tooltip>

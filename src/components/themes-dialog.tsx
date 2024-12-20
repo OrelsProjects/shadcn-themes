@@ -22,9 +22,9 @@ import CopyComponent from "@/components/ui/copy";
 import { usePalette } from "@/hooks/usePalette";
 import { Skeleton } from "@/components/ui/skeleton";
 import ReactDOM from "react-dom";
-import { HoverBorderGradient } from "@/components/ui/hover-border-gradient";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { EventTracker } from "@/eventTracker";
+import { Logger } from "@/logger";
 
 const dialogVariants = {
   initial: { opacity: 0, y: 0 },
@@ -83,6 +83,7 @@ const PaletteDialog = React.forwardRef<HTMLDivElement, PaletteDialogProps>(
   ) => {
     return (
       <motion.div
+        role="themes-dialog"
         ref={ref} // <-- pass the forwarded ref here
         {...dialogVariants}
         key="themes-dialog"
@@ -91,6 +92,9 @@ const PaletteDialog = React.forwardRef<HTMLDivElement, PaletteDialogProps>(
           className,
         )}
       >
+        <span className="sr-only" id="themes-dialog-title">
+          Themes Dialog
+        </span>
         <Button
           variant="outline"
           className="absolute top-2 right-2 z-50"
@@ -149,7 +153,7 @@ const ColorSwatch = ({ color, isHover, className }: ColorSwatchProps) => {
   );
 };
 
-export const ColorSwatchTooltip = ({ color, className }: ColorSwatchProps) => {
+const ColorSwatchTooltip = ({ color, className }: ColorSwatchProps) => {
   const [isTooltipOpen, setIsTooltipOpen] = useState(false);
 
   return (
@@ -323,10 +327,8 @@ export function ThemesDialog() {
 
   const handleScroll = useCallback(() => {
     if (!scrollContainerRef.current) {
-      console.log("Scroll container ref is not set");
       return;
     }
-    console.log("Scrolling");
     const { scrollTop, scrollHeight, clientHeight } =
       scrollContainerRef.current;
     const scrollPosition = scrollTop + clientHeight;
@@ -339,10 +341,8 @@ export function ThemesDialog() {
   useEffect(() => {
     const container = scrollContainerRef.current;
     if (!container) {
-      console.log("Scroll container ref is not set");
       return;
     }
-    console.log("Adding scroll event listener");
 
     container.addEventListener("scroll", handleScroll);
     return () => {
@@ -431,6 +431,7 @@ export function ThemesDialog() {
           )}
         </AnimatePresence>
         <Button
+          id="themes-button"
           variant={wasThemeClicked ? "outline" : "default"}
           onClick={toggleDialog}
           ref={themesButtonRef}

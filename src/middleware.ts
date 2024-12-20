@@ -8,7 +8,10 @@ const MAX_TIME_TO_PROCESS_REQUEST = 30;
 export function middleware(req: NextRequest) {
   let requestTimestamp = req.headers.get("x-request-timestamp");
   if (!requestTimestamp) {
-    return NextResponse.json({ error: "Invalid request" }, { status: 400 });
+    return NextResponse.json(
+      { error: "Invalid request, no timestamp" },
+      { status: 400 },
+    );
   }
   requestTimestamp = decrypt(requestTimestamp);
   const url = req.nextUrl.clone();

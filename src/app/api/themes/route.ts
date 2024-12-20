@@ -1,4 +1,5 @@
 import prisma from "@/app/api/_db/db";
+import loggerServer from "@/loggerServer";
 import { ParsedPalette, ThemePalette, ThemeType } from "@/models/palette";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -35,17 +36,13 @@ export async function GET(req: NextRequest) {
       take: getAll ? PALETTES_PER_PAGE * 100 : PALETTES_PER_PAGE,
     });
 
-    let parsedThemes: ParsedPalette[] = themes
-      .map(theme => ({
-        id: theme.id,
-        name: theme.themeName,
-        owner: theme.owner.name,
-        views: theme.visits.length || 0,
-        colors: JSON.parse(theme.themeColors) as Record<
-          ThemeType,
-          ThemePalette
-        >,
-      }))
+    let parsedThemes: ParsedPalette[] = themes.map(theme => ({
+      id: theme.id,
+      name: theme.themeName,
+      owner: theme.owner.name,
+      views: theme.visits.length || 0,
+      colors: JSON.parse(theme.themeColors) as Record<ThemeType, ThemePalette>,
+    }));
 
     // Go over each, if they dont have light or dark, generate them.
     parsedThemes = parsedThemes.map(theme => {
@@ -69,7 +66,7 @@ export async function GET(req: NextRequest) {
       hasMore: themes.length === PALETTES_PER_PAGE,
     });
   } catch (error: any) {
-    console.log(error);
+    loggerServer.error("Error getting themes", error);
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }

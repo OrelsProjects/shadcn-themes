@@ -60,8 +60,8 @@ export function usePalette() {
       }));
 
       dispatch(addPalettes(parsedPalettes));
-    } catch (e) {
-      console.error(e);
+    } catch (e: any) {
+      Logger.error("Failed to fetch palettes", e);
     } finally {
       loadingRef.current = false;
     }
@@ -121,15 +121,14 @@ export function usePalette() {
     () =>
       throttle(async (theme: ParsedPalette) => {
         if (!userId) {
-          Logger.error("No user id found", userId);
-          return;
+          Logger.error("No user id found");
         }
         try {
           await axiosInstance.post("/api/themes/visit", {
             themeId: theme.id,
-            userId,
+            userId: userId || "not-found",
           });
-        } catch (e) {
+        } catch (e: any) {
           Logger.error("Failed to visit theme", e);
         }
       }, 2000),
@@ -160,8 +159,8 @@ export function usePalette() {
               themeId: theme.id,
               userId,
             });
-          } catch (e) {
-            Logger.error("Failed to add copy code", e);
+          } catch (e: any) {
+            Logger.error("Failed to add copy code", { error: e });
           }
         },
         2000,
