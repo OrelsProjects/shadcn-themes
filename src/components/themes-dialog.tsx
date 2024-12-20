@@ -2,7 +2,7 @@ import { selectPalette } from "@/lib/features/theme/paletteSlice";
 import { useAppSelector, useAppDispatch } from "@/hooks/redux";
 import { cn, getThemeColor } from "@/lib/utils";
 import { ParsedPalette, ThemeType } from "@/models/palette";
-import { ArrowDown, Palette, X } from "lucide-react";
+import { ArrowDown, Eye, Palette, X } from "lucide-react";
 import React, {
   useState,
   useMemo,
@@ -192,7 +192,7 @@ const PaletteCard = ({
 }: {
   palette: ParsedPalette;
   isSelected: boolean;
-  onPaletteSelected: (e: ParsedPalette) => void;
+  onPaletteSelected: (palette: ParsedPalette) => void;
   selectedThemeType: ThemeType;
 }) => {
   const [isHover, setIsHover] = useState(false);
@@ -246,6 +246,12 @@ const PaletteCard = ({
           color={getThemeColor("background", colors, true)}
         />
       </div>
+      {
+        <div className="flex flex-row items-center justify-start mt-2 gap-2  text-foreground/40">
+          <Eye className="h-3 w-3" />
+          <span className="text-xs">{palette.views}</span>
+        </div>
+      }
     </div>
   );
 };

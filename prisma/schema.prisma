@@ -133,13 +133,25 @@ model Rating {
 model Report {
   id String @id @default(auto()) @map("_id") @db.ObjectId
 
-  userId String
+  userId  String
   themeId String
 
-  comments   String?
+  comments String?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@map("reports")
+}
+
+model copy {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  userId  String
+  themeId String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("copies")
 }

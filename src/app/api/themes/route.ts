@@ -25,17 +25,27 @@ export async function GET(req: NextRequest) {
           position: "asc",
         },
       },
-      include: { owner: true },
+      include: {
+        owner: true,
+        visits: {
+          select: { id: true },
+        },
+      },
       skip: (page - 1) * PALETTES_PER_PAGE,
       take: getAll ? PALETTES_PER_PAGE * 100 : PALETTES_PER_PAGE,
     });
 
-    let parsedThemes: ParsedPalette[] = themes.map(theme => ({
-      id: theme.id,
-      name: theme.themeName,
-      owner: theme.owner.name,
-      colors: JSON.parse(theme.themeColors) as Record<ThemeType, ThemePalette>,
-    }));
+    let parsedThemes: ParsedPalette[] = themes
+      .map(theme => ({
+        id: theme.id,
+        name: theme.themeName,
+        owner: theme.owner.name,
+        views: theme.visits.length || 0,
+        colors: JSON.parse(theme.themeColors) as Record<
+          ThemeType,
+          ThemePalette
+        >,
+      }))
 
     // Go over each, if they dont have light or dark, generate them.
     parsedThemes = parsedThemes.map(theme => {
