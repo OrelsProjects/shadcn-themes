@@ -50,6 +50,7 @@ export function usePalette() {
       setHasMore(hasMore);
 
       let parsedPalettes: ParsedPalette[] = palettes.map(theme => ({
+        ...theme,
         id: theme.id,
         name: theme.name,
         colors: {
@@ -78,12 +79,14 @@ export function usePalette() {
 
   // Paginated themes from the Redux state
   const currentPalettes = useMemo(() => {
-    const uniquePalettes = allPalettes.reduce((acc, palette) => {
-      if (!acc.find(p => p.id === palette.id)) {
-        acc.push(palette);
-      }
-      return acc;
-    }, [] as ParsedPalette[]);
+    const uniquePalettes = allPalettes
+      .reduce((acc, palette) => {
+        if (!acc.find(p => p.id === palette.id)) {
+          acc.push(palette);
+        }
+        return acc;
+      }, [] as ParsedPalette[])
+      .sort((a, b) => b.views - a.views);
     return matches
       ? uniquePalettes
       : uniquePalettes.slice(0, page * itemsPerPage);
@@ -133,8 +136,23 @@ export function usePalette() {
     [userId],
   );
 
+  const addCopyCode = useCallback(
+    (theme: ParsedPalette) => {
+      try {
+        axiosInstance.post("/api/copy", {
+          themeId: theme.id,
+          userId,
+        });
+      } catch (e) {
+        Logger.error("Failed to add copy code", e);
+      }
+    },
+    [userId],
+  );
+
   return {
     init,
+    addCopyCode,
     currentPalettes,
     loadMorePalettes,
     loadingThemes,
