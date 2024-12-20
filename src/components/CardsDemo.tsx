@@ -1,7 +1,6 @@
 "use client";
 
 import { CardsDemo } from "@/components/cards";
-import ReportIssue from "@/components/report-issue";
 import { Button } from "@/components/ui-demo/button";
 import { EventTracker } from "@/eventTracker";
 import { useAppDispatch, useAppSelector } from "@/hooks/redux";
@@ -9,22 +8,19 @@ import {
   changeBaseThemeType,
   changeThemeType,
 } from "@/lib/features/theme/paletteSlice";
-import { Gabarito } from "@/lib/fonts";
 import { LampDesk } from "@/lib/icons";
 import { cn } from "@/lib/utils";
-import { ParsedPalette, ThemeType } from "@/models/palette";
+import { ThemeType } from "@/models/palette";
 import { useAnimation, motion } from "framer-motion";
-import { Moon, Sparkles, Sun } from "lucide-react";
+import { Moon, Sun } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 
 const TIME_TO_CHANGE_THEME = 200;
 
 const Header = ({
-  selectedPalette,
   selectedThemeType,
   baseThemeType,
 }: {
-  selectedPalette: ParsedPalette;
   selectedThemeType: ThemeType;
   baseThemeType: ThemeType;
 }) => {
@@ -110,11 +106,6 @@ const Header = ({
             />
           </Button>
         </motion.div>
-        <ReportIssue
-          themeType={selectedThemeType}
-          selectedPalette={selectedPalette}
-
-        />
       </div>
       <div
         onClick={() => {
@@ -181,7 +172,6 @@ export function CardsDemoContainer({
         <Header
           selectedThemeType={selectedThemeType}
           baseThemeType={baseThemeType}
-          selectedPalette={selectedPalette}
         />
         <div className="w-full flex justify-center px-4">
           <div className="max-w-full">

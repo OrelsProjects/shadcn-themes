@@ -1,5 +1,6 @@
 "use client";
 
+import NavbarItemContainer from "@/components/bottom-navbar/navbar-item-container";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -108,10 +109,7 @@ export default function CopyCode() {
         asChild
         onClick={() => EventTracker.track("Open copy button clicked")}
       >
-        <Button variant="outline">
-          <Copy className="h-4 w-4 sm:mr-2" />
-          <span className="hidden sm:inline">Copy code</span>
-        </Button>
+        <NavbarItemContainer Icon={Copy} label="Copy code" />
       </DialogTrigger>
       <DialogContent className="sm:max-w-[600px] overflow-clip">
         <DialogHeader className="flex flex-row items-center justify-between">

@@ -1,5 +1,4 @@
 import { Button } from "@/components/ui/button";
-import { Button as ButtonDemo } from "@/components/ui-demo/button";
 import {
   Dialog,
   DialogContent,
@@ -8,22 +7,20 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Skeleton } from "@/components/ui/skeleton";
 import { useReport } from "@/hooks/useReport";
 import { cn } from "@/lib/utils";
-import { ParsedPalette, ThemeType } from "@/models/palette";
 import { Check, Flag, Loader } from "lucide-react";
 import { useState } from "react";
 import { motion } from "framer-motion";
+import { useAppSelector } from "@/hooks/redux";
 
-export default function ReportIssue({
-  themeType,
-  selectedPalette,
-}: {
-  themeType: ThemeType;
-  selectedPalette: ParsedPalette;
-}) {
-  const { submitReport, updateReport, isLoading, isLoadingUpdate } = useReport();
+export default function ReportIssue() {
+  const { selectedPalette, selectedThemeType } = useAppSelector(
+    state => state.palette,
+  );
+
+  const { submitReport, updateReport, isLoading, isLoadingUpdate } =
+    useReport();
   const [reportId, setReportId] = useState<string | undefined>();
   const [didReport, setDidReport] = useState(false);
 
@@ -56,7 +53,7 @@ export default function ReportIssue({
         className={cn(
           "w-full rounded-lg active:translate-y-1 transition-all inline-flex items-center justify-start border-foreground/30 text-foreground",
           {
-            "shadow-md": themeType === "light",
+            "shadow-md": selectedThemeType === "light",
             "justify-center": isLoading,
           },
         )}
@@ -69,14 +66,11 @@ export default function ReportIssue({
   return (
     <Dialog onOpenChange={handleDialogOpenChange}>
       <DialogTrigger asChild>
-        <ButtonDemo
+        <Button
           variant={"outline"}
-          className={cn(
-            "rounded-lg active:translate-y-1 transition-all w-fit inline-flex items-center border-foreground/30 text-foreground-demo",
-            {
-              "shadow-md": themeType === "light",
-            },
-          )}
+          className={cn({
+            "shadow-md": selectedThemeType === "light",
+          })}
         >
           {isLoadingUpdate ? (
             <Loader className="animate-spin" />
@@ -86,12 +80,15 @@ export default function ReportIssue({
               animate={{ opacity: 1 }}
               transition={{ duration: 0.3 }}
             >
-              <Check className="!w-5 !h-5" />
+              <Check className="!w-4 !h-4" />
             </motion.div>
           ) : (
-            <Flag className="!w-5 !h-5" />
+            <>
+              <Flag className="!w-4 !h-4" />
+            </>
           )}
-        </ButtonDemo>
+          <span className="hidden sm:inline">Report Issue</span>
+        </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px] text-foreground">
         <DialogHeader>

@@ -1,6 +1,6 @@
 "use client";
 
-import { BottomNavbar } from "@/components/bottom-navbar";
+import { BottomNavbar } from "@/components/bottom-navbar/bottom-navbar";
 import { CardsDemoContainer } from "@/components/CardsDemo";
 import Header from "@/components/header";
 import Hero from "@/components/hero";
