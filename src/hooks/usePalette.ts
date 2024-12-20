@@ -136,17 +136,37 @@ export function usePalette() {
     [userId],
   );
 
-  const addCopyCode = useCallback(
-    (theme: ParsedPalette) => {
-      try {
-        axiosInstance.post("/api/copy", {
-          themeId: theme.id,
-          userId,
-        });
-      } catch (e) {
-        Logger.error("Failed to add copy code", e);
-      }
-    },
+  // const addCopyCode = useCallback(
+  //   (theme: ParsedPalette) => {
+  //     try {
+  //       axiosInstance.post("/api/copy", {
+  //         themeId: theme.id,
+  //         userId,
+  //       });
+  //     } catch (e) {
+  //       Logger.error("Failed to add copy code", e);
+  //     }
+  //   },
+  //   [userId],
+  // );
+
+  // throttle the above
+  const addCopyCode = useMemo(
+    () =>
+      throttle(
+        (theme: ParsedPalette) => {
+          try {
+            axiosInstance.post("/api/copy", {
+              themeId: theme.id,
+              userId,
+            });
+          } catch (e) {
+            Logger.error("Failed to add copy code", e);
+          }
+        },
+        2000,
+        { trailing: false },
+      ),
     [userId],
   );
 
