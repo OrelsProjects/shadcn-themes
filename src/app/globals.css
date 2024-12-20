@@ -83,7 +83,7 @@
     --chart-3: 39 80% 50%;
     --chart-4: 39 80% 50%;
     --chart-5: 39 80% 50%;
-/* 
+    /* 
     --background-demo: 222 84% 5%;
     --foreground-demo: 210 40% 98%;
     --card-demo: 222 84% 5%;
@@ -223,7 +223,6 @@
   body {
     @apply bg-background-demo text-foreground-demo;
   }
-
 }
 
 @media (min-width: 768px) {
@@ -246,4 +245,74 @@
     background: hsla(224, 21%, 83%, 0.4);
     border-radius: 9999px;
   }
+}
+
+.prose {
+  @apply text-foreground leading-relaxed max-w-3xl mx-auto; /* Center-align for readability */
+}
+
+.prose h1,
+.prose h2,
+.prose h3,
+.prose h4,
+.prose h5,
+.prose h6 {
+  @apply text-foreground font-bold my-6;
+}
+
+.prose h1 {
+  @apply text-5xl leading-tight mb-8; /* Extra spacing for main headings */
+}
+
+.prose h2 {
+  @apply text-4xl text-primary leading-snug mb-6;
+}
+
+.prose h3 {
+  @apply text-3xl leading-snug mb-5;
+}
+
+.prose p {
+  @apply my-6 leading-relaxed text-lg; /* Larger text for easier reading */
+}
+
+.prose ul,
+.prose ol {
+  @apply my-6 ml-10 leading-relaxed; /* Increased line spacing */
+}
+
+.prose li {
+  @apply mb-3 list-disc list-inside; /* Bulleted or numbered lists with spacing */
+}
+
+.prose a {
+  @apply text-primary hover:underline font-medium;
+}
+
+.prose blockquote {
+  @apply border-l-4 border-muted pl-6 italic my-6 text-lg bg-muted/10 rounded; /* Softer, more readable blockquote style */
+}
+
+.prose code {
+  @apply bg-muted-foreground text-sm rounded px-2 py-1 font-mono text-muted-foreground; /* Distinct and readable inline code */
+}
+
+.prose pre {
+  @apply bg-muted-foreground text-sm rounded-lg p-6 my-6 overflow-x-auto shadow-md; /* Larger padding and shadow for clarity */
+}
+
+.prose img {
+  @apply my-6 rounded-lg shadow-lg mx-auto; /* Center-aligned with larger spacing */
+}
+
+.prose table {
+  @apply w-full my-6 border-collapse border border-muted/50 shadow-sm;
+}
+
+.prose th {
+  @apply bg-muted/10 text-left px-4 py-2 text-sm font-semibold;
+}
+
+.prose td {
+  @apply border px-4 py-2 text-sm;
 }

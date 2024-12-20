@@ -1,28 +1,16 @@
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
-import { ArrowLeft } from "lucide-react";
-import { Metadata } from "next";
-import Link from "next/link";
-import React from "react";
+import { Inter } from "next/font/google";
 
-export const metadata: Metadata = {
-  title: "Blogs",
+const inter = Inter({ subsets: ["latin"] });
+
+export const metadata = {
+  title: "Blog",
+  description: "A beautiful blog with dynamic table of contents",
 };
-export default function Layout({
+
+export default function RootLayout({
   children,
-  params,
 }: {
   children: React.ReactNode;
-  params: { slug: string };
 }) {
-  // Convert slug from snake-case to title case
-  const formattedSlug = params.slug
-    .split("-")
-    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(" ");
-
-  // Set metadata dynamically
-  metadata.title = `Blogs | ${formattedSlug}`;
-
-  return <article>{children}</article>;
+  return <article className={inter.className}>{children}</article>;
 }

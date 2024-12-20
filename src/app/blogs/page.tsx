@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import {
@@ -9,11 +10,13 @@ import {
   CardDescription,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { CalendarIcon, ClockIcon } from "lucide-react";
-import { Blogs } from "@/app/blogs/[slug]/page";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { CalendarIcon, ClockIcon, SearchIcon } from "lucide-react";
+import { Header } from "./header";
 
 interface BlogPost {
-  slug: Blogs;
+  slug: string;
   title: string;
   description: string;
   date: string;
@@ -27,7 +30,7 @@ const blogPosts: BlogPost[] = [
     title: "Choose the Right Color",
     description:
       "A guide to selecting the perfect color palette for your next project.",
-    date: "2024-18-12",
+    date: "2024-12-18",
     readTime: "5 min",
     category: "Design",
   },
@@ -35,7 +38,7 @@ const blogPosts: BlogPost[] = [
     slug: "the-shadcn-way",
     title: "The Shadcn Way",
     description: "Learn what is the Shadcn philosophy about choosing colors.",
-    date: "2024-18-12",
+    date: "2024-12-18",
     readTime: "5 min",
     category: "UI/UX",
   },
@@ -43,7 +46,7 @@ const blogPosts: BlogPost[] = [
     slug: "why-shadcn",
     title: "Why Shadcn?",
     description: "Why should you choose Shadcn over other design libraries?",
-    date: "2024-18-12",
+    date: "2024-12-18",
     readTime: "8 min",
     category: "Development",
   },
@@ -51,15 +54,30 @@ const blogPosts: BlogPost[] = [
     slug: "shadcn-vs-material",
     title: "Shadcn vs Material",
     description: "A comparison between Shadcn and Material design systems.",
-    date: "2024-18-12",
+    date: "2024-12-18",
     readTime: "6 min",
     category: "Design",
   },
 ];
 
+const categories = Array.from(new Set(blogPosts.map(post => post.category)));
+
 export default function BlogsPage() {
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+
+  const filteredPosts = blogPosts.filter(post => {
+    const matchesSearch =
+      post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      post.description.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesCategory =
+      !selectedCategory || post.category === selectedCategory;
+    return matchesSearch && matchesCategory;
+  });
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-secondary/20">
+      <Header />
       <div className="container mx-auto py-12">
         <section className="text-center mb-12">
           <h1 className="text-4xl font-bold mb-4">Our Blog</h1>
@@ -69,8 +87,37 @@ export default function BlogsPage() {
           </p>
         </section>
 
+        <div className="mb-8 flex flex-col sm:flex-row gap-4">
+          <div className="relative flex-grow">
+            <SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" />
+            <Input
+              type="text"
+              placeholder="Search articles..."
+              className="pl-10"
+              value={searchTerm}
+              onChange={e => setSearchTerm(e.target.value)}
+            />
+          </div>
+          <div className="flex gap-2 flex-wrap">
+            {categories.map(category => (
+              <Button
+                key={category}
+                variant={selectedCategory === category ? "default" : "outline"}
+                size="sm"
+                onClick={() =>
+                  setSelectedCategory(
+                    selectedCategory === category ? null : category,
+                  )
+                }
+              >
+                {category}
+              </Button>
+            ))}
+          </div>
+        </div>
+
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {blogPosts.map((post, index) => (
+          {filteredPosts.map((post, index) => (
             <motion.div
               key={post.slug}
               initial={{ opacity: 0, y: 20 }}
@@ -108,6 +155,23 @@ export default function BlogsPage() {
             </motion.div>
           ))}
         </div>
+
+        <section className="mt-16 bg-secondary/50 rounded-lg p-8 text-center">
+          <h2 className="text-2xl font-bold mb-4">
+            Subscribe to Our Newsletter
+          </h2>
+          <p className="text-muted-foreground mb-6">
+            Stay up-to-date with our latest articles and insights.
+          </p>
+          <div className="flex max-w-md mx-auto">
+            <Input
+              type="email"
+              placeholder="Enter your email"
+              className="rounded-r-none"
+            />
+            <Button className="rounded-l-none">Subscribe</Button>
+          </div>
+        </section>
       </div>
     </div>
   );

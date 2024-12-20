@@ -1,49 +1,24 @@
+import fs from "fs";
+import path from "path";
 import { notFound } from "next/navigation";
-import dynamic from "next/dynamic";
+import BlogPost from "./blog-post";
 
-export type Blogs =
-  | "choose-the-right-color"
-  | "the-shadcn-way"
-  | "why-shadcn"
-  | "shadcn-vs-material";
+export async function generateStaticParams() {
+  const files = fs.readdirSync(path.join(process.cwd(), "seo-content"));
+  return files.map(filename => ({
+    slug: filename.replace(".md", ""),
+  }));
+}
 
-// Map of valid slugs to their component paths
-const blogComponents: Record<Blogs, React.ComponentType> = {
-  "choose-the-right-color": dynamic(
-    () => import("../content/choose-the-right-color"),
-  ),
-  "the-shadcn-way": dynamic(() => import("../content/the-shadcn-way")),
-  "why-shadcn": dynamic(() => import("../content/why-shadcn")),
-  "shadcn-vs-material": dynamic(() => import("../content/shadcn-vs-material")),
-};
-
-type BlogPost = keyof typeof blogComponents;
-
-export default async function BlogPost({
-  params,
-}: {
-  params: { slug: string };
-}) {
+export default function BlogPage({ params }: { params: { slug: string } }) {
   const { slug } = params;
+  const filePath = path.join(process.cwd(), "seo-content", `${slug}.md`);
 
-  // Type check if the slug is valid
-  if (!isValidBlogSlug(slug)) {
+  if (!fs.existsSync(filePath)) {
     notFound();
   }
 
-  const BlogContent = blogComponents[slug];
+  const content = fs.readFileSync(filePath, "utf8");
 
-  return <BlogContent />;
-}
-
-// Helper function to type check valid blog slugs
-function isValidBlogSlug(slug: string): slug is BlogPost {
-  return slug in blogComponents;
-}
-
-// Generate static params for all blog posts
-export function generateStaticParams() {
-  return Object.keys(blogComponents).map(slug => ({
-    slug,
-  }));
+  return <BlogPost content={content} />;
 }
