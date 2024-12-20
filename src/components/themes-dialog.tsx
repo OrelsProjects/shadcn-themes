@@ -410,7 +410,7 @@ export function ThemesDialog() {
           })}
         />
       )}
-      <div className="relative w-fit h-fit flex items-end justify-center">
+      <div className="relative w-fit h-fit flex items-end justify-center overflow-visible">
         <AnimatePresence>
           {!wasThemeClicked && (
             <motion.div

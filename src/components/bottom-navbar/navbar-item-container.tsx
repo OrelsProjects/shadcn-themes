@@ -14,11 +14,7 @@ export default function NavbarItemContainer({
 }: NavbarItemContainerProps) {
   return (
     <Button variant="outline">
-      <Icon
-        className={cn("h-4 w-4", {
-          "sm:mr-2": !!label,
-        })}
-      />
+      <Icon className={cn("h-4 w-4")} />
       {label && <span className="hidden sm:inline">{label}</span>}
       {children}
     </Button>

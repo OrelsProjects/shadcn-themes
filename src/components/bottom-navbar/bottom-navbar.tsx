@@ -96,7 +96,7 @@ export function BottomNavbar() {
     >
       <Card
         aria-label="Theme tools and social links"
-        className="w-fit h-16 bg-background/80 backdrop-blur-md border border-border/80 shadow-sm px-6 py-2 flex items-center gap-4  overflow-x-auto"
+        className="w-fit h-16 bg-background/80 backdrop-blur-md border border-border/80 shadow-sm px-6 py-2 flex items-center gap-4 max-sm:overflow-x-auto"
       >
         <CopyCode />
         <ThemesDialog />
