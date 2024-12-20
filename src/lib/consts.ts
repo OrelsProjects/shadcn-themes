@@ -6,6 +6,7 @@ export const LINKEDIN_URL =
 export const SUBSTACK_URL = "https://theindiepreneur.substack.com/";
 
 export const basePalette: ParsedPalette = {
+  views: 0,
   name: "base",
   owner: "system",
   colors: {
