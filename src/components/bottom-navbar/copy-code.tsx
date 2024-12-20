@@ -120,7 +120,9 @@ export default function CopyCode() {
       </DialogTrigger>
       <DialogContent className="sm:max-w-[600px] overflow-clip">
         <DialogHeader className="flex flex-row items-center justify-between">
-          <DialogTitle className="text-foreground">Theme</DialogTitle>
+          <DialogTitle className="text-foreground">
+            Theme {selectedPalette.name}
+          </DialogTitle>
         </DialogHeader>
         <DialogDescription className="text-foreground/50 mt-2">
           Copy and paste the following code into your CSS file.
