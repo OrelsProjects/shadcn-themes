@@ -1,3 +1,4 @@
+import { Logger } from "@/logger";
 import { useState } from "react";
 
 interface ReviewData {
@@ -27,7 +28,8 @@ export function useReview() {
       }
 
       return await response.json();
-    } catch (err) {
+    } catch (err: any) {
+      Logger.error("Failed to submit review", err);
       setError(err instanceof Error ? err.message : "An error occurred");
     } finally {
       setIsLoading(false);
@@ -52,7 +54,8 @@ export function useReview() {
       }
 
       return await response.json();
-    } catch (err) {
+    } catch (err: any) {
+      Logger.error("Failed to update review", err);
       setError(err instanceof Error ? err.message : "An error occurred");
     } finally {
       setIsLoading(false);

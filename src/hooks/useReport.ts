@@ -25,7 +25,7 @@ export function useReport() {
       });
       const reportId = response.data;
       return reportId;
-    } catch (err) {
+    } catch (err: any) {
       setError(err instanceof Error ? err.message : "An error occurred");
       Logger.error("Failed to submit report", err);
     } finally {
@@ -42,7 +42,7 @@ export function useReport() {
 
     try {
       await axiosInstance.patch("/api/report", data);
-    } catch (err) {
+    } catch (err: any) {
       setError(err instanceof Error ? err.message : "An error occurred");
       Logger.error("Failed to update report", err);
     } finally {
