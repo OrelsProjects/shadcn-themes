@@ -17,6 +17,7 @@ export type ParsedPalette = {
   id: string;
   name: string;
   owner: string;
+  views: number;
   colors: Record<ThemeType, ThemePalette>;
 };
 
