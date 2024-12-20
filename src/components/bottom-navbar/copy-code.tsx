@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/tooltip";
 import { EventTracker } from "@/eventTracker";
 import { useAppSelector } from "@/hooks/redux";
+import { usePalette } from "@/hooks/usePalette";
 import { HSL, ParsedPalette, ThemePalette, ThemeType } from "@/models/palette";
 import { Copy } from "lucide-react";
 import { useMemo, useState } from "react";
@@ -88,6 +89,7 @@ export function generateCSS(parsedPalette: ParsedPalette): string {
 
 export default function CopyCode() {
   const { selectedPalette } = useAppSelector(state => state.palette);
+  const { addCopyCode } = usePalette();
   const [showTooltip, setShowTooltip] = useState(false);
 
   const codeString = useMemo(() => {
@@ -100,6 +102,7 @@ export default function CopyCode() {
     EventTracker.track("Copied CSS code", { palette: selectedPalette?.name });
     navigator.clipboard.writeText(codeString);
     setShowTooltip(true);
+    addCopyCode(selectedPalette);
     setTimeout(() => setShowTooltip(false), 2000);
   };
 
@@ -109,7 +112,10 @@ export default function CopyCode() {
         asChild
         onClick={() => EventTracker.track("Open copy button clicked")}
       >
-        <NavbarItemContainer Icon={Copy} label="Copy code" />
+        <Button variant="outline">
+          <Copy className="h-5 w-5" />
+          Copy code
+        </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[600px] overflow-clip">
         <DialogHeader className="flex flex-row items-center justify-between">
