@@ -79,14 +79,13 @@ export function usePalette() {
 
   // Paginated themes from the Redux state
   const currentPalettes = useMemo(() => {
-    const uniquePalettes = allPalettes
-      .reduce((acc, palette) => {
-        if (!acc.find(p => p.id === palette.id)) {
-          acc.push(palette);
-        }
-        return acc;
-      }, [] as ParsedPalette[])
-      .sort((a, b) => b.views - a.views);
+    const uniquePalettes = allPalettes.reduce((acc, palette) => {
+      if (!acc.find(p => p.id === palette.id)) {
+        acc.push(palette);
+      }
+      return acc;
+    }, [] as ParsedPalette[]);
+
     return matches
       ? uniquePalettes
       : uniquePalettes.slice(0, page * itemsPerPage);
