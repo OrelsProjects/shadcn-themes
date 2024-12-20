@@ -112,7 +112,7 @@ export default function CopyCode() {
         asChild
         onClick={() => EventTracker.track("Open copy button clicked")}
       >
-        <Button variant="outline">
+        <Button variant="outline" onClick={handleCopy}>
           <Copy className="h-5 w-5" />
           Copy code
         </Button>
