@@ -147,7 +147,7 @@ const ColorSwatch = ({ color, isHover, className }: ColorSwatchProps) => {
     <ColorSwatchTooltip color={color} className={className} />
   ) : (
     <div
-      className={cn("w-4 h-4 sm:w-6 sm:h-6 rounded-full opacity-50", className)}
+      className={cn("w-4 h-4 sm:w-6 sm:h-6 rounded-full opacity-100", className)}
       style={{ backgroundColor: color }}
     />
   );
