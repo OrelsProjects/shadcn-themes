@@ -9,6 +9,7 @@ export function middleware(req: NextRequest) {
   let requestTimestamp =
     req.headers.get("X-Request-Timestamp") ||
     req.headers.get("x-request-timestamp");
+  console.log("Header entries: ", req.headers.entries());
   if (!requestTimestamp) {
     return NextResponse.json(
       { error: "Invalid request, no timestamp" },
