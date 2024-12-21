@@ -3,6 +3,7 @@ import React from "react";
 
 export const metadata: Metadata = {
   title: "Blogs",
+  description: "Blogs for Shadcn Themes.",
 };
 
 export default function Layout({
