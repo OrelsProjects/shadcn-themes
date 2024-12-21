@@ -6,7 +6,9 @@ import type { NextRequest } from "next/server";
 const MAX_TIME_TO_PROCESS_REQUEST = 30;
 
 export function middleware(req: NextRequest) {
-  let requestTimestamp = req.headers.get("x-request-timestamp");
+  let requestTimestamp =
+    req.headers.get("X-Request-Timestamp") ||
+    req.headers.get("x-request-timestamp");
   if (!requestTimestamp) {
     return NextResponse.json(
       { error: "Invalid request, no timestamp" },
