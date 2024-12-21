@@ -138,23 +138,6 @@ export default function BlogsPage() {
             </motion.div>
           ))}
         </div>
-
-        <section className="mt-16 bg-secondary/50 rounded-lg p-8 text-center">
-          <h2 className="text-2xl font-bold mb-4">
-            Subscribe to Our Newsletter
-          </h2>
-          <p className="text-muted-foreground mb-6">
-            Stay up-to-date with our latest articles and insights.
-          </p>
-          <div className="flex max-w-md mx-auto">
-            <Input
-              type="email"
-              placeholder="Enter your email"
-              className="rounded-r-none"
-            />
-            <Button className="rounded-l-none">Subscribe</Button>
-          </div>
-        </section>
       </div>
     </div>
   );
