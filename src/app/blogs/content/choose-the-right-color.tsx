@@ -318,22 +318,6 @@ export default function PrimaryColorGuidePage() {
         </ul>
       </section>
 
-      <section>
-        <h2 className="text-2xl font-semibold mb-4">
-          Ready to Choose Your Primary Color?
-        </h2>
-        <p className="mb-4">
-          Selecting the right primary color for your website is crucial for
-          creating a strong brand identity and engaging user experience. Take
-          the time to experiment with different combinations and gather feedback
-          to refine your choices.
-        </p>
-        <Button size="lg" asChild>
-          <Link href="/">
-            Start Designing Your Color Scheme <ArrowRight className="ml-1" />
-          </Link>
-        </Button>
-      </section>
     </div>
   );
 }

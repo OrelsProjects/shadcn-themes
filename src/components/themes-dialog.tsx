@@ -404,7 +404,10 @@ export function ThemesDialog() {
     );
 
   return (
-    <div className="w-full h-full flex items-center relative">
+    <div
+      data-testid="themes-dialog"
+      className="w-full h-full flex items-center relative"
+    >
       {(isOpen || !wasThemeClicked) && (
         <Background
           onClick={() => {
