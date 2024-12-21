@@ -60,8 +60,7 @@ export function generateCSS(parsedPalette: ParsedPalette): string {
     --chart-2: ${colorToHSL(theme["chart-2"])};
     --chart-3: ${colorToHSL(theme["chart-3"])};
     --chart-4: ${colorToHSL(theme["chart-4"])};
-    --chart-5: ${colorToHSL(theme["chart-5"])};
-    `;
+    --chart-5: ${colorToHSL(theme["chart-5"])};`;
   };
 
   const hasDarkTheme = Object.keys(colors.dark).length > 0;
