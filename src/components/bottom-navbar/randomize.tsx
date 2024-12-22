@@ -119,6 +119,7 @@ export default function RandomizePopover() {
   };
 
   const openPicker = () => {
+    EventTracker.track("Color Picker opened");
     setIsPickerOpen(true);
   };
 
