@@ -12,6 +12,8 @@ export interface ThemeState {
   allPalettes: ParsedPalette[];
   showThemePalette?: boolean;
   hideThemePalette?: boolean;
+  showRandomize?: boolean;
+  hideRandomize?: boolean;
 }
 
 export const initialState: ThemeState = {
@@ -22,6 +24,8 @@ export const initialState: ThemeState = {
   selectedPalette: basePalette,
   showThemePalette: false,
   hideThemePalette: false,
+  showRandomize: false,
+  hideRandomize: false,
 };
 
 const paletteSlice = createSlice({
@@ -53,6 +57,12 @@ const paletteSlice = createSlice({
     setHideThemePalette(state, action: PayloadAction<boolean>) {
       state.hideThemePalette = action.payload;
     },
+    setShowRandomize(state, action: PayloadAction<boolean>) {
+      state.showRandomize = action.payload;
+    },
+    setHideRandomize(state, action: PayloadAction<boolean>) {
+      state.hideRandomize = action.payload;
+    },
     changeBaseThemeType(state) {
       if (state.selectedThemeType === state.baseThemeType) {
         state.selectedThemeType =
@@ -70,6 +80,8 @@ export const {
   changeBaseThemeType,
   setShowThemePalette,
   setHideThemePalette,
+  setShowRandomize,
+  setHideRandomize,
 } = paletteSlice.actions;
 
 export default paletteSlice.reducer;

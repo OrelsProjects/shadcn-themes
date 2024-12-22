@@ -4,6 +4,8 @@ import {
   changeThemeType,
   setHideThemePalette,
   setShowThemePalette,
+  setHideRandomize,
+  setShowRandomize,
 } from "@/lib/features/theme/paletteSlice";
 import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 import { ReactNode, useState } from "react";
@@ -30,7 +32,7 @@ export function ShortcutProvider() {
   };
 
   useHotkeys(
-    ["l", "t", "Escape"],
+    ["l", "t", "r", "Escape"],
     event => {
       EventTracker.track("shortcut", { key: event.code });
       const allowDoubles = ["keyT", "Escape"];
@@ -51,6 +53,14 @@ export function ShortcutProvider() {
             handleLRelease();
           }
           break;
+        case "KeyR":
+          if (event.type === "keyup") {
+            dispatch(setShowRandomize(true));
+            setTimeout(() => {
+              dispatch(setShowRandomize(false));
+            }, 200);
+            break;
+          }
         case "KeyT":
           if (event.type === "keyup") {
             dispatch(setShowThemePalette(true));
@@ -62,8 +72,10 @@ export function ShortcutProvider() {
         case "Escape":
           if (event.type === "keyup") {
             dispatch(setHideThemePalette(true));
+            dispatch(setHideRandomize(true));
             setTimeout(() => {
               dispatch(setHideThemePalette(false));
+              dispatch(setHideRandomize(false));
             }, 200);
           }
           break;

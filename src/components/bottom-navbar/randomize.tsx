@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Dices, ChevronDown, RotateCcw, X, Lock, Unlock } from "lucide-react";
 import {
@@ -20,7 +20,7 @@ import { EventTracker } from "@/eventTracker";
 
 export default function RandomizePopover() {
   const dispatch = useAppDispatch();
-  const { selectedThemeType, selectedPalette } = useAppSelector(
+  const { selectedThemeType, selectedPalette, showRandomize } = useAppSelector(
     state => state.palette,
   );
   const { generateRandomPalette } = usePalette();
@@ -29,14 +29,20 @@ export default function RandomizePopover() {
   const [primaryForegroundColor, setPrimaryForegroundColor] = useState<HSL>([
     255, 255, 255,
   ]);
-  const [customPrimaryColor, setCustomPrimaryColor] = useState<HSL | null>(
-    null,
-  );
+
   const [isLocked, setIsLocked] = useState(false); // Lock state
   const [history, setHistory] = useState<ParsedPalette[]>([selectedPalette]);
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const [isOpen, setIsOpen] = useState(false);
-  const [isPickerOpen, setIsPickerOpen] = useState(false);
+  const [isPickerOpen, setIsPickerOpen] = useState(true);
+
+  const randomizeButtonRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    if (showRandomize) {
+      randomizeButtonRef.current?.click();
+    }
+  }, [showRandomize]);
 
   useEffect(() => {
     setPrimaryColor(history[currentIndex]?.colors[selectedThemeType].primary);
@@ -47,7 +53,6 @@ export default function RandomizePopover() {
 
   const generatePalette = () => {
     EventTracker.track("Randomize palette clicked");
-    debugger;
     const newPalette = generateRandomPalette(isLocked ? primaryColor : null);
     setHistory(prev => [...prev, newPalette]);
     setCurrentIndex(prev => prev + 1);
@@ -89,7 +94,6 @@ export default function RandomizePopover() {
   const debouncedHandleColorChange = useMemo(
     () =>
       debounce((color: HSL) => {
-        setCustomPrimaryColor(color);
         const newPalette: ParsedPalette = {
           ...currentPalette,
           colors: {
@@ -114,16 +118,38 @@ export default function RandomizePopover() {
     debouncedHandleColorChange(color);
   };
 
+  const openPicker = () => {
+    setIsPickerOpen(true);
+  };
+
   const closePicker = () => {
+    EventTracker.track("Color Picker closed");
     setIsPickerOpen(false);
   };
 
   return (
-    <Popover open={isOpen} onOpenChange={setIsOpen}>
+    <Popover
+      open={isOpen}
+      onOpenChange={open => {
+        setIsOpen(open);
+        if (open) {
+          EventTracker.track("Randomize popover opened");
+          openPicker();
+        }
+      }}
+    >
       <PopoverTrigger asChild>
-        <Button variant="outline" className="w-full justify-between">
+        <Button
+          variant="outline"
+          className="w-full flex items-center !ring-ring/0"
+          onClick={() => setIsOpen(prev => !prev)}
+          ref={randomizeButtonRef}
+        >
           <Dices className="h-5 w-5" />
-          <span className="hidden sm:inline-flex">Randomize</span>
+          <span className="hidden sm:inline">
+            Randomize{" "}
+            <kbd className={cn("border border-border p-1 px-2 ml-1")}>R</kbd>
+          </span>
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-64 p-4 border-border/60" side="top">
@@ -191,7 +217,11 @@ export default function RandomizePopover() {
             }}
             onClick={() => {
               if (!currentPalette) return;
-              setIsPickerOpen(prev => !prev);
+              if (isPickerOpen) {
+                closePicker();
+              } else {
+                openPicker();
+              }
             }}
           >
             {currentPalette && (

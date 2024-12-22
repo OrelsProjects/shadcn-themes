@@ -143,6 +143,7 @@ export function usePalette() {
           try {
             axiosInstance.post("/api/copy", {
               themeId: theme.id,
+              colors: theme.colors,
               userId,
             });
           } catch (e: any) {
@@ -159,7 +160,7 @@ export function usePalette() {
     const { light, dark } = createThemeConfig(primaryColor);
     return {
       name: "Random",
-      id: "random",
+      id: "",
       owner: "random",
       views: 0,
       colors: {
