@@ -6,11 +6,12 @@ export async function POST(req: NextRequest) {
   const body = await req.json();
 
   try {
-    const { userId, themeId } = body;
+    const { userId, themeId, comments } = body;
     const report = await prisma.report.create({
       data: {
         userId,
         themeId,
+        comments,
       },
       select: {
         id: true,

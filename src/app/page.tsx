@@ -6,7 +6,6 @@ import Header from "@/components/header";
 import Hero from "@/components/hero";
 import Footer from "@/components/footer";
 import CodeFastAdBanner from "@/components/banners/codefast-ad";
-import { ReviewPopup } from "@/components/ui/review-popup";
 
 export default function Dashboard() {
   return (

@@ -13,42 +13,44 @@ import { Check, Flag, Loader } from "lucide-react";
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { useAppSelector } from "@/hooks/redux";
+import { Textarea } from "@/components/ui/textarea";
 
 export default function ReportIssue() {
   const { selectedPalette, selectedThemeType } = useAppSelector(
     state => state.palette,
   );
 
-  const { submitReport, updateReport, isLoading, isLoadingUpdate } =
-    useReport();
-  const [reportId, setReportId] = useState<string | undefined>();
+  const { submitReport, isLoading, isLoadingUpdate } = useReport();
+  const [comments, setComments] = useState("");
   const [didReport, setDidReport] = useState(false);
 
   const handleDialogOpenChange = (open: boolean) => {
     if (!open) {
       return;
     }
-    submitReport({ themeId: selectedPalette.id }).then(id => {
-      setReportId(id);
-    });
   };
 
-  const handleUpdateReport = (comments: string) => {
-    if (!reportId || isLoading) {
-      return;
-    }
+  const handleSubmitReport = (comments: string) => {
     setDidReport(true);
-    updateReport({ id: reportId, comments }).then(() => {
+    submitReport({ comments, themeId: selectedPalette.id }).then(() => {
+      setComments("");
       setTimeout(() => {
         setDidReport(false);
       }, 2000);
     });
   };
 
-  const IssueButtonContainer = ({ comments }: { comments: string }) => (
+  const IssueButtonContainer = ({
+    comments,
+    disabled,
+  }: {
+    comments: string;
+    disabled?: boolean;
+  }) => (
     <DialogTrigger>
       <Button
-        onClick={() => handleUpdateReport(comments)}
+        disabled={disabled}
+        onClick={() => handleSubmitReport(comments)}
         variant="outline"
         className={cn(
           "w-full rounded-lg active:translate-y-1 transition-all inline-flex items-center justify-start border-foreground/30 text-foreground",
@@ -58,7 +60,7 @@ export default function ReportIssue() {
           },
         )}
       >
-        {isLoading ? <Loader className="animate-spin" /> : comments}
+        {comments}
       </Button>
     </DialogTrigger>
   );
@@ -101,9 +103,45 @@ export default function ReportIssue() {
           </DialogDescription>
         </DialogHeader>
         <div className="w-full flex flex-col gap-3 mt-4">
-          <IssueButtonContainer comments="The contrast is not good" />
-          <IssueButtonContainer comments="The palette is ugly" />
-          <IssueButtonContainer comments="The palette is fine, I'm just looking around" />
+          <IssueButtonContainer
+            disabled={isLoading}
+            comments="The contrast is not good"
+          />
+          <IssueButtonContainer
+            disabled={isLoading}
+            comments="The theme is ugly"
+          />
+          <IssueButtonContainer
+            disabled={isLoading}
+            comments="The theme is fine, I'm just looking around"
+          />
+          <form
+            className="flex flex-col gap-2 mt-4"
+            onSubmit={e => {
+              e.preventDefault();
+              if (e.currentTarget.checkValidity()) {
+                handleSubmitReport(comments.trim());
+              }
+            }}
+          >
+            <Textarea
+              value={comments}
+              onChange={e => setComments(e.target.value)}
+              placeholder="What's wrong with this theme?"
+              className="w-full"
+              required
+            />
+            <DialogTrigger asChild>
+              <Button
+                type="submit"
+                variant="outline"
+                className="w-full"
+                disabled={isLoading}
+              >
+                {isLoading ? <Loader className="animate-spin" /> : "Submit"}
+              </Button>
+            </DialogTrigger>
+          </form>
         </div>
         <div className="mt-6 flex justify-end">
           <DialogTrigger>

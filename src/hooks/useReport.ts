@@ -21,6 +21,7 @@ export function useReport() {
     try {
       const response = await axiosInstance.post<string>("/api/report", {
         themeId: data.themeId,
+        comments: data.comments,
         userId,
       });
       const reportId = response.data;
