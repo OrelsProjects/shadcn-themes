@@ -19,7 +19,7 @@ export async function POST(req: NextRequest) {
     const copy = await prisma.copy.create({
       data: {
         userId,
-        themeId,
+        themeId: themeId || undefined,
         colors: colors ? JSON.stringify(colors) : undefined,
       },
       select: {
