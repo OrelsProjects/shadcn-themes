@@ -8,7 +8,7 @@ import { Logger } from "@/logger";
 import { throttle } from "lodash";
 import axiosInstance from "@/lib/axiosInstance";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
-import { generateRandomPalette } from "@/lib/palette/utils";
+import { createThemeConfig } from "@/lib/palette/utils";
 
 export function usePalette() {
   const dispatch = useAppDispatch();
@@ -156,7 +156,7 @@ export function usePalette() {
   );
 
   const generateRandomPalette = (primaryColor?: HSL | null): ParsedPalette => {
-    const { light, dark } = generateRandomPalette(primaryColor);
+    const { light, dark } = createThemeConfig(primaryColor);
     return {
       name: "Random",
       id: "random",
