@@ -450,7 +450,7 @@ export function ThemesDialog() {
               },
             )}
           />
-          <Palette className="sm:mr-2 h-4 w-4" />
+          <Palette className="h-4 w-4" />
           <span className="hidden sm:inline">
             Themes{" "}
             <kbd

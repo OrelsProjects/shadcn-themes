@@ -15,7 +15,17 @@ import { motion } from "framer-motion";
 import { useAppSelector } from "@/hooks/redux";
 import { Textarea } from "@/components/ui/textarea";
 
-export default function ReportIssue() {
+interface ReportIssueProps {
+  className?: string;
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
+}
+
+export default function ReportIssue({
+  className,
+  open,
+  onOpenChange,
+}: ReportIssueProps) {
   const { selectedPalette, selectedThemeType } = useAppSelector(
     state => state.palette,
   );
@@ -25,9 +35,7 @@ export default function ReportIssue() {
   const [didReport, setDidReport] = useState(false);
 
   const handleDialogOpenChange = (open: boolean) => {
-    if (!open) {
-      return;
-    }
+    onOpenChange?.(open);
   };
 
   const handleSubmitReport = (comments: string) => {
@@ -66,13 +74,16 @@ export default function ReportIssue() {
   );
 
   return (
-    <Dialog onOpenChange={handleDialogOpenChange}>
+    <Dialog onOpenChange={handleDialogOpenChange} open={open}>
       <DialogTrigger asChild>
-        <Button
+        {/* <Button
           variant={"outline"}
-          className={cn({
-            "shadow-md": selectedThemeType === "light",
-          })}
+          className={cn(
+            {
+              "shadow-md": selectedThemeType === "light",
+            },
+            className,
+          )}
         >
           {isLoadingUpdate ? (
             <Loader className="animate-spin" />
@@ -90,7 +101,7 @@ export default function ReportIssue() {
             </>
           )}
           <span className="hidden sm:inline">Report Issue</span>
-        </Button>
+        </Button> */}
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px] text-foreground">
         <DialogHeader>

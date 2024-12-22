@@ -1,13 +1,14 @@
 import { useState, useMemo, useEffect, useRef, useCallback } from "react";
 import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 import { addPalettes } from "@/lib/features/theme/paletteSlice";
-import { ParsedPalette } from "@/models/palette";
+import { HSL, ParsedPalette } from "@/models/palette";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import cuid from "cuid";
 import { Logger } from "@/logger";
 import { throttle } from "lodash";
 import axiosInstance from "@/lib/axiosInstance";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
+import { generateRandomPalette } from "@/lib/palette/utils";
 
 export function usePalette() {
   const dispatch = useAppDispatch();
@@ -154,6 +155,20 @@ export function usePalette() {
     [userId],
   );
 
+  const generateRandomPalette = (primaryColor?: HSL | null): ParsedPalette => {
+    const { light, dark } = generateRandomPalette(primaryColor);
+    return {
+      name: "Random",
+      id: "random",
+      owner: "random",
+      views: 0,
+      colors: {
+        light,
+        dark,
+      },
+    };
+  };
+
   return {
     init,
     addCopyCode,
@@ -163,5 +178,6 @@ export function usePalette() {
     resetPaging,
     loadingPaging,
     visitTheme,
+    generateRandomPalette,
   };
 }
