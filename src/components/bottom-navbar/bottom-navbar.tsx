@@ -42,7 +42,6 @@ export function BottomNavbar() {
         <CopyCode />
         <ThemesDialog />
         <Randomize />
-        <Separator orientation="vertical" />
         <AdditionalBottomNavbarOptions />
         <Separator orientation="vertical" />
         <Socials />
