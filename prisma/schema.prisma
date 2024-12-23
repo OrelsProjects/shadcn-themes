@@ -100,7 +100,6 @@ model Theme {
 
   owner  ThemeOwner   @relation(fields: [themeOwnerId], references: [id], onDelete: Cascade)
   visits ThemeVisit[]
-  copy   copy[]
 
   @@map("theme")
 }
@@ -149,13 +148,12 @@ model copy {
   id String @id @default(auto()) @map("_id") @db.ObjectId
 
   userId  String
-  themeId String? @db.ObjectId
+  themeId String?
   colors  String? // JSON stringified object, Record<ThemeType, ThemePalette>
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  theme Theme? @relation(fields: [themeId], references: [id], onDelete: Cascade)
 
   @@map("copies")
 }

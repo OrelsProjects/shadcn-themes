@@ -28,7 +28,9 @@ export async function POST(req: NextRequest) {
     });
     return NextResponse.json(copy.id);
   } catch (e: any) {
-    loggerServer.error("Failed to add copy report", e);
+    loggerServer.error("Failed to add copy report", JSON.stringify(body), {
+      error: e.message,
+    });
     return NextResponse.json(
       { error: "Failed to add copy report" },
       { status: 500 },
