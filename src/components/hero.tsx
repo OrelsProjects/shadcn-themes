@@ -21,9 +21,9 @@ const themeSources = [
 
 export default function Hero() {
   return (
-    <div className="w-full flex flex-col justify-center items-center gap-8">
+    <div className="w-full flex flex-col justify-center items-center gap-8 text-foreground">
       <motion.div className="text-center">
-        <h1 className="text-4xl md:text-6xl font-bold">
+        <h1 className="text-4xl md:text-6xl font-bold text-foreground">
           The most beautiful themes{" "}
           <span className="block mt-2 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
             The Shadcn way
