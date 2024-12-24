@@ -1,6 +1,5 @@
 "use client";
 
-import NavbarItemContainer from "@/components/bottom-navbar/navbar-item-container";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -136,6 +135,7 @@ export default function CopyCode() {
               overflow: "auto",
               padding: "1rem",
               borderRadius: "0.375rem",
+              fontSmooth: "antialiased",
             }}
             showLineNumbers={true}
             wrapLines={true}

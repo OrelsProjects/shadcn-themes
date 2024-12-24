@@ -25,7 +25,11 @@ function clamp(val: number, min = 0, max = 100) {
 /**
  * Convert [h, s, l] to a new triple, clamped & rounded to 1 decimal place.
  */
-function finalizeHSL(h: number, s: number, l: number): [number, number, number] {
+function finalizeHSL(
+  h: number,
+  s: number,
+  l: number,
+): [number, number, number] {
   const hh = ((h % 360) + 360) % 360; // wrap negative
   const ss = clamp(s, 0, 100);
   const ll = clamp(l, 0, 100);
@@ -50,7 +54,7 @@ function randomHSL(): [number, number, number] {
 }
 
 /**
- * Convert [h,s,l] <-> colord, so we can use .mix().
+ * Convert [h,s,l] <-> colord, so we can use .mix(), .darken(), etc.
  */
 function toColord(hsl: [number, number, number]): Colord {
   return new Colord({ h: hsl[0], s: hsl[1], l: hsl[2] });
@@ -61,7 +65,24 @@ function fromColord(c: Colord): [number, number, number] {
 }
 
 /**
- * Nudges color `color` slightly toward `target` by a factor in [0..1].
+ * Darkens the color by a given factor (0..1).
+ */
+function darkenHSL(hsl: [number, number, number], factor: number) {
+  const col = toColord(hsl);
+  // .darken() factor is in [0..1], e.g. 0.4 => 40% darker
+  return fromColord(col.darken(factor));
+}
+
+/**
+ * Lightens the color by a given factor (0..1).
+ */
+function lightenHSL(hsl: [number, number, number], factor: number) {
+  const col = toColord(hsl);
+  return fromColord(col.lighten(factor));
+}
+
+/**
+ * Slightly nudge color => target by factor in [0..1].
  */
 function nudgeTowards(
   color: [number, number, number],
@@ -150,42 +171,49 @@ function buildLightTheme(
 }
 
 /**
- * Build baseline DARK theme (shadcn-like).
+ * Build baseline DARK theme (shadcn-like), but *derived*
+ * from the light theme's values. So we do *not* randomize
+ * the background, etc. Instead, we systematically transform
+ * each color to be truly dark, but maintain hue relationships.
  */
 function buildDarkTheme(
   primary: [number, number, number],
   destructive: [number, number, number],
+  lightTheme: ThemePalette,
 ): ThemePalette {
-  const [ph, ps, pl] = primary;
-
-  // Very dark background
-  const background = finalizeHSL(ph, randomInt(70, 85), randomInt(4, 5));
-  const foreground = finalizeHSL(210, 40, 98);
+  // We transform the light background => a dark background
+  // e.g. darken by 0.85
+  const background = darkenHSL(lightTheme.background, 0.85);
+  // Similarly, lighten the light foreground (since it's near black, it might become near white if we want)
+  // But let's do the opposite: if the light foreground is dark, we lighten it enough to be readable.
+  const foreground = lightenHSL(lightTheme.foreground, 0.7);
 
   const popover = background;
   const popoverForeground = foreground;
-  const card = background;
+
+  // For card, let's darken it more than background for variety, or lighten it slightly if the light card is the same as background.
+  const card = darkenHSL(lightTheme.card, 0.75);
   const cardForeground = foreground;
 
-  const bgL = background[2];
-  const mutedL = clamp(bgL + 12, 0, 30);
-  const muted = finalizeHSL(background[0], clamp(background[1] - 40), mutedL);
-  const mutedForeground = finalizeHSL(215, 20, 65);
+  const border = darkenHSL(lightTheme.border, 0.5);
+  const input = border;
 
-  const secondary = muted;
-  const accent = muted;
+  // For muted, we can darken it but keep the same hue
+  const muted = darkenHSL(lightTheme.muted, 0.7);
+  // The muted foreground can be lightly brightened
+  const mutedForeground = lightenHSL(lightTheme["muted-foreground"], 0.5);
 
-  const border = muted;
-  const input = muted;
+  // Keep the same hue for primary, but clamp to a lower L. If you want even darker, do darkenHSL.
+  // We'll do a partial approach: if the light is [ph, ps, pl], we do something like .darken(0.3).
+  const primaryDark = darkenHSL(primary, 0.3);
+  // Foreground => near white
+  const primaryForeground = [210, 40, 98] as [number, number, number];
 
-  // clamp primary ~50–60% L for dark
-  const primaryDark = finalizeHSL(ph, clamp(ps, 50, 95), clamp(pl, 50, 60));
-  const primaryForeground = finalizeHSL(ph + 2, 47, 12);
+  // Destructive => same approach
+  const destructiveDark = darkenHSL(destructive, 0.3);
+  const destructiveForeground: HSL = [210, 40, 98];
 
-  const [dh, ds, dl] = destructive;
-  const destructiveDark = finalizeHSL(dh, clamp(ds, 60, 90), clamp(dl, 30, 50));
-  const destructiveForeground = finalizeHSL(210, 40, 98);
-
+  // ring => same as primaryDark
   const ring = primaryDark;
 
   return {
@@ -199,27 +227,25 @@ function buildDarkTheme(
     input,
     primary: primaryDark,
     "primary-foreground": primaryForeground,
-    secondary,
-    "secondary-foreground": mutedForeground,
-    accent,
-    "accent-foreground": mutedForeground,
+    secondary: darkenHSL(lightTheme.secondary, 0.65),
+    "secondary-foreground": lightenHSL(lightTheme["secondary-foreground"], 0.5),
+    accent: darkenHSL(lightTheme.accent, 0.65),
+    "accent-foreground": lightenHSL(lightTheme["accent-foreground"], 0.5),
     muted,
     "muted-foreground": mutedForeground,
     destructive: destructiveDark,
     "destructive-foreground": destructiveForeground,
     ring,
     radius: "",
-    "chart-1": primaryDark,
-    "chart-2": secondary,
-    "chart-3": accent,
-    "chart-4": muted,
+    "chart-1": darkenHSL(lightTheme["chart-1"], 0.3),
+    "chart-2": darkenHSL(lightTheme["chart-2"], 0.3),
+    "chart-3": darkenHSL(lightTheme["chart-3"], 0.3),
+    "chart-4": darkenHSL(lightTheme["chart-4"], 0.3),
     "chart-5": background,
   };
 }
 
-/**
- * We skip messing with 'primary' and 'primary-foreground'.
- */
+// We skip messing with 'primary' and 'primary-foreground'.
 const skipKeys = ["primary", "primary-foreground"] as const;
 
 function isHSLValue(val: HSL | string): val is HSL {
@@ -232,10 +258,7 @@ function isSkipKey(key: keyof ThemePalette): key is (typeof skipKeys)[number] {
 /**
  * Applies the entire "crazy" logic to the theme, for crazyRate in [0..100].
  */
-function applyCrazy(
-  theme: ThemePalette,
-  crazyRate: number,
-): ThemePalette {
+function applyCrazy(theme: ThemePalette, crazyRate: number): ThemePalette {
   // If exactly 100 => fully random
   if (crazyRate === 100) {
     const newTheme = { ...theme };
@@ -268,47 +291,37 @@ function applyCrazy(
   }
 
   // Otherwise => multi-step approach
-  // factorA => 0..10
-  // factorB => 10..30
-  // factorC => 30..60
-  // factorD => 60..90
-  // factorE => 90..100
   function rangeFactor(start: number, end: number) {
     if (crazyRate <= start) return 0;
     if (crazyRate >= end) return 1;
     return (crazyRate - start) / (end - start);
   }
 
-  const factorA = rangeFactor(0, 10);   // mild
-  const factorB = rangeFactor(10, 30);  // more (nerfed)
-  const factorC = rangeFactor(30, 60);  // bigger
-  const factorD = rangeFactor(60, 90);  // large
-  const factorE = rangeFactor(90, 100); // extreme
+  const factorA = rangeFactor(0, 10);
+  const factorB = rangeFactor(10, 30);
+  const factorC = rangeFactor(30, 60);
+  const factorD = rangeFactor(60, 90);
+  const factorE = rangeFactor(90, 100);
 
   const randomSign = () => (Math.random() < 0.5 ? -1 : 1);
 
-  // factorA => 0..10 => old "10..30" => 5 shift
+  // shift amounts
   const hueShiftA = 5;
   const satShiftA = 5;
   const lightShiftA = 3;
 
-  // factorB => 10..30 => old "30..60" => now nerfed
-  // originally we used 25, let's reduce to 15
-  const hueShiftB = 10;  // was 25
-  const satShiftB = 10;  // was 25
-  const lightShiftB = 8; // was 15
+  const hueShiftB = 10;
+  const satShiftB = 10;
+  const lightShiftB = 8;
 
-  // factorC => 30..60 => old "60..90" => big => 60
   const hueShiftC = 40;
   const satShiftC = 40;
   const lightShiftC = 35;
 
-  // factorD => 60..90 => old "90..100" => huge => 100
   const hueShiftD = 100;
   const satShiftD = 70;
   const lightShiftD = 45;
 
-  // factorE => 90..100 => brand-new => 150
   const hueShiftE = 150;
   const satShiftE = 90;
   const lightShiftE = 50;
@@ -334,7 +347,11 @@ function applyCrazy(
     lightShiftD * factorD * randomSign() +
     lightShiftE * factorE * randomSign();
 
-  function shiftHSL([h, s, l]: [number, number, number]): [number, number, number] {
+  function shiftHSL([h, s, l]: [number, number, number]): [
+    number,
+    number,
+    number,
+  ] {
     h += totalHueShift;
     s += totalSatShift;
     l += totalLightShift;
@@ -343,7 +360,7 @@ function applyCrazy(
 
   const newTheme = { ...theme };
 
-  // Step 1: Shift everything except skipKeys, radius, etc.
+  // Shift everything except skipKeys, radius, etc.
   for (const key of Object.keys(newTheme) as (keyof ThemePalette)[]) {
     if (isSkipKey(key)) continue;
     if (key === "radius") continue;
@@ -352,14 +369,18 @@ function applyCrazy(
     newTheme[key] = shiftHSL(val);
   }
 
-  // Step 2: If factorA > 0 => do a mild "nudge" on card & muted toward 'primary'.
+  // If factorA > 0 => mild nudge on card & muted toward 'primary'
   if (factorA > 0) {
     const nudgeBase = 0.3 * factorA;
     if (isHSLValue(newTheme.card) && isHSLValue(newTheme.primary)) {
       newTheme.card = nudgeTowards(newTheme.card, newTheme.primary, nudgeBase);
     }
     if (isHSLValue(newTheme.muted) && isHSLValue(newTheme.primary)) {
-      newTheme.muted = nudgeTowards(newTheme.muted, newTheme.primary, nudgeBase);
+      newTheme.muted = nudgeTowards(
+        newTheme.muted,
+        newTheme.primary,
+        nudgeBase,
+      );
     }
   }
 
@@ -367,7 +388,9 @@ function applyCrazy(
 }
 
 /**
- * Final function that returns { light, dark } for any crazyRate=0..100.
+ * Final function that returns { light, dark } for any crazyRate=0..100,
+ * ensuring the dark theme is derived from the light theme's colors
+ * (no random background).
  */
 export function createThemeConfig(
   crazyRate: number,
@@ -379,11 +402,13 @@ export function createThemeConfig(
 
   const destructive = createDestructive();
 
-  // Baseline
+  // 1) Build light baseline
   const lightBase = buildLightTheme(chosenPrimary, destructive);
-  const darkBase = buildDarkTheme(chosenPrimary, destructive);
 
-  // Then apply "crazy" logic, for all ranges.
+  // 2) Build dark baseline by deriving from light (no random BG)
+  const darkBase = buildDarkTheme(chosenPrimary, destructive, lightBase);
+
+  // 3) Then apply "crazy" transformations to each
   const finalLight = applyCrazy(lightBase, crazyRate);
   const finalDark = applyCrazy(darkBase, crazyRate);
 
