@@ -99,8 +99,8 @@ function nudgeTowards(
  */
 function createPrimary(hue?: number): [number, number, number] {
   const h = hue ?? randomInt(0, 359);
-  const s = randomInt(80, 95);
-  const l = randomInt(50, 60);
+  const s = randomInt(70, 95);
+  const l = randomInt(40, 60);
   return finalizeHSL(h, s, l);
 }
 
