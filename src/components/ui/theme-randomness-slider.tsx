@@ -55,19 +55,22 @@ export function ThemeRandomnessSlider({
               opacity: 1,
               boxShadow: [
                 "0 0 0 rgba(124, 58, 237, 0)",
-                "0 0 20px rgba(124, 58, 237, 0.5)",
-                "0 0 20px rgba(124, 58, 237, 0.9)",
-                "0 0 20px rgba(124, 58, 237, 0.5)",
+                "0 0 20px hsl(var(--primary))",
               ],
+              transition: {
+                duration: 1,
+              },
             }
           : {
               scale: 1,
               opacity: 1,
               boxShadow: [
-                "0 0 20px rgba(124, 58, 237, 0.9)",
-                "0 0 20px rgba(124, 58, 237, 0.5)",
+                "0 0 20px hsl(var(--primary))",
                 "0 0 0 rgba(124, 58, 237, 0)",
               ],
+              transition: {
+                duration: 1,
+              },
             }
       }
       transition={{
