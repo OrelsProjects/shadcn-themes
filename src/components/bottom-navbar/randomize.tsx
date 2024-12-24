@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Dices, ChevronDown, RotateCcw, X, Lock, Unlock } from "lucide-react";
+import { Dices, X, Lock, Unlock, Sparkles } from "lucide-react";
 import {
   Popover,
   PopoverContent,
@@ -13,6 +13,7 @@ import { usePalette } from "@/hooks/usePalette";
 import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 import { selectPalette } from "@/lib/features/theme/paletteSlice";
 import { ColorPicker } from "@/components/ui/color-picker";
+import { ThemeRandomnessSlider } from "@/components/ui/theme-randomness-slider";
 import { debounce } from "lodash";
 import { cn } from "@/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
@@ -29,14 +30,17 @@ export default function RandomizePopover() {
   const [primaryForegroundColor, setPrimaryForegroundColor] = useState<HSL>([
     255, 255, 255,
   ]);
+  const [randomness, setRandomness] = useState(0);
+  const [hasRandomnessChanged, setHasRandomnessChanged] = useState(false);
 
-  const [isLocked, setIsLocked] = useState(false); // Lock state
+  const [isLocked, setIsLocked] = useState(false);
   const [history, setHistory] = useState<ParsedPalette[]>([selectedPalette]);
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const [isOpen, setIsOpen] = useState(false);
   const [isPickerOpen, setIsPickerOpen] = useState(true);
 
   const randomizeButtonRef = useRef<HTMLButtonElement>(null);
+  const generateButtonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     if (showRandomize) {
@@ -45,23 +49,56 @@ export default function RandomizePopover() {
   }, [showRandomize]);
 
   useEffect(() => {
+    console.log("Setting primary color", primaryColor);
     setPrimaryColor(history[currentIndex]?.colors[selectedThemeType].primary);
     setPrimaryForegroundColor(
       history[currentIndex]?.colors[selectedThemeType]["primary-foreground"],
     );
   }, [currentIndex, history, selectedThemeType]);
 
-  const generatePalette = () => {
-    EventTracker.track("Randomize palette clicked");
-    const newPalette = generateRandomPalette(isLocked ? primaryColor : null);
+  const generatePalette = (
+    randomnessValue?: number,
+    primaryColorValue?: HSL,
+  ) => {
+    const paletteRandomness = randomnessValue || randomness;
+    EventTracker.track("Randomize palette clicked", {
+      randomness: paletteRandomness,
+    });
+
+    console.log(
+      "Generating palette with randomness",
+      paletteRandomness,
+      "And primary color",
+      primaryColor,
+    );
+
+    const newPalette = generateRandomPalette(
+      paletteRandomness,
+      isLocked ? primaryColorValue || primaryColor : null,
+    );
     setHistory(prev => [...prev, newPalette]);
     setCurrentIndex(prev => prev + 1);
     dispatch(selectPalette({ newPalette: newPalette }));
+    setHasRandomnessChanged(false);
   };
 
   const currentPalette = useMemo(() => {
     return history[currentIndex] || selectedPalette;
   }, [currentIndex, history]);
+
+  const handleRandomnessChange = (value: number) => {
+    setRandomness(value);
+    generatePaletteWithRandomness(value);
+  };
+
+  // Make handle above with debounce of 50ms
+  const generatePaletteWithRandomness = useMemo(
+    () =>
+      debounce(value => {
+        generateButtonRef.current?.click();
+      }, 200),
+    [],
+  );
 
   const setSelectedPalette = (value: number | ParsedPalette) => {
     const palette = typeof value === "number" ? history[value] : value;
@@ -153,7 +190,7 @@ export default function RandomizePopover() {
           </span>
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-64 p-4 border-border/60" side="top">
+      <PopoverContent className="w-80 p-4 border-border/60" side="top">
         <div className="flex flex-col space-y-4">
           <AnimatePresence>
             {isPickerOpen && (
@@ -180,7 +217,7 @@ export default function RandomizePopover() {
                   ease: "easeOut",
                 }}
                 className={cn(
-                  "w-full flex flex-col items-center justify-center gap-2 bg-card-foreground/20 rounded-lg p-2",
+                  "w-full flex flex-col items-center justify-center gap-6 bg-card-foreground/20 rounded-lg p-2",
                   {
                     "bg-background p-0": !isPickerOpen,
                   },
@@ -193,6 +230,11 @@ export default function RandomizePopover() {
                 >
                   <X className="h-3 w-3" />
                 </Button>
+                <ThemeRandomnessSlider
+                  value={randomness}
+                  onChange={handleRandomnessChange}
+                />
+
                 <ColorPicker
                   value={primaryColor}
                   onColorChange={handleColorChange}
@@ -249,8 +291,34 @@ export default function RandomizePopover() {
               )}
             </Button>
           </div>
-          <Button onClick={generatePalette} className="w-full">
-            Generate
+          <Button
+            onClick={() => generatePalette()}
+            className="w-full relative group"
+            ref={generateButtonRef}
+          >
+            <AnimatePresence mode="wait">
+              {hasRandomnessChanged ? (
+                <motion.div
+                  key="changed"
+                  initial={{ opacity: 0, y: 5 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -5 }}
+                  className="flex items-center gap-2"
+                >
+                  <Sparkles className="h-4 w-4 opacity-75" />
+                  <span>Apply Changes</span>
+                </motion.div>
+              ) : (
+                <motion.div
+                  key="default"
+                  initial={{ opacity: 0, y: 5 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -5 }}
+                >
+                  Generate
+                </motion.div>
+              )}
+            </AnimatePresence>
           </Button>
           <div className="flex space-x-2">
             <Button

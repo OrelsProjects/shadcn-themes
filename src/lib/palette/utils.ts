@@ -1,511 +1,391 @@
 import { Colord, extend } from "colord";
+import mixPlugin from "colord/plugins/mix";
 import a11yPlugin from "colord/plugins/a11y";
 import harmoniesPlugin from "colord/plugins/harmonies";
 
 import { HSL, ThemePalette } from "@/models/palette";
 
-extend([a11yPlugin, harmoniesPlugin]);
+// Ensure .mix() is available
+extend([a11yPlugin, harmoniesPlugin, mixPlugin]);
 
-type HSLJson = {
-  h: number;
-  s: number;
-  l: number;
-};
-
-export interface Palettes {
-  light?: ThemePalette;
-  dark?: ThemePalette;
+/**
+ * Round a number to 1 digit after the decimal.
+ */
+function roundOne(num: number): number {
+  return parseFloat(num.toFixed(1));
 }
 
-const faker = {
-  number: {
-    int: (options: { min: number; max: number }) => {
-      return (
-        Math.floor(Math.random() * (options.max - options.min + 1)) +
-        options.min
-      );
-    },
-    float: (options: { min: number; max: number }) => {
-      return Math.random() * (options.max - options.min) + options.min;
-    },
-  },
-  datatype: {
-    boolean: () => {
-      return Math.random() < 0.5;
-    },
-  },
-  helpers: {
-    arrayElement: <T extends readonly unknown[] | Array<unknown>>(
-      arr: T,
-    ): T[number] => {
-      return arr[Math.floor(Math.random() * arr.length)];
-    },
-  },
-};
+/**
+ * Clamp a number into [min, max].
+ */
+function clamp(val: number, min = 0, max = 100) {
+  return Math.max(min, Math.min(max, val));
+}
 
-// Our available modes
-const modes = ["complementary", "triadic", "analogous", "slick"] as const;
+/**
+ * Convert [h, s, l] to a new triple, clamped & rounded to 1 decimal place.
+ */
+function finalizeHSL(h: number, s: number, l: number): [number, number, number] {
+  const hh = ((h % 360) + 360) % 360; // wrap negative
+  const ss = clamp(s, 0, 100);
+  const ll = clamp(l, 0, 100);
+  return [roundOne(hh), roundOne(ss), roundOne(ll)];
+}
 
-const createPrimaryColor = (): HSLJson => {
+/**
+ * Return a random integer in [min, max].
+ */
+function randomInt(min: number, max: number): number {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+/**
+ * Return a random HSL with minimal saturation to avoid bland colors.
+ */
+function randomHSL(): [number, number, number] {
+  const h = randomInt(0, 359);
+  const s = randomInt(20, 100);
+  const l = randomInt(0, 100);
+  return finalizeHSL(h, s, l);
+}
+
+/**
+ * Convert [h,s,l] <-> colord, so we can use .mix().
+ */
+function toColord(hsl: [number, number, number]): Colord {
+  return new Colord({ h: hsl[0], s: hsl[1], l: hsl[2] });
+}
+function fromColord(c: Colord): [number, number, number] {
+  const hsl = c.toHsl();
+  return finalizeHSL(hsl.h, hsl.s, hsl.l);
+}
+
+/**
+ * Nudges color `color` slightly toward `target` by a factor in [0..1].
+ */
+function nudgeTowards(
+  color: [number, number, number],
+  target: [number, number, number],
+  factor = 0.1,
+): [number, number, number] {
+  const c1 = toColord(color);
+  const c2 = toColord(target);
+  return fromColord(c1.mix(c2, factor));
+}
+
+/**
+ * Create or use a "primary" [h, s, l].
+ */
+function createPrimary(hue?: number): [number, number, number] {
+  const h = hue ?? randomInt(0, 359);
+  const s = randomInt(80, 95);
+  const l = randomInt(50, 60);
+  return finalizeHSL(h, s, l);
+}
+
+/**
+ * Create a random "destructive" (red).
+ */
+function createDestructive(): [number, number, number] {
+  const s = randomInt(80, 95);
+  const l = randomInt(50, 60);
+  return finalizeHSL(0, s, l);
+}
+
+/**
+ * Build baseline LIGHT theme (shadcn-like).
+ */
+function buildLightTheme(
+  primary: [number, number, number],
+  destructive: [number, number, number],
+): ThemePalette {
+  const background = finalizeHSL(0, 0, 100);
+  const foreground = finalizeHSL(20, 14, 4);
+
+  const popover = background;
+  const popoverForeground = foreground;
+  const card = background;
+  const cardForeground = foreground;
+  const border = finalizeHSL(20, 6, 90);
+  const input = border;
+
+  const muted = finalizeHSL(60, 5, 96);
+  const mutedForeground = finalizeHSL(25, 6, 45);
+
+  // secondary, accent = muted
+  const secondary = muted;
+  const accent = muted;
+
+  const primaryForeground = finalizeHSL(60, 9, 98);
+  const destructiveForeground = finalizeHSL(60, 9, 98);
+  const ring = primary;
+
   return {
-    h: faker.number.int({ min: 0, max: 360 }),
-    s: faker.number.int({ min: 0, max: 100 }),
-    l: faker.number.int({ min: 10, max: 90 }),
+    background,
+    foreground,
+    popover,
+    "popover-foreground": popoverForeground,
+    card,
+    "card-foreground": cardForeground,
+    border,
+    input,
+    primary,
+    "primary-foreground": primaryForeground,
+    secondary,
+    "secondary-foreground": mutedForeground,
+    accent,
+    "accent-foreground": mutedForeground,
+    muted,
+    "muted-foreground": mutedForeground,
+    destructive,
+    "destructive-foreground": destructiveForeground,
+    ring,
+    radius: "0.95rem",
+    "chart-1": primary,
+    "chart-2": secondary,
+    "chart-3": accent,
+    "chart-4": muted,
+    "chart-5": background,
   };
-};
+}
 
-const createForegroundDark = (hue: number): HSLJson => {
+/**
+ * Build baseline DARK theme (shadcn-like).
+ */
+function buildDarkTheme(
+  primary: [number, number, number],
+  destructive: [number, number, number],
+): ThemePalette {
+  const [ph, ps, pl] = primary;
+
+  // Very dark background
+  const background = finalizeHSL(ph, randomInt(70, 85), randomInt(4, 5));
+  const foreground = finalizeHSL(210, 40, 98);
+
+  const popover = background;
+  const popoverForeground = foreground;
+  const card = background;
+  const cardForeground = foreground;
+
+  const bgL = background[2];
+  const mutedL = clamp(bgL + 12, 0, 30);
+  const muted = finalizeHSL(background[0], clamp(background[1] - 40), mutedL);
+  const mutedForeground = finalizeHSL(215, 20, 65);
+
+  const secondary = muted;
+  const accent = muted;
+
+  const border = muted;
+  const input = muted;
+
+  // clamp primary ~50–60% L for dark
+  const primaryDark = finalizeHSL(ph, clamp(ps, 50, 95), clamp(pl, 50, 60));
+  const primaryForeground = finalizeHSL(ph + 2, 47, 12);
+
+  const [dh, ds, dl] = destructive;
+  const destructiveDark = finalizeHSL(dh, clamp(ds, 60, 90), clamp(dl, 30, 50));
+  const destructiveForeground = finalizeHSL(210, 40, 98);
+
+  const ring = primaryDark;
+
   return {
-    h: hue,
-    s: faker.number.int({ min: 10, max: 40 }),
-    l: faker.number.int({ min: 97, max: 100 }),
-  };
-};
-
-export const createDestructive = () => {
-  return new Colord({
-    h: faker.number.int({ min: 0, max: 22 }),
-    s: faker.number.int({ min: 80, max: 100 }),
-    l: faker.number.int({ min: 20, max: 45 }),
-  });
-};
-
-const createContrast = (color: Colord) => {
-  const isLight = color.isLight();
-  let opposite = color;
-
-  let i = 0;
-  while (opposite.contrast(color) < 6) {
-    opposite = isLight ? opposite.darken(0.2) : opposite.lighten(0.2);
-    if (i++ > 10) break;
-  }
-  return opposite;
-};
-
-const createBackgroundLight = (hue: number): HSLJson => {
-  return {
-    h: hue,
-    s: faker.number.int({ min: 30, max: 70 }),
-    l: faker.number.int({ min: 98, max: 100 }),
-  };
-};
-
-const createBackgroundDark = (hue: number): HSLJson => {
-  return {
-    h: hue,
-    s: faker.number.int({ min: 30, max: 60 }),
-    l: faker.number.int({ min: 0, max: 4 }),
-  };
-};
-
-const createForegroundLight = (hue: number): HSLJson => {
-  return {
-    h: hue,
-    s: faker.number.int({ min: 50, max: 80 }),
-    l: faker.number.int({ min: 0, max: 5 }),
-  };
-};
-
-const createColorHarmony = (
-  primary: Colord,
-  mode: (typeof modes)[number],
-  shouldMatch: boolean,
-  isDark?: boolean,
-) => {
-  if (mode === "triadic") {
-    const [, secondary, accent] = primary.harmonies(mode);
-    if (!secondary || !accent) throw new Error("Failed to create harmony");
-    return { secondary, accent };
-  }
-
-  if (mode === "complementary") {
-    const [, secondary] = primary.harmonies(mode);
-    if (!secondary) throw new Error("Failed to create harmony");
-    return { secondary, accent: secondary };
-  }
-
-  if (mode === "analogous") {
-    const [secondary, , accent] = primary.harmonies(mode);
-    if (!secondary || !accent) throw new Error("Failed to create harmony");
-    return { secondary, accent };
-  }
-
-  // "slick" is your custom approach.
-  if (mode === "slick") {
-    if (isDark) {
-      const baseSaturation = faker.number.int({ min: 0, max: 20 });
-      const baseLightness = faker.number.int({ min: 8, max: 20 });
-
-      const clr = new Colord({
-        h: primary.hue(),
-        s: baseSaturation,
-        l: baseLightness,
-      });
-
-      return {
-        secondary: clr,
-        accent: shouldMatch
-          ? clr
-          : clr
-              .saturate(faker.number.float({ min: 0.05, max: 0.1 }))
-              .lighten(faker.number.float({ min: 0.05, max: 0.1 })),
-      };
-    }
-
-    const baseSaturation = faker.number.int({ min: 0, max: 20 });
-    const baseLightness = faker.number.int({ min: 80, max: 92 });
-
-    const clr = new Colord({
-      h: primary.hue(),
-      s: baseSaturation,
-      l: baseLightness,
-    });
-
-    return {
-      secondary: clr,
-      accent: shouldMatch
-        ? clr
-        : clr
-            .darken(faker.number.float({ min: 0.05, max: 0.1 }))
-            .saturate(faker.number.float({ min: 0.05, max: 0.1 })),
-    };
-  }
-
-  throw new Error("Invalid mode");
-};
-
-const colordToHsl = (color: Colord): HSLJson => {
-  const hsla = color.toHsl();
-  return { h: hsla.h, s: hsla.s, l: hsla.l };
-};
-
-export const createThemeConfig = (
-  primaryColor?: [number, number, number] | null,
-): { light: ThemePalette; dark: ThemePalette } => {
-  const primaryJson = primaryColor
-    ? { h: primaryColor[0], s: primaryColor[1], l: primaryColor[2] }
-    : undefined;
-
-  const primaryBase = new Colord(primaryJson || createPrimaryColor());
-
-  // 10% chance to go "not basic"
-  const isNotBasic = Math.random() < 0.2;
-
-  // Base backgrounds
-  let backgroundLight = createBackgroundLight(primaryBase.hue());
-  let backgroundDark = createBackgroundDark(primaryBase.hue());
-
-  // If "not basic", unify the background color with the primary hue
-  // (So if primary is bluish, backgrounds also go bluish, etc.)
-  if (isNotBasic) {
-    const baseHue = primaryBase.hue();
-    // Light background
-    backgroundLight = {
-      h: baseHue,
-      s: faker.number.int({ min: 40, max: 80 }),
-      l: faker.number.int({ min: 75, max: 98 }),
-    };
-    // Dark background
-    backgroundDark = {
-      h: baseHue,
-      s: faker.number.int({ min: 20, max: 40 }),
-      l: faker.number.int({ min: 2, max: 8 }),
-    };
-  }
-
-  // Keep the same primary for both light & dark
-  const primaryLightColord = primaryBase;
-  const primaryDarkColord = primaryBase;
-
-  const primaryLight = colordToHsl(primaryLightColord);
-  const primaryDark = colordToHsl(primaryDarkColord);
-
-  const primaryLightForeground = colordToHsl(createContrast(primaryLightColord));
-  const primaryDarkForeground = colordToHsl(createContrast(primaryDarkColord));
-
-  // Foreground
-  let foregroundLight = createForegroundLight(primaryBase.hue());
-  let foregroundDark = createForegroundDark(primaryBase.hue());
-
-  if (isNotBasic) {
-    // Possibly unify these a bit if you want them "super matched"
-    foregroundLight = {
-      h: backgroundLight.h,
-      s: faker.number.int({ min: 30, max: 60 }),
-      l: faker.number.int({ min: 0, max: 10 }),
-    };
-    foregroundDark = {
-      h: backgroundDark.h,
-      s: faker.number.int({ min: 10, max: 30 }),
-      l: faker.number.int({ min: 90, max: 100 }),
-    };
-  }
-
-  // Card colors
-  const cardBoolean = faker.datatype.boolean();
-  let cardLight = cardBoolean
-    ? colordToHsl(new Colord(backgroundLight).darken(0.01))
-    : backgroundLight;
-  let cardDark = cardBoolean
-    ? colordToHsl(new Colord(backgroundDark).lighten(0.01))
-    : backgroundDark;
-
-  if (isNotBasic) {
-    // Maybe push these closer to background too
-    const cLight = new Colord(backgroundLight);
-    const cLightHSL = cLight.toHsl();
-    cLightHSL.l = Math.max(0, cLightHSL.l - 1); // slightly darker than BG
-    cardLight = colordToHsl(new Colord(cLightHSL));
-
-    const cDark = new Colord(backgroundDark);
-    const cDarkHSL = cDark.toHsl();
-    cDarkHSL.l = Math.min(100, cDarkHSL.l + 1); // slightly lighter than BG
-    cardDark = colordToHsl(new Colord(cDarkHSL));
-  }
-
-  // Card foreground
-  const cardLightForeground = cardBoolean
-    ? colordToHsl(new Colord(foregroundLight).darken(0.01))
-    : foregroundLight;
-  const cardDarkForeground = cardBoolean
-    ? colordToHsl(new Colord(foregroundDark).lighten(0.01))
-    : foregroundDark;
-
-  // Popover colors
-  const popoverBoolean = faker.datatype.boolean();
-  const popoverLight = popoverBoolean ? cardLight : backgroundLight;
-  const popoverDark = popoverBoolean ? cardDark : backgroundDark;
-  const popoverLightForeground = popoverBoolean
-    ? cardLightForeground
-    : foregroundLight;
-  const popoverDarkForeground = popoverBoolean
-    ? cardDarkForeground
-    : foregroundDark;
-
-  // Harmonies
-  const harmonyMode = faker.helpers.arrayElement(modes);
-  const shouldMatch = faker.datatype.boolean();
-
-  const lightHarmonies = createColorHarmony(
-    primaryLightColord,
-    harmonyMode,
-    shouldMatch,
-    false,
-  );
-  const darkHarmonies = createColorHarmony(
-    primaryDarkColord,
-    harmonyMode,
-    shouldMatch,
-    true,
-  );
-
-  // Secondary
-  const secondaryLight = colordToHsl(lightHarmonies.secondary);
-  const secondaryLightForeground = colordToHsl(
-    createContrast(lightHarmonies.secondary),
-  );
-  const secondaryDark = colordToHsl(darkHarmonies.secondary);
-  const secondaryDarkForeground = colordToHsl(
-    createContrast(darkHarmonies.secondary),
-  );
-
-  // Accent (initial, based on harmony)
-  let accentLightColord = lightHarmonies.accent;
-  let accentDarkColord = darkHarmonies.accent;
-
-  // For light: make accent a bit darker than the card
-  // For dark: make accent a bit lighter than the card
-  const cLight = new Colord(cardLight);
-  const aLight = accentLightColord;
-  const cDark = new Colord(cardDark);
-  const aDark = accentDarkColord;
-
-  const cLightHSL = cLight.toHsl();
-  const aLightHSL = aLight.toHsl();
-  // Increase offset for “a bit darker” in light
-  const offsetLight = 3; 
-  aLightHSL.l = Math.max(0, cLightHSL.l - offsetLight);
-  accentLightColord = new Colord(aLightHSL);
-
-  const cDarkHSL = cDark.toHsl();
-  const aDarkHSL = aDark.toHsl();
-  // Increase offset for “a bit brighter” in dark
-  const offsetDark = 3;
-  aDarkHSL.l = Math.min(100, cDarkHSL.l + offsetDark);
-  accentDarkColord = new Colord(aDarkHSL);
-
-  // Recompute accent foregrounds
-  const accentLightForegroundColord = createContrast(accentLightColord);
-  const accentDarkForegroundColord = createContrast(accentDarkColord);
-
-  const accentLight = colordToHsl(accentLightColord);
-  const accentLightForeground = colordToHsl(accentLightForegroundColord);
-  const accentDark = colordToHsl(accentDarkColord);
-  const accentDarkForeground = colordToHsl(accentDarkForegroundColord);
-
-  // Destructive
-  const destructiveBase = createDestructive();
-  const destructiveLight = colordToHsl(destructiveBase);
-  const destructiveDark = {
-    h: destructiveLight.h,
-    s: destructiveLight.s,
-    l: faker.number.int({ min: 45, max: 60 }),
-  };
-
-  const destructiveLightForeground = colordToHsl(
-    createContrast(destructiveBase),
-  );
-  const destructiveDarkForeground = colordToHsl(
-    createContrast(new Colord(destructiveDark)),
-  );
-
-  // Muted
-  const mutedBaseDeviations = {
-    s: faker.number.int({ min: 5, max: 40 }),
-    l: faker.number.int({ min: 0, max: 10 }),
-  };
-
-  const mutedLight = {
-    h: secondaryLight.h,
-    s: mutedBaseDeviations.s,
-    l: 85 + mutedBaseDeviations.l,
-  };
-  const mutedDark = {
-    h: secondaryDark.h,
-    s: mutedBaseDeviations.s,
-    l: 15 - mutedBaseDeviations.l,
-  };
-
-  // Muted foreground
-  const mutedForegroundBaseDeviations = {
-    s: faker.number.int({ min: 0, max: 15 }),
-    l: faker.number.int({ min: 0, max: 15 }),
-  };
-
-  const mutedForegroundLight = {
-    h: mutedLight.h,
-    s: mutedForegroundBaseDeviations.s,
-    l: 25 + mutedForegroundBaseDeviations.l,
-  };
-  const mutedForegroundDark = {
-    h: mutedDark.h,
-    s: mutedForegroundBaseDeviations.s,
-    l: 75 - mutedForegroundBaseDeviations.l,
-  };
-
-  // Borders / Inputs
-  const inputBaseDeviations = {
-    s: faker.number.int({ min: 2, max: 15 }),
-    l: faker.number.int({ min: 5, max: 10 }),
-  };
-
-  const borderLight = {
-    h: backgroundLight.h,
-    s: inputBaseDeviations.s,
-    l: backgroundLight.l - inputBaseDeviations.l,
-  };
-  const borderDark = {
-    h: backgroundDark.h,
-    s: inputBaseDeviations.s,
-    l: faker.number.int({ min: 10, max: 15 }),
-  };
-
-  // Chart
-  const buildChartTheme = (theme: {
-    secondary: HSLJson;
-    primary: HSLJson;
-    accent: HSLJson;
-  }) => {
-    const chart4 = {
-      h: theme.secondary.h,
-      s: theme.secondary.s,
-      l: 3 + theme.secondary.l,
-    };
-
-    const chart5 = {
-      h: theme.primary.h,
-      s: 3 + theme.primary.s,
-      l: theme.primary.l,
-    };
-
-    return {
-      "chart-1": theme.primary,
-      "chart-2": theme.secondary,
-      "chart-3": theme.accent,
-      "chart-4": chart4,
-      "chart-5": chart5,
-    };
-  };
-
-  const chartLight = buildChartTheme({
-    secondary: secondaryLight,
-    primary: primaryLight,
-    accent: accentLight,
-  });
-
-  const chartDark = buildChartTheme({
-    secondary: secondaryDark,
+    background,
+    foreground,
+    popover,
+    "popover-foreground": popoverForeground,
+    card,
+    "card-foreground": cardForeground,
+    border,
+    input,
     primary: primaryDark,
-    accent: accentDark,
-  });
-
-  // Convert to final HSL arrays
-  const convertToHSLArray = (hsl: HSLJson): HSL => [hsl.h, hsl.s, hsl.l];
-
-  return {
-    light: {
-      background: convertToHSLArray(backgroundLight),
-      foreground: convertToHSLArray(foregroundLight),
-      card: convertToHSLArray(cardLight),
-      "card-foreground": convertToHSLArray(cardLightForeground),
-      popover: convertToHSLArray(popoverLight),
-      "popover-foreground": convertToHSLArray(popoverLightForeground),
-      primary: convertToHSLArray(primaryLight),
-      "primary-foreground": convertToHSLArray(primaryLightForeground),
-      secondary: convertToHSLArray(secondaryLight),
-      "secondary-foreground": convertToHSLArray(secondaryLightForeground),
-      accent: convertToHSLArray(accentLight),
-      "accent-foreground": convertToHSLArray(accentLightForeground),
-      muted: convertToHSLArray(mutedLight),
-      "muted-foreground": convertToHSLArray(mutedForegroundLight),
-      destructive: convertToHSLArray(destructiveLight),
-      "destructive-foreground": convertToHSLArray(destructiveLightForeground),
-      border: convertToHSLArray(borderLight),
-      input: convertToHSLArray(borderLight),
-      ring: convertToHSLArray(primaryLight),
-      radius: "4px",
-      "chart-1": convertToHSLArray(chartLight["chart-1"]),
-      "chart-2": convertToHSLArray(chartLight["chart-2"]),
-      "chart-3": convertToHSLArray(chartLight["chart-3"]),
-      "chart-4": convertToHSLArray(chartLight["chart-4"]),
-      "chart-5": convertToHSLArray(chartLight["chart-5"]),
-    },
-    dark: {
-      background: convertToHSLArray(backgroundDark),
-      foreground: convertToHSLArray(foregroundDark),
-      card: convertToHSLArray(cardDark),
-      "card-foreground": convertToHSLArray(cardDarkForeground),
-      popover: convertToHSLArray(popoverDark),
-      "popover-foreground": convertToHSLArray(popoverDarkForeground),
-      primary: convertToHSLArray(primaryDark),
-      "primary-foreground": convertToHSLArray(primaryDarkForeground),
-      secondary: convertToHSLArray(secondaryDark),
-      "secondary-foreground": convertToHSLArray(secondaryDarkForeground),
-      accent: convertToHSLArray(accentDark),
-      "accent-foreground": convertToHSLArray(accentDarkForeground),
-      muted: convertToHSLArray(mutedDark),
-      "muted-foreground": convertToHSLArray(mutedForegroundDark),
-      destructive: convertToHSLArray(destructiveDark),
-      "destructive-foreground": convertToHSLArray(destructiveDarkForeground),
-      border: convertToHSLArray(borderDark),
-      input: convertToHSLArray(borderDark),
-      ring: convertToHSLArray(primaryDark),
-      radius: "4px",
-      "chart-1": convertToHSLArray(chartDark["chart-1"]),
-      "chart-2": convertToHSLArray(chartDark["chart-2"]),
-      "chart-3": convertToHSLArray(chartDark["chart-3"]),
-      "chart-4": convertToHSLArray(chartDark["chart-4"]),
-      "chart-5": convertToHSLArray(chartDark["chart-5"]),
-    },
+    "primary-foreground": primaryForeground,
+    secondary,
+    "secondary-foreground": mutedForeground,
+    accent,
+    "accent-foreground": mutedForeground,
+    muted,
+    "muted-foreground": mutedForeground,
+    destructive: destructiveDark,
+    "destructive-foreground": destructiveForeground,
+    ring,
+    radius: "",
+    "chart-1": primaryDark,
+    "chart-2": secondary,
+    "chart-3": accent,
+    "chart-4": muted,
+    "chart-5": background,
   };
-};
+}
+
+/**
+ * We skip messing with 'primary' and 'primary-foreground'.
+ */
+const skipKeys = ["primary", "primary-foreground"] as const;
+
+function isHSLValue(val: HSL | string): val is HSL {
+  return Array.isArray(val) && val.length === 3;
+}
+function isSkipKey(key: keyof ThemePalette): key is (typeof skipKeys)[number] {
+  return skipKeys.includes(key as (typeof skipKeys)[number]);
+}
+
+/**
+ * Applies the entire "crazy" logic to the theme, for crazyRate in [0..100].
+ */
+function applyCrazy(
+  theme: ThemePalette,
+  crazyRate: number,
+): ThemePalette {
+  // If exactly 100 => fully random
+  if (crazyRate === 100) {
+    const newTheme = { ...theme };
+
+    // 1) random bg + contrast fg
+    const randomBg = randomHSL();
+    const bgCol = toColord(randomBg);
+    let randomFg = randomHSL();
+    for (let i = 0; i < 20; i++) {
+      const fgCol = toColord(randomFg);
+      if (fgCol.contrast(bgCol) >= 4.5) break;
+      randomFg = randomHSL();
+    }
+    newTheme.background = randomBg;
+    newTheme.foreground = randomFg;
+    newTheme.popover = randomBg;
+    newTheme["popover-foreground"] = randomFg;
+    newTheme.card = randomBg;
+    newTheme["card-foreground"] = randomFg;
+
+    // randomize others (skip primary, primary-foreground)
+    for (const key of Object.keys(newTheme) as (keyof ThemePalette)[]) {
+      if (isSkipKey(key)) continue;
+      if (key === "radius") continue;
+      const val = newTheme[key];
+      if (!isHSLValue(val)) continue;
+      newTheme[key] = randomHSL();
+    }
+    return newTheme;
+  }
+
+  // Otherwise => multi-step approach
+  // factorA => 0..10
+  // factorB => 10..30
+  // factorC => 30..60
+  // factorD => 60..90
+  // factorE => 90..100
+  function rangeFactor(start: number, end: number) {
+    if (crazyRate <= start) return 0;
+    if (crazyRate >= end) return 1;
+    return (crazyRate - start) / (end - start);
+  }
+
+  const factorA = rangeFactor(0, 10);   // mild
+  const factorB = rangeFactor(10, 30);  // more (nerfed)
+  const factorC = rangeFactor(30, 60);  // bigger
+  const factorD = rangeFactor(60, 90);  // large
+  const factorE = rangeFactor(90, 100); // extreme
+
+  const randomSign = () => (Math.random() < 0.5 ? -1 : 1);
+
+  // factorA => 0..10 => old "10..30" => 5 shift
+  const hueShiftA = 5;
+  const satShiftA = 5;
+  const lightShiftA = 3;
+
+  // factorB => 10..30 => old "30..60" => now nerfed
+  // originally we used 25, let's reduce to 15
+  const hueShiftB = 10;  // was 25
+  const satShiftB = 10;  // was 25
+  const lightShiftB = 8; // was 15
+
+  // factorC => 30..60 => old "60..90" => big => 60
+  const hueShiftC = 40;
+  const satShiftC = 40;
+  const lightShiftC = 35;
+
+  // factorD => 60..90 => old "90..100" => huge => 100
+  const hueShiftD = 100;
+  const satShiftD = 70;
+  const lightShiftD = 45;
+
+  // factorE => 90..100 => brand-new => 150
+  const hueShiftE = 150;
+  const satShiftE = 90;
+  const lightShiftE = 50;
+
+  const totalHueShift =
+    hueShiftA * factorA * randomSign() +
+    hueShiftB * factorB * randomSign() +
+    hueShiftC * factorC * randomSign() +
+    hueShiftD * factorD * randomSign() +
+    hueShiftE * factorE * randomSign();
+
+  const totalSatShift =
+    satShiftA * factorA * randomSign() +
+    satShiftB * factorB * randomSign() +
+    satShiftC * factorC * randomSign() +
+    satShiftD * factorD * randomSign() +
+    satShiftE * factorE * randomSign();
+
+  const totalLightShift =
+    lightShiftA * factorA * randomSign() +
+    lightShiftB * factorB * randomSign() +
+    lightShiftC * factorC * randomSign() +
+    lightShiftD * factorD * randomSign() +
+    lightShiftE * factorE * randomSign();
+
+  function shiftHSL([h, s, l]: [number, number, number]): [number, number, number] {
+    h += totalHueShift;
+    s += totalSatShift;
+    l += totalLightShift;
+    return finalizeHSL(h, s, l);
+  }
+
+  const newTheme = { ...theme };
+
+  // Step 1: Shift everything except skipKeys, radius, etc.
+  for (const key of Object.keys(newTheme) as (keyof ThemePalette)[]) {
+    if (isSkipKey(key)) continue;
+    if (key === "radius") continue;
+    const val = newTheme[key];
+    if (!isHSLValue(val)) continue;
+    newTheme[key] = shiftHSL(val);
+  }
+
+  // Step 2: If factorA > 0 => do a mild "nudge" on card & muted toward 'primary'.
+  if (factorA > 0) {
+    const nudgeBase = 0.3 * factorA;
+    if (isHSLValue(newTheme.card) && isHSLValue(newTheme.primary)) {
+      newTheme.card = nudgeTowards(newTheme.card, newTheme.primary, nudgeBase);
+    }
+    if (isHSLValue(newTheme.muted) && isHSLValue(newTheme.primary)) {
+      newTheme.muted = nudgeTowards(newTheme.muted, newTheme.primary, nudgeBase);
+    }
+  }
+
+  return newTheme;
+}
+
+/**
+ * Final function that returns { light, dark } for any crazyRate=0..100.
+ */
+export function createThemeConfig(
+  crazyRate: number,
+  primaryColor?: [number, number, number] | null,
+): { light: ThemePalette; dark: ThemePalette } {
+  const chosenPrimary = primaryColor
+    ? finalizeHSL(primaryColor[0], primaryColor[1], primaryColor[2])
+    : createPrimary();
+
+  const destructive = createDestructive();
+
+  // Baseline
+  const lightBase = buildLightTheme(chosenPrimary, destructive);
+  const darkBase = buildDarkTheme(chosenPrimary, destructive);
+
+  // Then apply "crazy" logic, for all ranges.
+  const finalLight = applyCrazy(lightBase, crazyRate);
+  const finalDark = applyCrazy(darkBase, crazyRate);
+
+  return { light: finalLight, dark: finalDark };
+}

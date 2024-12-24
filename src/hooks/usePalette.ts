@@ -156,8 +156,11 @@ export function usePalette() {
     [userId],
   );
 
-  const generateRandomPalette = (primaryColor?: HSL | null): ParsedPalette => {
-    const { light, dark } = createThemeConfig(primaryColor);
+  const generateRandomPalette = (
+    randomness: number,
+    primaryColor?: HSL | null,
+  ): ParsedPalette => {
+    const { light, dark } = createThemeConfig(randomness, primaryColor);
     return {
       name: "Random",
       id: "",
