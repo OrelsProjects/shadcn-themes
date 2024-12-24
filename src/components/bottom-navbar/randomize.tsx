@@ -49,7 +49,6 @@ export default function RandomizePopover() {
   }, [showRandomize]);
 
   useEffect(() => {
-    console.log("Setting primary color", primaryColor);
     setPrimaryColor(history[currentIndex]?.colors[selectedThemeType].primary);
     setPrimaryForegroundColor(
       history[currentIndex]?.colors[selectedThemeType]["primary-foreground"],
@@ -64,13 +63,6 @@ export default function RandomizePopover() {
     EventTracker.track("Randomize palette clicked", {
       randomness: paletteRandomness,
     });
-
-    console.log(
-      "Generating palette with randomness",
-      paletteRandomness,
-      "And primary color",
-      primaryColor,
-    );
 
     const newPalette = generateRandomPalette(
       paletteRandomness,

@@ -3,6 +3,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Slider } from "@/components/ui/slider";
 import { Sparkles } from "lucide-react";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
+import { debounce } from "lodash";
+import { EventTracker } from "@/eventTracker";
 
 const descriptions = [
   { range: [0, 0], text: "Just shadcn, don't expect any changes" },
@@ -39,11 +41,18 @@ export function ThemeRandomnessSlider({
 
   const handleValueChange = (newValue: number) => {
     onChange(newValue);
+    trackEvent(newValue);
     if (isFirstTime) {
       setHasSeenSlider(true);
       setIsFirstTime(false);
     }
   };
+
+  const trackEvent = debounce(value => {
+    EventTracker.track("theme-randomness-slider", {
+      value,
+    });
+  }, 3000);
 
   return (
     <motion.div
