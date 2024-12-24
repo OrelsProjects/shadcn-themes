@@ -14,7 +14,7 @@ const descriptions = [
   { range: [91, 99], text: "Oh, don't you dare going there" },
   {
     range: [100, 100],
-    text: "Alright, we take no responsibility for this attrocity",
+    text: "Alright, we take no responsibility for this atrocity",
   },
 ];
 
