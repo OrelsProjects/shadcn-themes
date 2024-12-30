@@ -205,7 +205,7 @@ function buildDarkTheme(
 
   // Keep the same hue for primary, but clamp to a lower L. If you want even darker, do darkenHSL.
   // We'll do a partial approach: if the light is [ph, ps, pl], we do something like .darken(0.3).
-  const primaryDark = darkenHSL(primary, 0.3);
+  const primaryDark = primary;
   // Foreground => near white
   const primaryForeground = [210, 40, 98] as [number, number, number];
 
