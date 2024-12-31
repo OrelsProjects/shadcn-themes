@@ -12,9 +12,6 @@ export function Header() {
           <Link href="/blogs" className="text-foreground/60 hover:text-foreground">
             Blog
           </Link>
-          <Link href="/about" className="text-foreground/60 hover:text-foreground">
-            About
-          </Link>
           <Button variant="outline">Subscribe</Button>
         </nav>
       </div>
