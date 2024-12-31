@@ -7,7 +7,8 @@ export type Blogs =
   | "choose-the-right-color"
   | "the-shadcn-way"
   | "why-shadcn"
-  | "shadcn-vs-material";
+  | "shadcn-vs-material"
+  | "dark-mode-in-nextjs";
 
 // Map of valid slugs to their component paths
 const blogComponents: Record<Blogs, React.ComponentType> = {
@@ -17,6 +18,7 @@ const blogComponents: Record<Blogs, React.ComponentType> = {
   "the-shadcn-way": dynamic(() => import("../content/the-shadcn-way")),
   "why-shadcn": dynamic(() => import("../content/why-shadcn")),
   "shadcn-vs-material": dynamic(() => import("../content/shadcn-vs-material")),
+  "dark-mode-in-nextjs": dynamic(() => import("../content/dark-mode")),
 };
 
 type BlogPost = keyof typeof blogComponents;

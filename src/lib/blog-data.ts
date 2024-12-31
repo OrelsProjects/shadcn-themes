@@ -41,6 +41,14 @@ export const blogPosts: BlogPost[] = [
     readTime: "6 min",
     category: "Design",
   },
+  {
+    slug: "dark-mode-in-nextjs",
+    title: "Dark Mode in NextJS",
+    description: "Learn how to implement dark mode in your application.",
+    date: "2024-12-18",
+    readTime: "6 min",
+    category: "Development",
+  },
 ];
 
 export async function getAllBlogPosts(): Promise<BlogPost[]> {

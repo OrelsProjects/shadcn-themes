@@ -20,9 +20,11 @@ const TIME_TO_CHANGE_THEME = 200;
 const Header = ({
   selectedThemeType,
   baseThemeType,
+  stickyHeader,
 }: {
   selectedThemeType: ThemeType;
   baseThemeType: ThemeType;
+  stickyHeader?: boolean;
 }) => {
   const lightDarkText = useMemo(() => {
     if (baseThemeType === "light") {
@@ -73,7 +75,10 @@ const Header = ({
   return (
     <div
       className={cn(
-        "sticky top-0 sm:top-0 w-full flex justify-center sm:justify-between bg-muted-demo items-center p-4 rounded-t-lg shadow-md sm:border-foreground-demo/40 z-10",
+        {
+          sticky: stickyHeader,
+        },
+        "top-0 sm:top-0 w-full flex justify-center sm:justify-between bg-muted-demo items-center p-4 rounded-t-lg shadow-md sm:border-foreground-demo/40 z-10",
         {
           "border-b border-foreground-demo/30": baseThemeType === "dark",
         },
@@ -136,10 +141,10 @@ const Header = ({
 };
 
 export function CardsDemoContainer({
-  minimal = false,
+  stickyHeader = true,
   theme,
 }: {
-  minimal?: boolean;
+  stickyHeader?: boolean;
   theme?: ThemeType;
 }) {
   const dispatch = useAppDispatch();
@@ -172,6 +177,7 @@ export function CardsDemoContainer({
         <Header
           selectedThemeType={selectedThemeType}
           baseThemeType={baseThemeType}
+          stickyHeader={stickyHeader}
         />
         <div className="w-full flex justify-center px-4">
           <div className="max-w-full">

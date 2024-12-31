@@ -10,7 +10,6 @@ import {
 import {
   Card,
   CardContent,
-  CardDescription,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -83,7 +82,7 @@ export default function ShadcnVsMUIComparison() {
   ];
 
   return (
-    <article className="prose prose-slate dark:prose-invert max-w-none">
+    <div className="prose prose-slate dark:prose-invert max-w-none">
       <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl mb-6">
         Shadcn UI vs Material UI: Choosing the Right UI Library for Your Project
       </h1>
@@ -268,6 +267,6 @@ export default function ShadcnVsMUIComparison() {
           needs and sets you up for success.
         </p>
       </section>
-    </article>
+    </div>
   );
 }
