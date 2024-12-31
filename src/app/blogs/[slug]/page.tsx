@@ -39,10 +39,3 @@ export default function BlogPost({ params }: { params: { slug: string } }) {
 function isValidBlogSlug(slug: string): slug is BlogPost {
   return slug in blogComponents;
 }
-
-// Generate static params for all blog posts
-export function generateStaticParams() {
-  return Object.keys(blogComponents).map(slug => ({
-    slug,
-  }));
-}
