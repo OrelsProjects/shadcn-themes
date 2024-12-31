@@ -1,4 +1,6 @@
-import { notFound } from "next/navigation";
+"use client";
+
+import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
 
 export type Blogs =
@@ -19,19 +21,16 @@ const blogComponents: Record<Blogs, React.ComponentType> = {
 
 type BlogPost = keyof typeof blogComponents;
 
-export default async function BlogPost({
-  params,
-}: {
-  params: { slug: string };
-}) {
+export default function BlogPost({ params }: { params: { slug: string } }) {
+  const router = useRouter();
   const { slug } = params;
 
   // Type check if the slug is valid
   if (!isValidBlogSlug(slug)) {
-    notFound();
+    router.push("/blogs");
   }
 
-  const BlogContent = blogComponents[slug];
+  const BlogContent = blogComponents[slug as Blogs];
 
   return <BlogContent />;
 }
