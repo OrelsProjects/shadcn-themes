@@ -21,7 +21,18 @@ export type ParsedPalette = {
   colors: Record<ThemeType, ThemePalette>;
 };
 
-export interface ThemePalette {
+export interface SidebarTheme {
+  "sidebar-background": HSL;
+  "sidebar-foreground": HSL;
+  "sidebar-primary": HSL;
+  "sidebar-primary-foreground": HSL;
+  "sidebar-accent": HSL;
+  "sidebar-accent-foreground": HSL;
+  "sidebar-border": HSL;
+  "sidebar-ring": HSL;
+}
+
+export interface BasePalette {
   background: HSL;
   foreground: HSL;
   card: HSL;
@@ -48,3 +59,5 @@ export interface ThemePalette {
   "chart-4": HSL;
   "chart-5": HSL;
 }
+
+export type ThemePalette = BasePalette & SidebarTheme;

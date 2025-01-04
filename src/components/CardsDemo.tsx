@@ -1,6 +1,7 @@
 "use client";
 
 import { CardsDemo } from "@/components/cards";
+import { DemoSidebar } from "@/components/cards/sidebar";
 import { Button } from "@/components/ui-demo/button";
 import { EventTracker } from "@/eventTracker";
 import { useAppDispatch, useAppSelector } from "@/hooks/redux";
@@ -12,7 +13,7 @@ import { LampDesk } from "@/lib/icons";
 import { cn } from "@/lib/utils";
 import { ThemeType } from "@/models/palette";
 import { useAnimation, motion } from "framer-motion";
-import { Moon, Sun } from "lucide-react";
+import { Moon, Sidebar, Sun } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 
 const TIME_TO_CHANGE_THEME = 200;
@@ -21,10 +22,12 @@ const Header = ({
   selectedThemeType,
   baseThemeType,
   stickyHeader,
+  openSidebar,
 }: {
   selectedThemeType: ThemeType;
   baseThemeType: ThemeType;
   stickyHeader?: boolean;
+  openSidebar?: () => void;
 }) => {
   const lightDarkText = useMemo(() => {
     if (baseThemeType === "light") {
@@ -78,13 +81,25 @@ const Header = ({
         {
           sticky: stickyHeader,
         },
-        "top-0 sm:top-0 w-full flex justify-center sm:justify-between bg-muted-demo items-center p-4 rounded-t-lg shadow-md sm:border-foreground-demo/40 z-10",
+        "top-0 sm:top-0 w-full flex justify-center sm:justify-between bg-muted-demo items-center p-4 rounded-t-lg shadow-md sm:border-foreground-demo/40 z-20",
         {
           "border-b border-foreground-demo/30": baseThemeType === "dark",
         },
       )}
     >
       <div className="flex flex-row items-center gap-2">
+        <Button
+          onClick={openSidebar}
+          variant={"outline"}
+          className={cn(
+            "hidden md:inline-flex rounded-lg w-fit items-center border-foreground/30",
+            {
+              "shadow-md": selectedThemeType === "light",
+            },
+          )}
+        >
+          <Sidebar className="w-5 h-5 text-foreground-demo" />
+        </Button>
         <motion.div
           id="header"
           animate={controls}
@@ -148,6 +163,7 @@ export function CardsDemoContainer({
   theme?: ThemeType;
 }) {
   const dispatch = useAppDispatch();
+  const [showSidebar, setShowSidebar] = useState(true);
   const { baseThemeType, selectedThemeType, selectedPalette } = useAppSelector(
     state => state.palette,
   );
@@ -172,16 +188,32 @@ export function CardsDemoContainer({
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         transition={{ duration: 0.5, ease: "easeInOut" }}
-        className="w-full h-full flex flex-col gap-4 relative"
+        className="w-full h-full flex flex-col gap-0 relative"
       >
         <Header
           selectedThemeType={selectedThemeType}
           baseThemeType={baseThemeType}
           stickyHeader={stickyHeader}
+          openSidebar={() => {
+            setShowSidebar(!showSidebar);
+          }}
         />
-        <div className="w-full flex justify-center px-4">
-          <div className="max-w-full">
-            <CardsDemo />
+        <div className="w-full flex justify-center">
+          <div className="max-w-full relative">
+            {showSidebar && (
+              <DemoSidebar
+                onClose={() => {
+                  setShowSidebar(false);
+                }}
+              >
+                <CardsDemo />
+              </DemoSidebar>
+            )}
+            <CardsDemo
+              className={cn("md:hidden", {
+                "md:flex": !showSidebar,
+              })}
+            />
           </div>
         </div>
       </motion.div>

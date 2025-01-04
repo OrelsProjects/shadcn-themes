@@ -12,9 +12,14 @@ import { CardsStats } from "@/components/cards/stats";
 import { CardsTeamMembers } from "@/components/cards/team-members";
 import { cn } from "@/lib/utils";
 
-export function CardsDemo() {
+export function CardsDemo({ className }: { className?: string }) {
   return (
-    <div className="md:grid grid-cols-1 lg:grid-cols-10 xl:grid-cols-11 gap-4 w-full">
+    <div
+      className={cn(
+        "md:grid grid-cols-1 lg:grid-cols-10 xl:grid-cols-11 gap-4 w-full",
+        className,
+      )}
+    >
       <div className="space-y-4 lg:col-span-4 xl:col-span-6 w-full">
         <CardsStats />
         <div className="flex flex-col sm:grid-cols-[1fr] md:hidden w-full">

@@ -3,7 +3,13 @@ import mixPlugin from "colord/plugins/mix";
 import a11yPlugin from "colord/plugins/a11y";
 import harmoniesPlugin from "colord/plugins/harmonies";
 
-import { HSL, ThemePalette } from "@/models/palette";
+import {
+  BasePalette,
+  HSL,
+  SidebarTheme,
+  ThemePalette,
+  ThemeType,
+} from "@/models/palette";
 
 // Ensure .mix() is available
 extend([a11yPlugin, harmoniesPlugin, mixPlugin]);
@@ -141,7 +147,7 @@ function buildLightTheme(
   const destructiveForeground = finalizeHSL(60, 9, 98);
   const ring = primary;
 
-  return {
+  const basePalette: BasePalette = {
     background,
     foreground,
     popover,
@@ -167,6 +173,12 @@ function buildLightTheme(
     "chart-3": accent,
     "chart-4": muted,
     "chart-5": background,
+  };
+
+  const sideBar = buildSidebarTheme(basePalette, "light");
+  return {
+    ...basePalette,
+    ...sideBar,
   };
 }
 
@@ -216,7 +228,7 @@ function buildDarkTheme(
   // ring => same as primaryDark
   const ring = primaryDark;
 
-  return {
+  const baseTheme = {
     background,
     foreground,
     popover,
@@ -242,6 +254,13 @@ function buildDarkTheme(
     "chart-3": darkenHSL(lightTheme["chart-3"], 0.3),
     "chart-4": darkenHSL(lightTheme["chart-4"], 0.3),
     "chart-5": background,
+  };
+
+  const sideBar = buildSidebarTheme(baseTheme, "dark");
+
+  return {
+    ...baseTheme,
+    ...sideBar,
   };
 }
 
@@ -413,4 +432,30 @@ export function createThemeConfig(
   const finalDark = applyCrazy(darkBase, crazyRate);
 
   return { light: finalLight, dark: finalDark };
+}
+
+/**
+ * Build the sidebar palette from an existing theme.
+ *
+ * If we're in the light theme, we darken a bit (factor=0.05).
+ * If we're in the dark theme, we darken more (factor=0.1).
+ *
+ * You can tweak these factors as you please.
+ */
+export function buildSidebarTheme(
+  theme: BasePalette,
+  themeType: ThemeType,
+): SidebarTheme {
+  const factor = themeType === "dark" ? 0.1 : 0.05;
+
+  return {
+    "sidebar-background": darkenHSL(theme.background, factor),
+    "sidebar-foreground": theme.foreground,
+    "sidebar-primary": darkenHSL(theme.primary, factor),
+    "sidebar-primary-foreground": theme["primary-foreground"],
+    "sidebar-accent": darkenHSL(theme.accent, factor),
+    "sidebar-accent-foreground": theme["accent-foreground"],
+    "sidebar-border": darkenHSL(theme.border, factor),
+    "sidebar-ring": darkenHSL(theme.ring, factor),
+  };
 }

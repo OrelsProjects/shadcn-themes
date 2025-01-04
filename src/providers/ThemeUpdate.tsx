@@ -30,6 +30,10 @@ const ThemeUpdate = () => {
       if (key.includes("chart")) {
         demoKey = key + "-demo";
       }
+      if (key.includes("sidebar")) {
+        // replace siderbar- with sidebar-demo-
+        demoKey = key.replace("sidebar-", "sidebar-demo-");
+      }
       root.style.setProperty(`--${demoKey}`, hslString);
     });
   }, [selectedPalette, selectedThemeType]);

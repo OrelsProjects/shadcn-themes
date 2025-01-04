@@ -59,7 +59,16 @@ export function generateCSS(parsedPalette: ParsedPalette): string {
     --chart-2: ${colorToHSL(theme["chart-2"])};
     --chart-3: ${colorToHSL(theme["chart-3"])};
     --chart-4: ${colorToHSL(theme["chart-4"])};
-    --chart-5: ${colorToHSL(theme["chart-5"])};`;
+    --chart-5: ${colorToHSL(theme["chart-5"])};
+    
+    --sidebar-background: ${colorToHSL(theme["sidebar-background"])};
+    --sidebar-foreground: ${colorToHSL(theme["sidebar-foreground"])};
+    --sidebar-primary: ${colorToHSL(theme["sidebar-primary"])};
+    --sidebar-primary-foreground: ${colorToHSL(theme["sidebar-primary-foreground"])};
+    --sidebar-accent: ${colorToHSL(theme["sidebar-accent"])};
+    --sidebar-accent-foreground: ${colorToHSL(theme["sidebar-accent-foreground"])};
+    --sidebar-border: ${colorToHSL(theme["sidebar-border"])};
+    --sidebar-ring: ${colorToHSL(theme["sidebar-ring"])};`;
   };
 
   const hasDarkTheme = Object.keys(colors.dark).length > 0;
