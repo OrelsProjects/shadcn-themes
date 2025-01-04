@@ -210,8 +210,8 @@ export function CardsDemoContainer({
               </DemoSidebar>
             )}
             <CardsDemo
-              className={cn("md:hidden", {
-                "md:flex": !showSidebar,
+              className={cn("md:hidden p-4", {
+                "md:grid": !showSidebar,
               })}
             />
           </div>
