@@ -31,23 +31,28 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.shadcn.studio/resources/blogs/shadcn-vs-material</loc>
+    <loc>https://www.shadcn.studio/resources/blogs/shadcn-vs-material-ui</loc>
     <lastmod>2024-12-18</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.shadcn.studio/resources/blogs/the-shadcn-way</loc>
+    <loc>https://www.shadcn.studio/resources/blogs/shadcn-ui-philosophy</loc>
     <lastmod>2024-12-18</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.shadcn.studio/resources/blogs/why-shadcn</loc>
+    <loc>https://www.shadcn.studio/resources/blogs/why-choose-shadcn</loc>
     <lastmod>2024-12-18</lastmod>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.shadcn.studio/resources/blogs/dark-mode</loc>
+    <loc>https://www.shadcn.studio/resources/blogs/dark-mode-implementation</loc>
     <lastmod>2024-12-18</lastmod>
     <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.shadcn.studio/resources/contrast-checker</loc>
+    <lastmod>2024-12-18</lastmod>
+    <priority>0.8</priority>
   </url>
 </urlset>
