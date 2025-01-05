@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import fs from "fs/promises";
 import path from "path";
 import matter from "gray-matter";
+import loggerServer from "@/loggerServer";
 
 // 1. Define dynamic SEO-related metadata based on markdown frontmatter
 export async function generateMetadata({
@@ -14,6 +15,7 @@ export async function generateMetadata({
 
   // Read the markdown file
   const filePath = path.join(process.cwd(), "/public/blogs", `${slug}.md`);
+  loggerServer.info(`Reading file: ${filePath}`);
   const fileContents = await fs.readFile(filePath, "utf-8");
   const { data } = matter(fileContents);
 
