@@ -6,7 +6,7 @@ publishedAt: "2024-12-18T12:00:00Z"
 readingTime: "6 min read"
 author:
   name: "Orel Zilberman"
-  role: "Starter"
+  role: "Founter of Shadcn Themes"
   avatar: "/founder-image.jpg"
 ---
 # Shadcn UI vs Material UI: Which Framework Is Right for You?

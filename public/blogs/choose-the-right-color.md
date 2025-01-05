@@ -6,7 +6,7 @@ publishedAt: "2024-12-15T12:00:00Z"
 readingTime: "8 min read"
 author:
   name: "Orel Zilberman"
-  role: "Starter"
+  role: "Founter of Shadcn Themes"
   avatar: "/founder-image.jpg"
 ---
 

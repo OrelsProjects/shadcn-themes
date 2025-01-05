@@ -6,7 +6,7 @@ publishedAt: "2024-12-26T12:00:00Z"
 readingTime: "2 min read"
 author:
   name: "Orel Zilberman"
-  role: "Starter"
+  role: "Founter of Shadcn Themes"
   avatar: "/founder-image.jpg"
 ---
 # The Philosophy Behind Shadcn UI: Minimalism and Flexibility

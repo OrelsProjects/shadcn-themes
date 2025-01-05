@@ -13,6 +13,7 @@ import Image from "next/image";
 import { CalendarIcon, ClockIcon, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import CTA from "@/app/resources/contrast-checker/cta";
+import { TWITTER_URL } from "@/lib/consts";
 
 interface Frontmatter {
   slug: string;
@@ -280,7 +281,12 @@ export default function BlogPost({ params }: { params: { slug: string } }) {
 
         {/* Author */}
         <div className="flex items-center justify-center mb-12">
-          <div className="flex items-center space-x-4">
+          <Link
+            href={TWITTER_URL}
+            target="_blank"
+            rel="noopener noreferrer nofollow"
+            className="flex items-center space-x-4 hover:cursor-pointer"
+          >
             <Image
               src={blogData.author.avatar}
               alt={blogData.author.name}
@@ -291,7 +297,7 @@ export default function BlogPost({ params }: { params: { slug: string } }) {
               <h2 className="text-xl font-semibold">{blogData.author.name}</h2>
               <p className="text-muted-foreground">{blogData.author.role}</p>
             </div>
-          </div>
+          </Link>
         </div>
 
         {/* Content */}

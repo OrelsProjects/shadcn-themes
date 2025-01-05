@@ -4,10 +4,16 @@ import matter from "gray-matter";
 import Link from "next/link";
 import Image from "next/image";
 import { formatDistanceToNow } from "date-fns";
-import { CalendarIcon, Paintbrush } from 'lucide-react';
+import { CalendarIcon, Paintbrush } from "lucide-react";
 import Logo from "@/components/logo";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 export default function ResourcesPage() {
   const blogsDir = path.join(process.cwd(), "public/blogs");
@@ -34,7 +40,9 @@ export default function ResourcesPage() {
     };
   });
 
-  const filteredBlogs = blogs.filter(Boolean) as NonNullable<(typeof blogs)[0]>[];
+  const filteredBlogs = blogs.filter(Boolean) as NonNullable<
+    (typeof blogs)[0]
+  >[];
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-muted">
@@ -48,12 +56,18 @@ export default function ResourcesPage() {
           <nav>
             <ul className="flex space-x-4">
               <li>
-                <Link href="#blog-posts" className="text-muted-foreground hover:text-primary transition-colors">
+                <Link
+                  href="#blog-posts"
+                  className="text-muted-foreground hover:text-primary transition-colors"
+                >
                   Blog Posts
                 </Link>
               </li>
               <li>
-                <Link href="#our-tools" className="text-muted-foreground hover:text-primary transition-colors">
+                <Link
+                  href="#our-tools"
+                  className="text-muted-foreground hover:text-primary transition-colors"
+                >
                   Our Tools
                 </Link>
               </li>
@@ -70,31 +84,43 @@ export default function ResourcesPage() {
 
           <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
             {filteredBlogs.map(blog => (
-              <Card key={blog.slug} className="overflow-hidden transition-all hover:shadow-lg hover:-translate-y-1">
+              <Card
+                key={blog.slug}
+                className="overflow-hidden transition-all hover:shadow-lg hover:-translate-y-1"
+              >
                 <Link href={`/resources/blogs/${blog.slug}`}>
                   <CardHeader className="pb-4">
-                    <CardTitle className="text-xl line-clamp-2">{blog.title}</CardTitle>
-                    <CardDescription className="line-clamp-3">{blog.excerpt}</CardDescription>
+                    <CardTitle className="text-xl line-clamp-2">
+                      {blog.title}
+                    </CardTitle>
+                    <CardDescription className="line-clamp-3">
+                      {blog.excerpt}
+                    </CardDescription>
                   </CardHeader>
                   <CardContent>
                     <div className="flex items-center justify-between">
-                      <div className="flex items-center space-x-2">
+                      <div className="h-11 flex items-center space-x-2">
                         <Image
                           src={blog.author.avatar}
                           alt={blog.author.name}
-                          width={40}
-                          height={40}
-                          className="rounded-full object-cover"
+                          fill
+                          className="!relative !h-10 !w-10 rounded-full object-cover"
                         />
                         <div>
-                          <p className="text-sm font-medium">{blog.author.name}</p>
-                          <p className="text-xs text-muted-foreground">{blog.author.role}</p>
+                          <p className="text-sm font-medium">
+                            {blog.author.name}
+                          </p>
+                          <p className="text-xs text-muted-foreground">
+                            {blog.author.role}
+                          </p>
                         </div>
                       </div>
                       <div className="flex items-center space-x-2 text-sm text-muted-foreground">
                         <CalendarIcon className="w-4 h-4" />
                         <time dateTime={blog.publishedAt}>
-                          {formatDistanceToNow(new Date(blog.publishedAt), { addSuffix: true })}
+                          {formatDistanceToNow(new Date(blog.publishedAt), {
+                            addSuffix: true,
+                          })}
                         </time>
                       </div>
                     </div>
@@ -119,7 +145,8 @@ export default function ResourcesPage() {
                     <span>Contrast Checker</span>
                   </CardTitle>
                   <CardDescription>
-                    Ensure your color combinations meet accessibility standards for readability.
+                    Ensure your color combinations meet accessibility standards
+                    for readability.
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -136,10 +163,11 @@ export default function ResourcesPage() {
 
       <footer className="bg-muted py-8 mt-20">
         <div className="container text-center text-muted-foreground">
-          <p>&copy; {new Date().getFullYear()} Your Company. All rights reserved.</p>
+          <p>
+            &copy; {new Date().getFullYear()} Your Company. All rights reserved.
+          </p>
         </div>
       </footer>
     </div>
   );
 }
-
