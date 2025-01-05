@@ -12,7 +12,7 @@ export async function generateMetadata({
   const { slug } = params;
 
   // Read the markdown file
-  const url = process.env.NEXT_PUBLIC_APP_URl + "/blogs/" + slug + ".md";
+  const url = process.env.NEXT_PUBLIC_APP_URL + "/blogs/" + slug + ".md";
 
   try {
     // get file from the url.
