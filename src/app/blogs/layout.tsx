@@ -1,23 +1,16 @@
+import Theme from "@/app/blogs/Theme";
 import { Metadata } from "next";
+import { ThemeProvider } from "next-themes";
 import React from "react";
 
 export const metadata: Metadata = {
   title: "Blogs",
-  description: "Blogs for Shadcn Themes.",
 };
 
-export default function Layout({
-  children,
-  params,
-}: {
-  children: React.ReactNode;
-  params: { slug?: string };
-}) {
+export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="w-screen h-screen bg-background text-foreground overflow-x-clip overflow-y-auto">
-      <div className="p-4 space-y-8 relative">
-        <div className="space-y-8">{children}</div>
-      </div>
-    </div>
+    <Theme>
+      {children}
+    </Theme>
   );
 }

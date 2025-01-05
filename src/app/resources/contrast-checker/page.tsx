@@ -3,7 +3,15 @@
 import React, { useState, useEffect } from "react";
 import { HexColorPicker } from "react-colorful";
 import { Label } from "@/components/ui/label";
-import { CheckCircle, AlertCircle, XCircle, ArrowLeft } from "lucide-react";
+import {
+  CheckCircle,
+  AlertCircle,
+  XCircle,
+  ArrowLeft,
+  Home,
+  Menu,
+  PaintBucket,
+} from "lucide-react";
 import {
   Tooltip,
   TooltipContent,
@@ -18,10 +26,9 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import Color from "color";
-import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
 import Logo from "@/components/logo";
-
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 // Function to calculate relative luminance
 const getLuminance = (r: number, g: number, b: number) => {
   const a = [r, g, b].map(v => {
@@ -89,7 +96,6 @@ const ContrastIndicator = ({
 };
 
 // Convert color string to different formats
-// We store everything in hex internally, but display either HEX, RGB, or HSL.
 const convertColor = (hexValue: string, format: "hex" | "rgb" | "hsl") => {
   try {
     const c = Color(hexValue);
@@ -97,14 +103,13 @@ const convertColor = (hexValue: string, format: "hex" | "rgb" | "hsl") => {
       case "hex":
         return c.hex().toLowerCase();
       case "rgb":
-        return c.rgb().string(); // e.g. "rgb(255, 255, 255)"
+        return c.rgb().string();
       case "hsl":
-        return c.hsl().string(); // e.g. "hsl(0, 0%, 100%)"
+        return c.hsl().string();
       default:
         return c.hex().toLowerCase();
     }
   } catch (e) {
-    // fallback, if color parse fails
     return hexValue;
   }
 };
@@ -114,8 +119,37 @@ const parseToHex = (value: string) => {
   try {
     return Color(value).hex().toLowerCase();
   } catch (e) {
-    return "#000000"; // fallback if user typed something invalid
+    return "#000000";
   }
+};
+
+const MobileSidebar = () => {
+  return (
+    <Sheet>
+      <SheetTrigger asChild>
+        <Button variant="ghost" size="icon" className="md:hidden">
+          <Menu className="h-5 w-5" />
+          <span className="sr-only">Toggle menu</span>
+        </Button>
+      </SheetTrigger>
+      <SheetContent side="left" className="w-[300px] sm:w-[400px]">
+        <nav className="flex flex-col gap-4">
+          <Link href="/blogs" className="flex items-center gap-2 py-2">
+            <ArrowLeft className="h-5 w-5" />
+            <span>Back to Blogs</span>
+          </Link>
+          <Link href="/" className="flex items-center gap-2 py-2">
+            <Logo withText={false} className="w-5 h-5" />
+            <span>Generate Shadcn Themes</span>
+          </Link>
+          <div className="flex items-center gap-2 py-2">
+            <PaintBucket className="h-5 w-5" />
+            <span>Contrast Checker</span>
+          </div>
+        </nav>
+      </SheetContent>
+    </Sheet>
+  );
 };
 
 const ContrastChecker = () => {
@@ -128,7 +162,6 @@ const ContrastChecker = () => {
   const [contrastRatio, setContrastRatio] = useState(21);
 
   useEffect(() => {
-    // Calculate contrast based on the stored HEX
     const bgRgb = Color(bgHex).rgb().array();
     const fgRgb = Color(fgHex).rgb().array();
     const bgLum = getLuminance(bgRgb[0], bgRgb[1], bgRgb[2]);
@@ -136,7 +169,6 @@ const ContrastChecker = () => {
     setContrastRatio(getContrastRatio(bgLum, fgLum));
   }, [bgHex, fgHex]);
 
-  // Helper to handle dropdown selection
   const handleSelectFormat =
     (
       setterFormat: React.Dispatch<React.SetStateAction<"hex" | "rgb" | "hsl">>,
@@ -144,7 +176,6 @@ const ContrastChecker = () => {
       setterHex: React.Dispatch<React.SetStateAction<string>>,
     ) =>
     (format: "hex" | "rgb" | "hsl") => {
-      // Convert existing display value (in old format) back to hex
       const newHex = parseToHex(currentValueGetter());
       setterHex(newHex);
       setterFormat(format);
@@ -152,28 +183,22 @@ const ContrastChecker = () => {
 
   return (
     <div className="h-full max-h-screen flex flex-col items-center justify-start md:justify-center gap-2 bg-background p-4">
-      <div
-        className={`fixed top-0 left-0 right-0 bg-white dark:bg-gray-800 shadow-md transition-transform duration-300 z-10 *:translate-y-0 md:hidden flex flex-row justify-between pr-2`}
-      >
-        <div className="py-2 flex flex-col items-center justify-center sm:flex-row sm:justify-between">
-          <Button
-            variant="ghost"
-            size="sm"
-            className="flex items-center sm:mb-0"
-            asChild
-          >
-            <Link href="/" passHref className="flex flex-row items-center">
-              <Logo withText={false} className="w-7 h-7" />
-              <span className="text-sm">Generate Shadcn Themes</span>
-            </Link>
-          </Button>
-        </div>
-        <h1 className="h-fit text-base font-bold my-auto">Contrast Checker</h1>
+      {/* Mobile Sidebar */}
+      <div className="fixed top-2 left-2 z-50 md:hidden">
+        <MobileSidebar />
       </div>
+
+      {/* Mobile Header */}
+      <div className="fixed top-0 left-0 right-0 bg-white dark:bg-gray-800 shadow-md transition-transform duration-300 z-10 md:hidden flex justify-center items-center h-14">
+        <h1 className="text-base font-bold">Contrast Checker</h1>
+      </div>
+
+      {/* Desktop Title */}
       <h1 className="text-2xl md:text-4xl font-bold md:mb-8 max-md:hidden">
         Contrast Checker
       </h1>
-      <div className="flex flex-col md:flex-row gap-2 md:gap-8 w-full max-w-4xl max-md:mt-11">
+
+      <div className="flex flex-col md:flex-row gap-2 md:gap-8 w-full max-w-4xl max-md:mt-12">
         {/* BACKGROUND COLOR PICKER */}
         <div className="flex-1 flex flex-col justify-center items-center">
           <div className="mx-auto">
@@ -181,10 +206,9 @@ const ContrastChecker = () => {
             <HexColorPicker
               color={bgHex}
               onChange={newHex => setBgHex(newHex)}
-              className="w-full mb-4"
+              className="w-full mb-2"
             />
           </div>
-          {/* Format Dropdown + Displayed Input */}
           <div className="flex items-center gap-2">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -229,13 +253,11 @@ const ContrastChecker = () => {
               </DropdownMenuContent>
             </DropdownMenu>
 
-            {/* Text input displaying color in the selected format */}
             <input
               id="bgColor"
               className="border rounded px-2 py-1 w-full"
               value={convertColor(bgHex, bgFormat)}
               onChange={e => {
-                // parse new input to hex, store in state
                 setBgHex(parseToHex(e.target.value));
               }}
             />
@@ -249,11 +271,10 @@ const ContrastChecker = () => {
             <HexColorPicker
               color={fgHex}
               onChange={newHex => setFgHex(newHex)}
-              className="w-full mb-4"
+              className="w-full mb-2"
             />
           </div>
 
-          {/* Format Dropdown + Displayed Input */}
           <div className="flex items-center gap-2">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -298,7 +319,6 @@ const ContrastChecker = () => {
               </DropdownMenuContent>
             </DropdownMenu>
 
-            {/* Text input displaying color in the selected format */}
             <input
               id="fgColor"
               className="border rounded px-2 py-1 w-full"
@@ -313,7 +333,7 @@ const ContrastChecker = () => {
 
       {/* Contrast Ratio Display */}
       <div className="mt-12 text-center hidden md:block">
-        <h2 className="text-2xl font-semibold mb-4">Contrast Ratio</h2>
+        <h2 className="text-2xl font-semibold mb-2">Contrast Ratio</h2>
         <div
           className="text-6xl font-bold p-8 rounded-lg shadow-lg flex items-center justify-center gap-4"
           style={{ backgroundColor: bgHex, color: fgHex }}
@@ -327,7 +347,6 @@ const ContrastChecker = () => {
       >
         <div className="text-lg font-bold">{contrastRatio.toFixed(2)}:1</div>
         <ContrastIndicator ratio={contrastRatio} />
-        {/* <div className="text-lg font-bold">WCAG 2.0</div> */}
       </div>
       <ContrastIndicator ratio={contrastRatio} className="max-md:hidden" />
     </div>

@@ -3,6 +3,9 @@
 @tailwind utilities;
 
 @layer base {
+  html {
+    scroll-behavior: smooth;
+  }
   :root {
     /* Solarized */
     --background: 0 0% 98%;
@@ -91,7 +94,7 @@
     --chart-3: 39 80% 50%;
     --chart-4: 39 80% 50%;
     --chart-5: 39 80% 50%;
-/* 
+    /* 
     --background-demo: 222 84% 5%;
     --foreground-demo: 210 40% 98%;
     --card-demo: 222 84% 5%;
@@ -116,14 +119,14 @@
     --chart-3-demo: 30 80% 55%;
     --chart-4-demo: 280 65% 60%;
     --chart-5-demo: 340 75% 55%; */
---sidebar-background: 240 5.9% 10%;
---sidebar-foreground: 240 4.8% 95.9%;
---sidebar-primary: 224.3 76.3% 48%;
---sidebar-primary-foreground: 0 0% 100%;
---sidebar-accent: 240 3.7% 15.9%;
---sidebar-accent-foreground: 240 4.8% 95.9%;
---sidebar-border: 240 3.7% 15.9%;
---sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
   }
 }
 
@@ -239,7 +242,6 @@
   body {
     @apply bg-background-demo text-foreground-demo;
   }
-
 }
 
 @media (min-width: 768px) {
@@ -271,4 +273,30 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+.prose h1,
+.prose h2,
+.prose h3,
+.prose h4,
+.prose h5,
+.prose h6 {
+  color: var(--primary);
+  font-weight: bold;
+}
+
+.prose a {
+  color: var(--primary);
+  text-decoration: none;
+  transition:
+    color 0.3s ease,
+    text-decoration 0.3s ease;
+}
+
+.prose a:hover {
+  text-decoration: underline;
+}
+
+.prose {
+  --primary: hsl(39 80% 50%);
 }

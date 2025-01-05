@@ -14,6 +14,8 @@ export interface ThemeState {
   hideThemePalette?: boolean;
   showRandomize?: boolean;
   hideRandomize?: boolean;
+
+  systemTheme: ThemeType;
 }
 
 export const initialState: ThemeState = {
@@ -26,6 +28,7 @@ export const initialState: ThemeState = {
   hideThemePalette: false,
   showRandomize: false,
   hideRandomize: false,
+  systemTheme: "dark",
 };
 
 const paletteSlice = createSlice({
@@ -70,6 +73,9 @@ const paletteSlice = createSlice({
       }
       state.baseThemeType = state.baseThemeType === "light" ? "dark" : "light";
     },
+    setSystemTheme(state, action: PayloadAction<ThemeType>) {
+      state.systemTheme = action.payload;
+    },
   },
 });
 
@@ -82,6 +88,7 @@ export const {
   setHideThemePalette,
   setShowRandomize,
   setHideRandomize,
+  setSystemTheme,
 } = paletteSlice.actions;
 
 export default paletteSlice.reducer;

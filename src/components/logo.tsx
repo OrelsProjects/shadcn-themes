@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
@@ -9,11 +11,20 @@ const LOGO = "/logo.png";
 export interface LogoProps {
   height?: number;
   width?: number;
+  textClassName?: string;
   animate?: boolean;
   className?: string;
+  withText?: boolean;
 }
 
-export default function Logo({ height, width, animate, className }: LogoProps) {
+export default function Logo({
+  height,
+  width,
+  animate,
+  className,
+  textClassName,
+  withText = true,
+}: LogoProps) {
   const animation = animate
     ? {
         whileHover: { scale: 1.05 },
@@ -32,7 +43,13 @@ export default function Logo({ height, width, animate, className }: LogoProps) {
         width={width || 32}
         height={height || 32}
       />
-      <span className="text-lg font-semibold">{APP_NAME}</span>
+      {withText && (
+        <span
+          className={cn("text-lg text-foreground font-semibold", textClassName)}
+        >
+          {APP_NAME}
+        </span>
+      )}
     </motion.div>
   );
 }

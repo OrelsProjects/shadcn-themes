@@ -1,4 +1,5 @@
 // app/contrast-checker/layout.tsx
+import Theme from "@/app/blogs/Theme";
 import CTA from "@/app/resources/contrast-checker/cta";
 import Logo from "@/components/logo";
 import { Button } from "@/components/ui/button";
@@ -11,6 +12,7 @@ import {
 } from "@/components/ui/card";
 import { ArrowRight } from "lucide-react";
 import type { Metadata } from "next";
+import { ThemeProvider } from "next-themes";
 import Link from "next/link";
 
 // 1. Define all SEO-related metadata
@@ -75,7 +77,10 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         href="https://www.shadcn.studio/resources/contrast-checker"
       />
       <StructuredData />
-      <main>{children}</main>
+
+      <Theme>
+        <main>{children}</main>
+      </Theme>
       {/* CTA, etc. */}
       <CTA className="max-md:hidden" />
     </>
