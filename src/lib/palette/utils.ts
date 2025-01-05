@@ -10,6 +10,7 @@ import {
   ThemePalette,
   ThemeType,
 } from "@/models/palette";
+import { buildSidebarTheme } from "@/lib/palette/sidebar";
 
 // Ensure .mix() is available
 extend([a11yPlugin, harmoniesPlugin, mixPlugin]);
@@ -73,7 +74,7 @@ function fromColord(c: Colord): [number, number, number] {
 /**
  * Darkens the color by a given factor (0..1).
  */
-function darkenHSL(hsl: [number, number, number], factor: number) {
+export function darkenHSL(hsl: [number, number, number], factor: number) {
   const col = toColord(hsl);
   // .darken() factor is in [0..1], e.g. 0.4 => 40% darker
   return fromColord(col.darken(factor));
@@ -82,7 +83,7 @@ function darkenHSL(hsl: [number, number, number], factor: number) {
 /**
  * Lightens the color by a given factor (0..1).
  */
-function lightenHSL(hsl: [number, number, number], factor: number) {
+export function lightenHSL(hsl: [number, number, number], factor: number) {
   const col = toColord(hsl);
   return fromColord(col.lighten(factor));
 }
@@ -432,30 +433,4 @@ export function createThemeConfig(
   const finalDark = applyCrazy(darkBase, crazyRate);
 
   return { light: finalLight, dark: finalDark };
-}
-
-/**
- * Build the sidebar palette from an existing theme.
- *
- * If we're in the light theme, we darken a bit (factor=0.05).
- * If we're in the dark theme, we darken more (factor=0.1).
- *
- * You can tweak these factors as you please.
- */
-export function buildSidebarTheme(
-  theme: BasePalette,
-  themeType: ThemeType,
-): SidebarTheme {
-  const factor = themeType === "dark" ? 0.1 : 0.05;
-
-  return {
-    "sidebar-background": darkenHSL(theme.background, factor),
-    "sidebar-foreground": theme.foreground,
-    "sidebar-primary": darkenHSL(theme.primary, factor),
-    "sidebar-primary-foreground": theme["primary-foreground"],
-    "sidebar-accent": darkenHSL(theme.accent, factor),
-    "sidebar-accent-foreground": theme["accent-foreground"],
-    "sidebar-border": darkenHSL(theme.border, factor),
-    "sidebar-ring": darkenHSL(theme.ring, factor),
-  };
 }
