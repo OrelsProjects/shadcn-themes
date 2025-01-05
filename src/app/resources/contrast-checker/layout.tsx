@@ -1,19 +1,7 @@
 // app/contrast-checker/layout.tsx
-import Theme from "@/app/blogs/Theme";
 import CTA from "@/app/resources/contrast-checker/cta";
-import Logo from "@/components/logo";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardContent,
-  CardFooter,
-} from "@/components/ui/card";
-import { ArrowRight } from "lucide-react";
+import Theme from "@/app/resources/blogs/Theme";
 import type { Metadata } from "next";
-import { ThemeProvider } from "next-themes";
-import Link from "next/link";
 
 // 1. Define all SEO-related metadata
 export const metadata: Metadata = {
@@ -82,7 +70,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         <main>{children}</main>
       </Theme>
       {/* CTA, etc. */}
-      <CTA className="max-md:hidden" />
+      <CTA className="max-md:hidden mb-8" />
     </>
   );
 }

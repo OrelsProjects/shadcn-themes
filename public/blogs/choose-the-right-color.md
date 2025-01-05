@@ -72,7 +72,8 @@ Represents sophistication, authority, and timelessness.
 ## Tools for Choosing and Testing Website Colors
 
 - [Shadcn Themes](https://www.shadcn.studio/): Generate and refine palettes for shadcn.
-- [Contrast Checkers](https://www.shadcn.studio/resources/contrast-checker): Ensure text readability and compliance with WCAG.
+- <a href="https://www.shadcn.studio/resources/contrast-checker" target="_blank" rel="noopener noreferrer">Contrast Checkers</a>: Ensure text readability and compliance with WCAG.
+
 
 ## Best Practices for Implementing Colors in Web Design
 

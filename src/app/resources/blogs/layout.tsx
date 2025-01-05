@@ -1,6 +1,5 @@
-import Theme from "@/app/blogs/Theme";
+import Theme from "@/app/resources/blogs/Theme";
 import { Metadata } from "next";
-import { ThemeProvider } from "next-themes";
 import React from "react";
 
 export const metadata: Metadata = {

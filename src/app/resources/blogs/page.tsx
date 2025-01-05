@@ -69,7 +69,7 @@ export default function BlogsPage() {
         <div className="grid gap-8 md:grid-cols-3">
           {filteredBlogs.map(blog => (
             <Link
-              href={`/blogs/${blog.slug}`}
+              href={`/resources/blogs/${blog.slug}`}
               key={blog.slug}
               className="bg-muted rounded-lg shadow-lg overflow-hidden transition-transform hover:scale-105"
             >

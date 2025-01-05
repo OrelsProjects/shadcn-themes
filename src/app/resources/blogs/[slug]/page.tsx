@@ -59,7 +59,7 @@ export default function BlogPost({ params }: { params: { slug: string } }) {
   useEffect(() => {
     async function fetchMarkdown() {
       try {
-        const res = await fetch(`/blogs-content/${params.slug}.md`);
+        const res = await fetch(`/blogs/${params.slug}.md`);
         if (!res.ok) throw new Error("Markdown file not found");
 
         const rawMd = await res.text();
@@ -191,7 +191,7 @@ export default function BlogPost({ params }: { params: { slug: string } }) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center">
         <h1 className="text-2xl mb-4">404 – Blog not found</h1>
-        <Link href="/blogs">
+        <Link href="/resources/blogs">
           <Button variant="outline">Go back to Blogs</Button>
         </Link>
       </div>
@@ -216,7 +216,7 @@ export default function BlogPost({ params }: { params: { slug: string } }) {
         }`}
       >
         <div className="container mx-auto px-4 py-2 flex items-center justify-between">
-          <Link href="/blogs" passHref>
+          <Link href="/resources/blogs" passHref>
             <Button variant="outline" size="sm" className="flex items-center">
               <ArrowLeft className="mr-2 h-4 w-4" /> Back to Blogs
             </Button>
@@ -251,7 +251,7 @@ export default function BlogPost({ params }: { params: { slug: string } }) {
 
       {/* Main */}
       <main className="flex-1 container mx-auto px-4 py-16">
-        <Link href="/blogs" passHref className="inline-block mb-8">
+        <Link href="/resources/blogs" passHref className="inline-block mb-8">
           <Button variant="outline" size="sm" className="flex items-center">
             <ArrowLeft className="mr-2 h-4 w-4" /> Back to Blogs
           </Button>
@@ -297,7 +297,7 @@ export default function BlogPost({ params }: { params: { slug: string } }) {
         {/* Content */}
         <article className="prose prose-lg dark:prose-invert max-w-none">
           <div
-            className="bg-background shadow-lg rounded-lg p-8"
+            className="bg-background rounded-lg"
             dangerouslySetInnerHTML={{ __html: contentHtml }}
           />
         </article>

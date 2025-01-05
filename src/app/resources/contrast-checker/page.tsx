@@ -134,7 +134,10 @@ const MobileSidebar = () => {
       </SheetTrigger>
       <SheetContent side="left" className="w-[300px] sm:w-[400px]">
         <nav className="flex flex-col gap-4">
-          <Link href="/blogs" className="flex items-center gap-2 py-2">
+          <Link
+            href="/resources/blogs"
+            className="flex items-center gap-2 py-2"
+          >
             <ArrowLeft className="h-5 w-5" />
             <span>Back to Blogs</span>
           </Link>
@@ -183,22 +186,26 @@ const ContrastChecker = () => {
 
   return (
     <div className="h-full max-h-screen flex flex-col items-center justify-start md:justify-center gap-2 bg-background p-4">
+      <div className="w-full fixed top-0 py-4 z-50 flex justify-start items-center bg-background/30 backdrop-blur-lg px-8">
+        <div className="absolute inset-0 transition-transform duration-300 z-10 flex justify-center items-center h-14">
+          <h1 className="text-2xl font-bold">Contrast Checker</h1>
+        </div>
+        <Button
+          variant="ghost"
+          className="relative flex justify-center w-fit hover:bg-transparent px-0"
+          asChild
+        >
+          <Link href="/">
+            <Logo height={36} width={36} textClassName="text-xl" />
+          </Link>
+        </Button>
+      </div>
       {/* Mobile Sidebar */}
       <div className="fixed top-2 left-2 z-50 md:hidden">
         <MobileSidebar />
       </div>
 
-      {/* Mobile Header */}
-      <div className="fixed top-0 left-0 right-0 bg-white dark:bg-gray-800 shadow-md transition-transform duration-300 z-10 md:hidden flex justify-center items-center h-14">
-        <h1 className="text-base font-bold">Contrast Checker</h1>
-      </div>
-
-      {/* Desktop Title */}
-      <h1 className="text-2xl md:text-4xl font-bold md:mb-8 max-md:hidden">
-        Contrast Checker
-      </h1>
-
-      <div className="flex flex-col md:flex-row gap-2 md:gap-8 w-full max-w-4xl max-md:mt-12">
+      <div className="flex flex-col md:flex-row gap-2 md:gap-8 w-full max-w-4xl mt-12">
         {/* BACKGROUND COLOR PICKER */}
         <div className="flex-1 flex flex-col justify-center items-center">
           <div className="mx-auto">

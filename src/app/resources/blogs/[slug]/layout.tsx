@@ -13,7 +13,7 @@ export async function generateMetadata({
   const { slug } = params;
 
   // Read the markdown file
-  const filePath = path.join(process.cwd(), "/public/blogs-content", `${slug}.md`);
+  const filePath = path.join(process.cwd(), "/public/blogs", `${slug}.md`);
   const fileContents = await fs.readFile(filePath, "utf-8");
   const { data } = matter(fileContents);
 
@@ -55,7 +55,7 @@ function StructuredData({ metadata }: { metadata: any }) {
     "@context": "https://schema.org",
     "@type": "WebApplication",
     name: metadata.title,
-    url: `${process.env.NEXT_PUBLIC_APP_URL}/blogs/${metadata.slug}`,
+    url: `${process.env.NEXT_PUBLIC_APP_URL}/resources/blogs/${metadata.slug}`,
     operatingSystem: "All",
     applicationCategory: "DesignApplication",
     description: metadata.description,
