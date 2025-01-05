@@ -86,7 +86,7 @@ export default function Layout({
         rel="canonical"
         href={`${process.env.NEXT_PUBLIC_APP_URL}/${slug}`}
       />
-      <StructuredData metadata={generateMetadata({ params })} />
+      {/* <StructuredData metadata={generateMetadata({ params })} /> */}
       <main>{children}</main>
     </>
   );
