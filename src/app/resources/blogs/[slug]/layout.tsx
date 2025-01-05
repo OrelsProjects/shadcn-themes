@@ -11,7 +11,7 @@ export async function generateMetadata({
   params,
 }: {
   params: { slug: string };
-}): Promise<Metadata> {
+}): Promise<Metadata | undefined> {
   const { slug } = params;
 
   // Read the markdown file
