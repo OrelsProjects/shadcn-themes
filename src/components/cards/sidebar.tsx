@@ -5,26 +5,15 @@ import {
   Check,
   ChevronsUpDown,
   GalleryVerticalEnd,
-  Search,
   X,
 } from "lucide-react";
 
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/components/ui-demo/breadcrumb";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui-demo/dropdown-menu";
-import { Label } from "@/components/ui-demo/label";
-import { Separator } from "@/components/ui-demo/separator";
 import {
   Sidebar,
   SidebarContent,
@@ -32,7 +21,6 @@ import {
   SidebarGroupContent,
   SidebarGroupLabel,
   SidebarHeader,
-  SidebarInput,
   SidebarInset,
   SidebarMenu,
   SidebarMenuButton,

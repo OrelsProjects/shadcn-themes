@@ -41,6 +41,7 @@ interface ColorSwatchProps {
   color: string;
   isHover?: boolean;
   className?: string;
+  shape?: "circle" | "rectangle";
 }
 
 interface PaletteDialogProps {
@@ -142,27 +143,46 @@ const PaletteDialog = React.forwardRef<HTMLDivElement, PaletteDialogProps>(
 
 PaletteDialog.displayName = "PaletteDialog";
 
-const ColorSwatch = ({ color, isHover, className }: ColorSwatchProps) => {
+export const ColorSwatch = ({
+  color,
+  isHover,
+  className,
+  shape,
+}: ColorSwatchProps) => {
   return isHover ? (
-    <ColorSwatchTooltip color={color} className={className} />
+    <ColorSwatchTooltip color={color} className={className} shape={shape} />
   ) : (
     <div
-      className={cn("w-4 h-4 sm:w-6 sm:h-6 rounded-full opacity-100", className)}
+      className={cn(
+        "w-4 h-4 sm:w-6 sm:h-6 rounded-full opacity-100",
+        {
+          "w-4 h-6 sm:w-4 rounded-sm": shape === "rectangle",
+        },
+        className,
+      )}
       style={{ backgroundColor: color }}
     />
   );
 };
 
-const ColorSwatchTooltip = ({ color, className }: ColorSwatchProps) => {
+const ColorSwatchTooltip = ({
+  color,
+  className,
+  shape = "circle",
+}: ColorSwatchProps) => {
   const [isTooltipOpen, setIsTooltipOpen] = useState(false);
 
   return (
     <TooltipProvider delayDuration={150}>
       <Tooltip onOpenChange={setIsTooltipOpen}>
         <TooltipTrigger>
-          <div
+          <motion.div
+            whileHover={{ scale: 1.05 }}
             className={cn(
-              "w-4 h-4 sm:w-6 sm:h-6 rounded-full opacity-50",
+              "w-4 h-4 sm:w-6 sm:h-6 rounded-full opacity shadow-sm transition-shadow",
+              {
+                "w-2 sm:w-4 rounded-sm": shape === "rectangle",
+              },
               className,
             )}
             style={{ backgroundColor: color }}
@@ -188,16 +208,18 @@ const ColorSwatchTooltip = ({ color, className }: ColorSwatchProps) => {
   );
 };
 
-const PaletteCard = ({
+export const PaletteCard = ({
   palette,
   isSelected,
   onPaletteSelected,
   selectedThemeType,
+  showOnly,
 }: {
   palette: ParsedPalette;
   isSelected: boolean;
   onPaletteSelected: (palette: ParsedPalette) => void;
   selectedThemeType: ThemeType;
+  showOnly?: boolean;
 }) => {
   const [isHover, setIsHover] = useState(false);
 
@@ -217,7 +239,44 @@ const PaletteCard = ({
     }
   }, [palette, selectedThemeType]);
 
-  return (
+  const Colors = ({ shape }: { shape?: "circle" | "rectangle" }) => (
+    <div className="flex space-x-2">
+      <ColorSwatch
+        shape={shape}
+        isHover={isHover}
+        color={getThemeColor("primary", colors, true)}
+      />
+      <ColorSwatch
+        shape={shape}
+        isHover={isHover}
+        color={getThemeColor("secondary", colors, true)}
+      />
+      <ColorSwatch
+        shape={shape}
+        isHover={isHover}
+        className={cn("hidden sm:block", { block: showOnly })}
+        color={getThemeColor("background", colors, true)}
+      />
+    </div>
+  );
+
+  return showOnly ? (
+    <div
+      className="flex flex-col items-center gap-0.5 bg-muted-demo-foreground/20 p-1.5 px-3 rounded-lg"
+      onMouseEnter={() => setIsHover(true)}
+      onMouseLeave={() => setIsHover(false)}
+    >
+      <div className="flex flex-row items-center gap-4">
+        <h3 className="text-base sm:text-xl font-semibold text-foreground-demo truncate">
+          {palette.name
+            .split("-")
+            .map(x => x[0].toUpperCase() + x.slice(1))
+            .join(" ")}
+        </h3>
+        <Colors shape="rectangle" />
+      </div>
+    </div>
+  ) : (
     <div
       onClick={() => onPaletteSelected(palette)}
       onMouseEnter={() => setIsHover(true)}
@@ -227,7 +286,7 @@ const PaletteCard = ({
         isSelected && "bg-muted/20",
       )}
     >
-      <div className="flex justify-between items-start mb-2 ">
+      <div className="flex justify-between items-start mb-2">
         <h3 className="max-w-[80%] text-xs sm:text-sm font-semibold text-foreground truncate">
           {palette.name
             .split("-")
@@ -235,21 +294,7 @@ const PaletteCard = ({
             .join(" ")}
         </h3>
       </div>
-      <div className="flex space-x-2">
-        <ColorSwatch
-          isHover={isHover}
-          color={getThemeColor("primary", colors, true)}
-        />
-        <ColorSwatch
-          isHover={isHover}
-          color={getThemeColor("secondary", colors, true)}
-        />
-        <ColorSwatch
-          isHover={isHover}
-          className="hidden sm:block"
-          color={getThemeColor("background", colors, true)}
-        />
-      </div>
+      <Colors />
       {
         <div className="flex flex-row items-center justify-start mt-2 gap-2  text-foreground/40">
           <Eye className="h-3 w-3" />

@@ -1,5 +1,9 @@
 "use client";
 
+import {
+  ColorSwatch,
+  PaletteCard,
+} from "@/components/bottom-navbar/themes-dialog";
 import { CardsDemo } from "@/components/cards";
 import { DemoSidebar } from "@/components/cards/sidebar";
 import { Button } from "@/components/ui-demo/button";
@@ -11,7 +15,7 @@ import {
 } from "@/lib/features/theme/paletteSlice";
 import { LampDesk } from "@/lib/icons";
 import { cn } from "@/lib/utils";
-import { ThemeType } from "@/models/palette";
+import { ParsedPalette, ThemePalette, ThemeType } from "@/models/palette";
 import { useAnimation, motion } from "framer-motion";
 import { Moon, Sidebar, Sun } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
@@ -19,11 +23,13 @@ import { useEffect, useMemo, useState } from "react";
 const TIME_TO_CHANGE_THEME = 200;
 
 const Header = ({
+  selectedPalette,
   selectedThemeType,
   baseThemeType,
   stickyHeader,
   openSidebar,
 }: {
+  selectedPalette: ParsedPalette;
   selectedThemeType: ThemeType;
   baseThemeType: ThemeType;
   stickyHeader?: boolean;
@@ -81,7 +87,7 @@ const Header = ({
         {
           sticky: stickyHeader,
         },
-        "top-0 sm:top-0 w-full flex justify-center sm:justify-between bg-muted-demo items-center p-4 rounded-t-lg shadow-md sm:border-foreground-demo/40 z-20",
+        "top-0 sm:top-0 w-full flex justify-between bg-muted-demo items-center p-4 rounded-t-lg shadow-md sm:border-foreground-demo/40 z-20",
         {
           "border-b border-foreground-demo/30": baseThemeType === "dark",
         },
@@ -127,6 +133,13 @@ const Header = ({
           </Button>
         </motion.div>
       </div>
+      <PaletteCard
+        palette={selectedPalette}
+        isSelected
+        onPaletteSelected={() => {}}
+        selectedThemeType={selectedThemeType}
+        showOnly
+      />
       <div
         onClick={() => {
           handleThemeChange("text");
@@ -191,6 +204,7 @@ export function CardsDemoContainer({
         className="w-full h-full flex flex-col gap-0 relative"
       >
         <Header
+          selectedPalette={selectedPalette}
           selectedThemeType={selectedThemeType}
           baseThemeType={baseThemeType}
           stickyHeader={stickyHeader}
