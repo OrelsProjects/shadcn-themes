@@ -1,10 +1,6 @@
 // app/[slug]/layout.tsx
 import type { Metadata } from "next";
-import fs from "fs/promises";
-import path from "path";
 import matter from "gray-matter";
-import loggerServer from "@/loggerServer";
-import { Logger } from "@/logger";
 
 // 1. Define dynamic SEO-related metadata based on markdown frontmatter
 export async function generateMetadata({
@@ -15,12 +11,11 @@ export async function generateMetadata({
   const { slug } = params;
 
   // Read the markdown file
-  const blogsPath =
-    process.env.NODE_ENV === "development" ? "/public/blogs" : "/blogs";
-  const filePath = path.join(process.cwd(), blogsPath, `${slug}.md`);
-  loggerServer.info(`Reading file: ${filePath}`);
+  const url = process.env.NEXT_PUBLIC_APP_URl + "/resources/blogs/" + slug;
+
   try {
-    const fileContents = await fs.readFile(filePath, "utf-8");
+    // get file from the url.
+    const fileContents = await fetch(url).then(res => res.text());
     const { data } = matter(fileContents);
 
     // Extract metadata from frontmatter
@@ -53,9 +48,7 @@ export async function generateMetadata({
     };
 
     return metadata;
-  } catch (error) {
-    Logger.error(`Error reading file: ${filePath}`);
-  }
+  } catch (error) {}
 }
 
 // 2. Optional: Add a JSON-LD script for structured data
