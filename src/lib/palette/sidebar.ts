@@ -173,15 +173,12 @@ export function ensureContrast(
  * between `minRatio` and `maxRatio` if possible.
  *
  * We'll do a binary search for L in [0..100], preserving H & S.
- *
- * If we cannot get the ratio within that range (e.g. saturations or hues
- * are extreme), we'll settle for the closest ratio we can achieve.
  */
 function ensureModerateContrast(
   colorHSL: [number, number, number],
   bgHSL: [number, number, number],
-  minRatio: number, // e.g. 2.0
-  maxRatio: number, // e.g. 5.0
+  minRatio: number, // e.g. 4.5
+  maxRatio: number, // e.g. 7.0
   maxSteps = 10,
 ): [number, number, number] {
   const colBg = toColord(bgHSL);
@@ -189,12 +186,11 @@ function ensureModerateContrast(
   let col = toColord(colorHSL);
   const { h, s } = col.toHsl();
   let bestColor = col;
-  let bestDistance = Number.MAX_VALUE; // distance from [minRatio..maxRatio]
+  let bestDistance = Number.MAX_VALUE; // distance from the target [min..max]
 
-  // If we already land in [min..max], just return.
   const initialContrast = col.contrast(colBg);
   if (initialContrast >= minRatio && initialContrast <= maxRatio) {
-    return colorHSL;
+    return colorHSL; // already in the sweet spot
   }
 
   // We'll do a binary search on L in [0..100]
@@ -206,42 +202,40 @@ function ensureModerateContrast(
     const candidate = new Colord({ h, s, l: mid });
     const cRatio = candidate.contrast(colBg);
 
-    // Check how far from [minRatio..maxRatio]
+    // Determine how far we are from [minRatio..maxRatio]
     let distance = 0;
     if (cRatio < minRatio) distance = minRatio - cRatio;
     else if (cRatio > maxRatio) distance = cRatio - maxRatio;
 
-    // If it's better than our previous best, store it
+    // If it's better than what we had, store it
     if (distance < bestDistance) {
       bestDistance = distance;
       bestColor = candidate;
     }
 
-    // If cRatio is too small, we need to move further from background =>
-    //   if background is light => we need to lower L
-    //   if background is dark  => we need to raise L
-    // If cRatio is too large, we do the opposite.
-    // If cRatio is in [min..max], let's keep searching anyway
-    //   to see if we can get even closer to the *middle* if you want.
     const bgIsLight = colBg.isLight();
+
+    // If cRatio is below min, we move away from background
+    // If above max, we move closer to background
+    // If in [min..max], we can break or keep going. Let’s break to keep it simple.
     if (cRatio < minRatio) {
-      // Not enough contrast => move away from background
       if (bgIsLight) {
-        high = mid; // go darker
+        // background is light => we need to go darker
+        high = mid;
       } else {
-        low = mid; // go lighter
+        // background is dark => go lighter
+        low = mid;
       }
     } else if (cRatio > maxRatio) {
-      // Too much contrast => move closer to background
       if (bgIsLight) {
-        low = mid; // lighten color
+        // too much contrast => lighten color
+        low = mid;
       } else {
-        high = mid; // darken color
+        // too much contrast => darken color
+        high = mid;
       }
     } else {
-      // cRatio is in [min..max]. We could break right here or
-      // keep searching in hopes to find an even closer middle if you like.
-      // Let’s break for simplicity’s sake:
+      // cRatio is in [min..max], so we’re good
       bestDistance = 0;
       bestColor = candidate;
       break;
@@ -255,48 +249,50 @@ export function buildSidebarTheme(
   theme: BasePalette,
   type: ThemeType,
 ): SidebarTheme {
-  const factor = type === "dark" ? 0.08 : 0.03;
+  const factor = type === "dark" ? 0.048 : 0.03;
 
-  // Step 1: Start with a slightly darkened background
+  // Slightly darken the background
   const sidebarBackground = darkenHSL(theme.background, factor);
 
-  // Step 2: A medium-contrast “foreground” vs background
-  //   This is for your normal text, so we might want a *bit* more standard contrast
-  //   (like 3.5..7.0). Or you can skip the upper bound if you want high contrast.
-  //   Alternatively, you might keep it as is, just ensure it's at least 2.0 from the background
-  //   but not above 7.0, for example:
-  const sidebarForegroundBase = darkenHSL(theme.foreground, factor);
+  //
+  // 1) Foreground: Ensure at least 4.5 but max 7.0 contrast
+  //
+  //   a) Start by darkening or lightening the original foreground:
+  const fgBase = darkenHSL(theme.foreground, factor);
+  //   b) Then ensure it's between 4.5..7.0 vs. the background
   const sidebarForeground = ensureModerateContrast(
-    sidebarForegroundBase,
+    fgBase,
     sidebarBackground,
-    3.0, // min
-    7.0, // max
+    5.2,
+    7.0,
   );
 
-  // Step 3: For accent, we darken from theme.accent.
-  //   Then we ensure it’s *visible* (but not extreme) over sidebarBackground
-  const accentDarkened = darkenHSL(theme.accent, factor);
+  //
+  // 2) Accent: visible vs. background, but not extreme
+  //
+  //   a) Darken accent
+  const accentBase = darkenHSL(theme.accent, factor);
+  //   b) Ensure 2..5 contrast vs. background => "visible but not super-high"
   const sidebarAccent = ensureModerateContrast(
-    accentDarkened,
+    accentBase,
     sidebarBackground,
-    1.1, // min contrast with background
-    3.2, // max contrast with background
+    2.0,
+    5.0,
   );
-
-  // Step 4: accent-foreground must be fully readable on the accent itself.
-  //   So let's do a normal “ensureContrast(..., min=4.5)."
-  //   i.e. no upper bound for text readability.
+  //   c) accent-foreground => standard "ensureContrast" with min=4.5
   const accentForegroundBase = theme["accent-foreground"];
   const sidebarAccentForeground = ensureContrast(
     accentForegroundBase,
     sidebarAccent,
-    4.5, // standard WCAG ratio
+    4.5,
   );
 
-  // Primary for the sidebar
-  const primaryDarkened = darkenHSL(theme.primary, factor);
+  //
+  // 3) Primary: same approach as accent
+  //
+  const primaryBase = darkenHSL(theme.primary, factor);
   const sidebarPrimary = ensureModerateContrast(
-    primaryDarkened,
+    primaryBase,
     sidebarBackground,
     2.0,
     5.0,
@@ -307,10 +303,15 @@ export function buildSidebarTheme(
     4.5,
   );
 
-  // Border, ring => probably no text usage, so we can just darken them.
+  //
+  // 4) Border & ring => not text. Just darken them, or ensure a minimal contrast if you want
+  //
   const sidebarBorder = darkenHSL(theme.border, factor);
   const sidebarRing = darkenHSL(theme.ring, factor);
 
+  //
+  // Finally, return:
+  //
   return {
     "sidebar-background": sidebarBackground,
     "sidebar-foreground": sidebarForeground,
