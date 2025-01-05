@@ -4,6 +4,7 @@ import fs from "fs/promises";
 import path from "path";
 import matter from "gray-matter";
 import loggerServer from "@/loggerServer";
+import { Logger } from "@/logger";
 
 // 1. Define dynamic SEO-related metadata based on markdown frontmatter
 export async function generateMetadata({
@@ -18,39 +19,43 @@ export async function generateMetadata({
     process.env.NODE_ENV === "development" ? "/public/blogs" : "/blogs";
   const filePath = path.join(process.cwd(), blogsPath, `${slug}.md`);
   loggerServer.info(`Reading file: ${filePath}`);
-  const fileContents = await fs.readFile(filePath, "utf-8");
-  const { data } = matter(fileContents);
+  try {
+    const fileContents = await fs.readFile(filePath, "utf-8");
+    const { data } = matter(fileContents);
 
-  // Extract metadata from frontmatter
-  const metadata = {
-    title: data.title,
-    description: data.excerpt,
-    keywords: ["Accessibility", slug, "WCAG", "A11y"],
-    openGraph: {
+    // Extract metadata from frontmatter
+    const metadata = {
       title: data.title,
       description: data.excerpt,
-      url: `${process.env.NEXT_PUBLIC_APP_URL}/${slug}`,
-      siteName: "Shadcn Themes",
-      images: [
-        {
-          url: `${process.env.NEXT_PUBLIC_APP_URL}/og-image-${slug}.png`,
-          width: 1200,
-          height: 630,
-        },
-      ],
-      locale: "en_US",
-      type: "website",
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: data.title,
-      description: data.excerpt,
-      images: [`${process.env.NEXT_PUBLIC_APP_URL}/og-image-${slug}.png`],
-      creator: "@YourTwitterHandle",
-    },
-  };
+      keywords: ["Accessibility", slug, "WCAG", "A11y"],
+      openGraph: {
+        title: data.title,
+        description: data.excerpt,
+        url: `${process.env.NEXT_PUBLIC_APP_URL}/${slug}`,
+        siteName: "Shadcn Themes",
+        images: [
+          {
+            url: `${process.env.NEXT_PUBLIC_APP_URL}/og-image-${slug}.png`,
+            width: 1200,
+            height: 630,
+          },
+        ],
+        locale: "en_US",
+        type: "website",
+      },
+      twitter: {
+        card: "summary_large_image",
+        title: data.title,
+        description: data.excerpt,
+        images: [`${process.env.NEXT_PUBLIC_APP_URL}/og-image-${slug}.png`],
+        creator: "@YourTwitterHandle",
+      },
+    };
 
-  return metadata;
+    return metadata;
+  } catch (error) {
+    Logger.error(`Error reading file: ${filePath}`);
+  }
 }
 
 // 2. Optional: Add a JSON-LD script for structured data

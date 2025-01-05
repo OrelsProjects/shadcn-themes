@@ -124,7 +124,7 @@ export default function BlogPost({ params }: { params: { slug: string } }) {
       }
     }
 
-    fetchMarkdown();
+    fetchMarkdown().catch(() => setError(true));
   }, [params.slug]);
 
   // ============== 2) Manual Scroll-Spy on scroll ==============
