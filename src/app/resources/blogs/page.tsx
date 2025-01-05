@@ -164,7 +164,7 @@ export default function ResourcesPage() {
       <footer className="bg-muted py-8 mt-20">
         <div className="container text-center text-muted-foreground">
           <p>
-            &copy; {new Date().getFullYear()} Your Company. All rights reserved.
+            &copy; {new Date().getFullYear()} Shadcn Themes. All rights reserved.
           </p>
         </div>
       </footer>
