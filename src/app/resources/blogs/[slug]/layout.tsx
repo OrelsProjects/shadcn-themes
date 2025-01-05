@@ -14,7 +14,9 @@ export async function generateMetadata({
   const { slug } = params;
 
   // Read the markdown file
-  const filePath = path.join(process.cwd(), "/public/blogs", `${slug}.md`);
+  const blogsPath =
+    process.env.NODE_ENV === "development" ? "/public/blogs" : "/blogs";
+  const filePath = path.join(process.cwd(), blogsPath, `${slug}.md`);
   loggerServer.info(`Reading file: ${filePath}`);
   const fileContents = await fs.readFile(filePath, "utf-8");
   const { data } = matter(fileContents);
@@ -86,7 +88,7 @@ export default function Layout({
         rel="canonical"
         href={`${process.env.NEXT_PUBLIC_APP_URL}/${slug}`}
       />
-      {/* <StructuredData metadata={generateMetadata({ params })} /> */}
+      <StructuredData metadata={generateMetadata({ params })} />
       <main>{children}</main>
     </>
   );

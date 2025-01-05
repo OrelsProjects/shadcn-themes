@@ -1,7 +1,7 @@
 "use client";
 
 import "highlight.js/styles/atom-one-dark.css";
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { formatDistanceToNow } from "date-fns";
 import { Marked } from "marked";
@@ -10,7 +10,7 @@ import matter from "gray-matter";
 import hljs from "highlight.js";
 import Image from "next/image";
 
-import { CalendarIcon, ClockIcon, ArrowLeft, ArrowRight } from "lucide-react";
+import { CalendarIcon, ClockIcon, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import CTA from "@/app/resources/contrast-checker/cta";
 
