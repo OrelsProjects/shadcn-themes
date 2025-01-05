@@ -59,7 +59,7 @@ export default function BlogPost({ params }: { params: { slug: string } }) {
   useEffect(() => {
     async function fetchMarkdown() {
       try {
-        const res = await fetch(`/blogs/${params.slug}.md`);
+        const res = await fetch(`/blogs-content/${params.slug}.md`);
         if (!res.ok) throw new Error("Markdown file not found");
 
         const rawMd = await res.text();

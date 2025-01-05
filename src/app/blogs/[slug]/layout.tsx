@@ -13,7 +13,7 @@ export async function generateMetadata({
   const { slug } = params;
 
   // Read the markdown file
-  const filePath = path.join(process.cwd(), "/public/blogs", `${slug}.md`);
+  const filePath = path.join(process.cwd(), "/public/blogs-content", `${slug}.md`);
   const fileContents = await fs.readFile(filePath, "utf-8");
   const { data } = matter(fileContents);
 
