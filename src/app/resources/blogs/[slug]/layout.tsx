@@ -1,6 +1,7 @@
 // app/[slug]/layout.tsx
 import type { Metadata } from "next";
 import matter from "gray-matter";
+import loggerServer from "@/loggerServer";
 
 // 1. Define dynamic SEO-related metadata based on markdown frontmatter
 export async function generateMetadata({
@@ -48,7 +49,10 @@ export async function generateMetadata({
     };
 
     return metadata;
-  } catch (error) {}
+  } catch (error) {
+    console.error("Error reading file", error);
+    loggerServer.error("Error reading file", "", { data: error });
+  }
 }
 
 // 2. Optional: Add a JSON-LD script for structured data
