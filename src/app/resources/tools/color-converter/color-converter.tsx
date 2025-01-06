@@ -9,8 +9,15 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useState, useCallback } from "react";
-import { HexColorPicker } from "react-colorful";
+import dynamic from "next/dynamic";
 
+// Dynamically import HexColorPicker
+const HexColorPicker = dynamic(
+  () => import("react-colorful").then(mod => mod.HexColorPicker),
+  {
+    ssr: false,
+  },
+);
 export default function ColorConverter() {
   const [color, setColor] = useState({
     rgb: "rgb(255, 0, 0)",
