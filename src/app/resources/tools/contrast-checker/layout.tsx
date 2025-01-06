@@ -1,6 +1,5 @@
 // app/contrast-checker/layout.tsx
-import CTA from "@/app/resources/contrast-checker/cta";
-import Theme from "@/app/resources/blogs/Theme";
+import CTA from "@/app/resources/tools/contrast-checker/cta";
 import type { Metadata } from "next";
 
 // 1. Define all SEO-related metadata
@@ -13,7 +12,7 @@ export const metadata: Metadata = {
     title: "Contrast Checker – Accessibility Tool",
     description:
       "Easily check the contrast ratio between background and foreground colors to ensure WCAG compliance.",
-    url: "https://www.shadcn.studio/resources/contrast-checker",
+    url: "https://www.shadcn.studio/resources/tools/contrast-checker",
     siteName: "Shadcn Themes",
     images: [
       {
@@ -41,7 +40,7 @@ function StructuredData() {
     "@context": "https://schema.org",
     "@type": "WebApplication",
     name: "Contrast Checker – Accessibility Tool",
-    url: "https://www.shadcn.studio/resources/contrast-checker",
+    url: "https://www.shadcn.studio/resources/tools/contrast-checker",
     operatingSystem: "All",
     applicationCategory: "DesignApplication",
     description:
@@ -62,14 +61,11 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       {/* If you want an explicit canonical link, you can add it here */}
       <link
         rel="canonical"
-        href="https://www.shadcn.studio/resources/contrast-checker"
+        href="https://www.shadcn.studio/resources/tools/contrast-checker"
       />
       <StructuredData />
 
-      <Theme>
-        <main>{children}</main>
-      </Theme>
-      {/* CTA, etc. */}
+      <main>{children}</main>
       <CTA className="max-md:hidden mb-8" />
     </>
   );

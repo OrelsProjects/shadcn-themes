@@ -123,38 +123,6 @@ const parseToHex = (value: string) => {
   }
 };
 
-const MobileSidebar = () => {
-  return (
-    <Sheet>
-      <SheetTrigger asChild>
-        <Button variant="ghost" size="icon" className="md:hidden">
-          <Menu className="h-5 w-5" />
-          <span className="sr-only">Toggle menu</span>
-        </Button>
-      </SheetTrigger>
-      <SheetContent side="left" className="w-[300px] sm:w-[400px]">
-        <nav className="flex flex-col gap-4">
-          <Link
-            href="/resources/blogs"
-            className="flex items-center gap-2 py-2"
-          >
-            <ArrowLeft className="h-5 w-5" />
-            <span>Back to Blogs</span>
-          </Link>
-          <Link href="/" className="flex items-center gap-2 py-2">
-            <Logo withText={false} className="w-5 h-5" />
-            <span>Generate Shadcn Themes</span>
-          </Link>
-          <div className="flex items-center gap-2 py-2">
-            <PaintBucket className="h-5 w-5" />
-            <span>Contrast Checker</span>
-          </div>
-        </nav>
-      </SheetContent>
-    </Sheet>
-  );
-};
-
 const ContrastChecker = () => {
   const [bgHex, setBgHex] = useState("#b9b9b9");
   const [fgHex, setFgHex] = useState("#000000");
@@ -186,25 +154,6 @@ const ContrastChecker = () => {
 
   return (
     <div className="h-full max-h-screen flex flex-col items-center justify-start md:justify-center gap-2 bg-background p-4">
-      <div className="w-full fixed top-0 py-4 z-50 flex justify-start items-center bg-background/30 backdrop-blur-lg px-8">
-        <div className="absolute inset-0 transition-transform duration-300 z-10 flex justify-center items-center h-14">
-          <h1 className="text-2xl font-bold">Contrast Checker</h1>
-        </div>
-        <Button
-          variant="ghost"
-          className="relative flex justify-center w-fit hover:bg-transparent px-0"
-          asChild
-        >
-          <Link href="/">
-            <Logo height={36} width={36} textClassName="text-xl" />
-          </Link>
-        </Button>
-      </div>
-      {/* Mobile Sidebar */}
-      <div className="fixed top-2 left-2 z-50 md:hidden">
-        <MobileSidebar />
-      </div>
-
       <div className="flex flex-col md:flex-row gap-2 md:gap-8 w-full max-w-4xl mt-12">
         {/* BACKGROUND COLOR PICKER */}
         <div className="flex-1 flex flex-col justify-center items-center">

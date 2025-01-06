@@ -6,7 +6,7 @@ publishedAt: "2024-12-22T12:00:00Z"
 readingTime: "8 min read"
 author:
   name: "Orel Zilberman"
-  role: "Founter of Shadcn Themes"
+  role: "Founder of Shadcn Themes"
   avatar: "/founder-image.jpg"
 ---
 # Why choose Shadcn UI

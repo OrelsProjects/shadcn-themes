@@ -6,7 +6,7 @@ publishedAt: "2024-12-15T12:00:00Z"
 readingTime: "8 min read"
 author:
   name: "Orel Zilberman"
-  role: "Founter of Shadcn Themes"
+  role: "Founder of Shadcn Themes"
   avatar: "/founder-image.jpg"
 ---
 
@@ -72,7 +72,8 @@ Represents sophistication, authority, and timelessness.
 ## Tools for Choosing and Testing Website Colors
 
 - [Shadcn Themes](https://www.shadcn.studio/): Generate and refine palettes for shadcn.
-- <a href="https://www.shadcn.studio/resources/contrast-checker" target="_blank" rel="noopener noreferrer">Contrast Checkers</a>: Ensure text readability and compliance with WCAG.
+- <a href="https://www.shadcn.studio/resources/tools/contrast-checker" target="_blank">Contrast Checkers</a>: Ensure text readability and compliance with WCAG.
+- <a href="https://www.shadcn.studio/resources/tools/color-converter" target="_blank">Color Converter</a>: Convert colors between different color spaces.
 
 
 ## Best Practices for Implementing Colors in Web Design

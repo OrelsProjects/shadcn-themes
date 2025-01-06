@@ -1,4 +1,4 @@
-import Theme from "@/app/resources/blogs/Theme";
+import Theme from "@/app/resources/Theme";
 import { Metadata } from "next";
 import React from "react";
 

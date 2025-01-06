@@ -58,7 +58,7 @@ export default function ResourcesPage() {
               <li>
                 <Link
                   href="#blog-posts"
-                  className="text-muted-foreground hover:text-primary transition-colors"
+                  className="text-muted-foreground hover:text-primary transition-colors max-md:hidden"
                 >
                   Blog Posts
                 </Link>
@@ -68,7 +68,8 @@ export default function ResourcesPage() {
                   href="#our-tools"
                   className="text-muted-foreground hover:text-primary transition-colors"
                 >
-                  Our Tools
+                  <span className="max-md:hidden">Our Tools</span>
+                  <span className="md:hidden">Tools</span>
                 </Link>
               </li>
             </ul>
@@ -138,7 +139,7 @@ export default function ResourcesPage() {
 
           <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
             <Card className="overflow-hidden transition-all hover:shadow-lg hover:-translate-y-1">
-              <Link href="/resources/contrast-checker">
+              <Link href="/resources/tools/contrast-checker">
                 <CardHeader>
                   <CardTitle className="flex items-center space-x-2">
                     <Paintbrush className="w-6 h-6" />
@@ -156,7 +157,39 @@ export default function ResourcesPage() {
                 </CardContent>
               </Link>
             </Card>
-            {/* Add more tool cards here as needed */}
+            <Card className="overflow-hidden transition-all hover:shadow-lg hover:-translate-y-1">
+              <Link href="/resources/tools/color-converter">
+                <CardHeader>
+                  <CardTitle className="flex items-center space-x-2">
+                    <svg
+                      viewBox="0 0 24 24"
+                      className="w-6 h-6"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                    >
+                      <circle cx="12" cy="12" r="10" />
+                      <path d="M12 2v20M2 12h20" />
+                    </svg>
+                    <span>Color Converter</span>
+                  </CardTitle>
+                  <CardDescription>
+                    Convert colors between HEX, RGB, HSL, and more. Perfect for
+                    designers and developers.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid grid-cols-3 gap-2 aspect-video">
+                    <div className="bg-[#FF5757] rounded-md"></div>
+                    <div className="bg-[#57FF57] rounded-md"></div>
+                    <div className="bg-[#5757FF] rounded-md"></div>
+                    <div className="bg-[#FFD700] rounded-md"></div>
+                    <div className="bg-[#FF57FF] rounded-md"></div>
+                    <div className="bg-[#57FFFF] rounded-md"></div>
+                  </div>
+                </CardContent>
+              </Link>
+            </Card>
           </div>
         </section>
       </main>
@@ -164,7 +197,8 @@ export default function ResourcesPage() {
       <footer className="bg-muted py-8 mt-20">
         <div className="container text-center text-muted-foreground">
           <p>
-            &copy; {new Date().getFullYear()} Shadcn Themes. All rights reserved.
+            &copy; {new Date().getFullYear()} Shadcn Themes. All rights
+            reserved.
           </p>
         </div>
       </footer>

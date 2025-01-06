@@ -6,7 +6,7 @@ publishedAt: "2024-12-16T12:00:00Z"
 readingTime: "10 min read"
 author:
   name: "Orel Zilberman"
-  role: "Founter of Shadcn Themes"
+  role: "Founder of Shadcn Themes"
   avatar: "/founder-image.jpg"
 ---
 # How to Implement Dark Mode in Next.js: A Comprehensive Guide
