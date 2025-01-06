@@ -1,6 +1,6 @@
 "use client";
 
-import CTA from "@/app/resources/tools/contrast-checker/cta";
+import CTA from "@/app/resources/tools/cta";
 import Logo from "@/components/logo";
 import { Button } from "@/components/ui/button";
 import { Crosshair, PaintBucket } from "lucide-react";

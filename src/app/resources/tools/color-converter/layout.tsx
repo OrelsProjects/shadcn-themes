@@ -1,11 +1,18 @@
-import CTA from "@/app/resources/tools/contrast-checker/cta";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Color Converter – Color Format Conversion Tool",
   description:
     "Convert colors between RGB, HSL, HEX, and OKLCH formats. A powerful tool for designers and developers to transform color values across different color spaces.",
-  keywords: ["Color Converter", "RGB", "HSL", "HEX", "OKLCH", "Color Space", "Color Format"],
+  keywords: [
+    "Color Converter",
+    "RGB",
+    "HSL",
+    "HEX",
+    "OKLCH",
+    "Color Space",
+    "Color Format",
+  ],
   openGraph: {
     title: "Color Converter – Color Format Conversion Tool",
     description:
@@ -61,7 +68,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       />
       <StructuredData />
 
-      <main>{children}</main>
+      {children}
     </>
   );
-} 
+}

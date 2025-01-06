@@ -12,7 +12,7 @@ import Image from "next/image";
 
 import { CalendarIcon, ClockIcon, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import CTA from "@/app/resources/tools/contrast-checker/cta";
+import CTA from "@/app/resources/tools/cta";
 import { TWITTER_URL } from "@/lib/consts";
 
 interface Frontmatter {

@@ -1,5 +1,5 @@
 // app/contrast-checker/layout.tsx
-import CTA from "@/app/resources/tools/contrast-checker/cta";
+import CTA from "@/app/resources/tools/cta";
 import type { Metadata } from "next";
 
 // 1. Define all SEO-related metadata
@@ -65,8 +65,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       />
       <StructuredData />
 
-      <main>{children}</main>
-      <CTA className="max-md:hidden mb-8" />
+      {children}
     </>
   );
 }
