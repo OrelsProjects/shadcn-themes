@@ -17,7 +17,7 @@ const Header = () => {
         <Logo />
         <motion.div whileHover={{ x: 5 }} className="flex flex-col">
           <Link
-            href="/resources/blogs"
+            href="/resources"
             className="text-foreground/60 hover:text-foreground/80"
             aria-label="Read more about Shadcn themes and components"
           >

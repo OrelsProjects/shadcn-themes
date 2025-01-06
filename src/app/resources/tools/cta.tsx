@@ -41,7 +41,7 @@ export default function CTA({className}: {className?: string}) {
           </Link>
         </Button>
         <Link
-          href={"/resources/blogs"}
+          href={"/resources"}
           className="text-sm text-muted-foreground font-thin hover:underline"
         >
           Learn more about {process.env.NEXT_PUBLIC_APP_NAME}

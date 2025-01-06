@@ -192,7 +192,7 @@ export default function BlogPost({ params }: { params: { slug: string } }) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center">
         <h1 className="text-2xl mb-4">404 – Blog not found</h1>
-        <Link href="/resources/blogs">
+        <Link href="/resources">
           <Button variant="outline">Go back to Blogs</Button>
         </Link>
       </div>
@@ -217,7 +217,7 @@ export default function BlogPost({ params }: { params: { slug: string } }) {
         }`}
       >
         <div className="container mx-auto px-4 py-2 flex items-center justify-between">
-          <Link href="/resources/blogs" passHref>
+          <Link href="/resources" passHref>
             <Button variant="outline" size="sm" className="flex items-center">
               <ArrowLeft className="mr-2 h-4 w-4" /> Back to Blogs
             </Button>
@@ -252,7 +252,7 @@ export default function BlogPost({ params }: { params: { slug: string } }) {
 
       {/* Main */}
       <main className="flex-1 container mx-auto px-4 py-16">
-        <Link href="/resources/blogs" passHref className="inline-block mb-8">
+        <Link href="/resources" passHref className="inline-block mb-8">
           <Button variant="outline" size="sm" className="flex items-center">
             <ArrowLeft className="mr-2 h-4 w-4" /> Back to Blogs
           </Button>
