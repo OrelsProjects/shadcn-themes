@@ -2,7 +2,7 @@
 slug: "nextjs-seo-blog-structure"
 title: "Building an SEO-Optimized Blog Structure in Next.js"
 excerpt: "Learn how to create a performant, SEO-friendly blog structure in Next.js with proper metadata, dynamic routing, and markdown support."
-publishedAt: "2024-03-20T12:00:00Z"
+publishedAt: "2025-01-07T07:00:00Z"
 readingTime: "10 min read"
 author:
   name: "Orel Zilberman"
