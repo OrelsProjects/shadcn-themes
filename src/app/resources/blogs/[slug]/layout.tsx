@@ -43,7 +43,7 @@ export async function generateMetadata({
         card: "summary_large_image",
         title: data.title,
         description: data.excerpt,
-        images: [`${process.env.NEXT_PUBLIC_APP_URL}/og-image-${slug}.png`],
+        images: [`${process.env.NEXT_PUBLIC_OG_IMAGES_URL}/blogs/${slug}.png`],
         creator: "@YourTwitterHandle",
       },
     };
