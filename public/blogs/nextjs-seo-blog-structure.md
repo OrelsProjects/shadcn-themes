@@ -14,6 +14,72 @@ author:
 
 Creating a blog with Next.js isn't just about displaying content—it's about building a structure that search engines love and users enjoy. In this guide, we'll walk through creating an SEO-optimized blog structure that's both performant and maintainable.
 
+## Requirements
+
+### Core Dependencies
+```json
+{
+  "dependencies": {
+    "next": "^14.0.0",
+    "react": "^18",
+    "react-dom": "^18",
+    "gray-matter": "^4.0.3",
+    "marked": "^15.0.4",
+    "marked-highlight": "^2.2.1",
+    "date-fns": "^3.6.0"
+  },
+  "devDependencies": {
+    "typescript": "^5",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "@types/node": "^20",
+    "autoprefixer": "^10.0.1",
+    "postcss": "^8",
+    "tailwindcss": "^3.3.0",
+    "@tailwindcss/typography": "^0.5.15"
+  }
+}
+```
+
+### Setup Steps
+
+1. Create a new Next.js project with TypeScript and Tailwind:
+```bash
+npx create-next-app@latest my-blog --typescript --tailwind --app
+```
+
+2. Install additional dependencies:
+```bash
+npm install gray-matter marked marked-highlight date-fns
+npm install -D @tailwindcss/typography
+```
+
+3. Update your `tailwind.config.ts`:
+```typescript
+import type { Config } from "tailwindcss";
+
+const config: Config = {
+  content: [
+    "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+  ],
+  theme: {
+    extend: {},
+  },
+  plugins: [require("@tailwindcss/typography")],
+};
+export default config;
+```
+
+4. Create the blog directory structure:
+```bash
+mkdir -p public/blogs
+mkdir -p src/app/resources/blogs/[slug]
+```
+
+Now you're ready to start implementing the blog functionality!
+
 ## Essential Dependencies
 
 First, let's set up our project with the necessary packages:
@@ -244,21 +310,58 @@ export default function BlogsPage() {
 }
 ```
 
-This provides a basic blog listing page that:
-- Reads all markdown files from the `public/blogs` directory
-- Extracts metadata using `gray-matter`
-- Sorts posts by date (newest first)
-- Displays them in a responsive grid
+## 5. Required Styles
 
-Feel free to customize the design to match your needs. You might want to add:
-- Pagination for large numbers of posts
-- Category/tag filtering
-- Search functionality
-- Featured posts section
-- Different card layouts or list views
-- Author avatars and bios
-- Reading time indicators
-- View counts or other engagement metrics
+Add these styles to your `globals.css`:
+
+```css
+/* Basic styling for blog content */
+.prose h1,
+.prose h2,
+.prose h3,
+.prose h4,
+.prose h5,
+.prose h6 {
+  color: var(--primary);
+  font-weight: bold;
+}
+
+.prose a {
+  color: var(--primary);
+  text-decoration: none;
+  transition:
+    color 0.3s ease,
+    text-decoration 0.3s ease;
+}
+
+.prose a:hover {
+  text-decoration: underline;
+
+ .prose {
+    --primary: hsl(39 80% 50%);
+ }
+}
+```
+
+Make sure to set up your `tailwind.config.js` to include the typography plugin:
+
+```javascript
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+  content: ["./src/**/*.{js,ts,jsx,tsx}"],
+  theme: {
+    extend: {
+    },
+  },
+  plugins: [require("@tailwindcss/typography")],
+};
+```
+
+These styles provide:
+- Typography styling for markdown content
+- Color variables for consistent theming
+- Proper link and heading styles
+- Basic responsive design utilities
 
 ## Key SEO Features
 
