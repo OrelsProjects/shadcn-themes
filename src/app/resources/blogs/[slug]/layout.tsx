@@ -31,7 +31,7 @@ export async function generateMetadata({
         siteName: "Shadcn Themes",
         images: [
           {
-            url: `${process.env.NEXT_PUBLIC_APP_URL}/og-image-${slug}.png`,
+            url: `${process.env.NEXT_PUBLIC_OG_IMAGES_URL}/blogs/${slug}.png`,
             width: 1200,
             height: 630,
           },
