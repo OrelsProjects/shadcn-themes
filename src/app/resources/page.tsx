@@ -190,6 +190,100 @@ export default function ResourcesPage() {
                 </CardContent>
               </Link>
             </Card>
+            <Card className="overflow-hidden transition-all hover:shadow-lg hover:-translate-y-1">
+              <Link href="/resources/tools/character-counter">
+                <CardHeader>
+                  <CardTitle className="flex items-center space-x-2">
+                    <svg
+                      viewBox="0 0 24 24"
+                      className="w-6 h-6"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                    >
+                      <path d="M4 7V4h16v3M4 20v-3h16v3M9 4v16M15 4v16" />
+                    </svg>
+                    <span>Character Counter</span>
+                  </CardTitle>
+                  <CardDescription>
+                    Optimize content length for SEO and social media. Check character limits for various platforms.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="aspect-video bg-muted rounded-md p-4 flex flex-col justify-center items-center space-y-2">
+                    <div className="w-full h-2 bg-background rounded-full overflow-hidden">
+                      <div className="w-3/4 h-full bg-primary"></div>
+                    </div>
+                    <div className="text-sm text-muted-foreground">
+                      Meta Description: 120/160
+                    </div>
+                  </div>
+                </CardContent>
+              </Link>
+            </Card>
+            <Card className="overflow-hidden transition-all hover:shadow-lg hover:-translate-y-1">
+              <Link href="/resources/tools/word-counter">
+                <CardHeader>
+                  <CardTitle className="flex items-center space-x-2">
+                    <svg
+                      viewBox="0 0 24 24"
+                      className="w-6 h-6"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                    >
+                      <path d="M12 20V4M4 12h16M7 8h10M7 16h10" />
+                    </svg>
+                    <span>Word Counter</span>
+                  </CardTitle>
+                  <CardDescription>
+                    Analyze text with detailed statistics including word count, reading time, and more.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="aspect-video bg-muted rounded-md p-4 grid grid-cols-2 gap-2">
+                    <div className="flex flex-col items-center justify-center border rounded-md p-2">
+                      <div className="text-2xl font-bold text-primary">123</div>
+                      <div className="text-xs text-muted-foreground">Words</div>
+                    </div>
+                    <div className="flex flex-col items-center justify-center border rounded-md p-2">
+                      <div className="text-2xl font-bold text-primary">1m</div>
+                      <div className="text-xs text-muted-foreground">Read Time</div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Link>
+            </Card>
+            <Card className="overflow-hidden transition-all hover:shadow-lg hover:-translate-y-1">
+              <Link href="/resources/tools/responsive-tester">
+                <CardHeader>
+                  <CardTitle className="flex items-center space-x-2">
+                    <svg
+                      viewBox="0 0 24 24"
+                      className="w-6 h-6"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                    >
+                      <rect x="2" y="3" width="20" height="14" rx="2" ry="2" />
+                      <line x1="8" y1="21" x2="16" y2="21" />
+                      <line x1="12" y1="17" x2="12" y2="21" />
+                    </svg>
+                    <span>Responsive Tester</span>
+                  </CardTitle>
+                  <CardDescription>
+                    Test your website&apos;s responsiveness across different device sizes instantly.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="aspect-video bg-muted rounded-md p-4 flex items-center justify-center gap-4">
+                    <div className="h-full aspect-[9/16] bg-primary/20 rounded-md"></div>
+                    <div className="h-full aspect-[4/3] bg-primary/30 rounded-md"></div>
+                    <div className="h-full aspect-[16/9] bg-primary/40 rounded-md"></div>
+                  </div>
+                </CardContent>
+              </Link>
+            </Card>
           </div>
         </section>
       </main>

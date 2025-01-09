@@ -4,16 +4,27 @@ import Logo from "@/components/logo";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export default function Navbar() {
   const pathname = usePathname();
-  const title = pathname
-    .split("/")
-    .pop()
-    ?.replace(/-/g, " ")
-    .split(" ")
-    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(" ");
+  const [title, setTitle] = useState(
+    pathname
+      .split("/")
+      .pop()
+      ?.replace(/-/g, " ")
+      .split(" ")
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" "),
+  );
+
+  useEffect(() => {
+    // Read from title of the page
+    new Promise(resolve => setTimeout(resolve, 10)).then(() => {
+      const title = document.title;
+      setTitle(title);
+    });
+  }, []);
 
   return (
     <div className="w-full fixed top-0 py-4 z-50 flex justify-start items-center bg-background/30 backdrop-blur-lg px-8 max-md:hidden">
