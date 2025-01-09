@@ -77,6 +77,7 @@ export default function Layout({ children }: RootLayoutProps) {
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         <meta name="theme-color" content="#00000000" />
+        <link rel="apple-touch-icon" href="/logo-search.png" />
       </head>
       <body className={cn("antialiased", Gabarito.className)}>
         <StoreProvider>
