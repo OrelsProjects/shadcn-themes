@@ -158,7 +158,7 @@ export default function CopyCode() {
                   role="copy-code-button"
                   size="icon"
                   variant="ghost"
-                  className="absolute top-4 right-4 h-6 w-fit rounded-md bg-background/50 p-2.5 py-3.5 border border-background/40 text-foreground/70 hover:bg-card"
+                  className="absolute top-4 right-4 h-6 w-fit rounded-md bg-background/80 p-2.5 py-3.5 border border-background/40 text-foreground hover:bg-card text-base backdrop-blur-sm"
                   onClick={handleCopy}
                 >
                   <Copy className="h-3 w-3" />
