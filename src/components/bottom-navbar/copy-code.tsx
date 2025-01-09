@@ -122,7 +122,7 @@ export default function CopyCode() {
       >
         <Button variant="outline">
           <Copy className="h-5 w-5" />
-          <span className="hidden sm:inline-block">Copy code</span>
+          <span className="hidden md:inline-block">Copy code</span>
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[600px] overflow-clip">

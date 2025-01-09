@@ -11,12 +11,6 @@ const themeSources = [
     height: 40,
   },
   { name: "Shadcn", src: "/theme-sources/shadcn.png", width: 230, height: 100 },
-  //   {
-  //     name: "Marc Lou",
-  //     src: "/theme-sources/marclou.png",
-  //     width: 200,
-  //     height: 100,
-  //   },
 ];
 
 export default function Hero() {
@@ -29,7 +23,6 @@ export default function Hero() {
             The Shadcn way
           </span>
         </h1>
-
       </motion.div>
 
       <motion.div className="flex flex-col items-center gap-2">

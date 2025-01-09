@@ -176,7 +176,7 @@ export default function RandomizePopover() {
           ref={randomizeButtonRef}
         >
           <Dices className="h-5 w-5" />
-          <span className="hidden sm:inline">
+          <span className="hidden md:inline">
             Randomize{" "}
             <kbd className={cn("border border-border p-1 px-2 ml-1")}>R</kbd>
           </span>

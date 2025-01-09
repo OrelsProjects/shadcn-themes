@@ -441,7 +441,7 @@ export function ThemesDialog() {
         exit={{ opacity: 0 }}
         onClick={onClick}
         className={cn(
-          "fixed top-0 left-0 w-screen h-screen z-10 overflow-clip",
+          "fixed top-0 left-0 w-screen h-screen z-30 overflow-visible",
           className,
         )}
       />,
@@ -464,7 +464,7 @@ export function ThemesDialog() {
           })}
         />
       )}
-      <div className="relative w-fit h-fit flex items-end justify-center overflow-visible">
+      <div className="relative w-fit h-fit flex items-end justify-center overflow-visible z-20">
         <AnimatePresence>
           {!wasThemeClicked && (
             <motion.div
@@ -472,7 +472,7 @@ export function ThemesDialog() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.8, delay: 1.3 }}
-              className="w-full absolute bottom-12 flex flex-col items-center justify-center gap-2 animate-bounce"
+              className="w-full absolute bottom-4 md:bottom-12 flex flex-col items-center justify-center gap-2 animate-bounce "
             >
               <ArrowDown className="h-10 w-10 text-foreground" />
             </motion.div>
@@ -496,7 +496,7 @@ export function ThemesDialog() {
             )}
           />
           <Palette className="h-4 w-4" />
-          <span className="hidden sm:inline">
+          <span className="hidden md:inline">
             Themes{" "}
             <kbd
               className={cn("border border-border p-1 px-2 ml-1", {

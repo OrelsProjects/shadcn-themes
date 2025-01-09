@@ -17,7 +17,7 @@ export default function NavbarItemContainer({
   return (
     <Button variant="outline" onClick={onClick}>
       <Icon className={cn("h-4 w-4")} />
-      {label && <span className="hidden sm:inline">{label}</span>}
+      {label && <span className="hidden md:inline">{label}</span>}
       {children}
     </Button>
   );
