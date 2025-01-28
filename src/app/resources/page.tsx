@@ -80,7 +80,7 @@ export default function ResourcesPage() {
       <main className="container py-20 space-y-20">
         <section id="blog-posts" className="pt-16">
           <h1 className="text-4xl md:text-5xl font-bold mb-8 text-center bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary-foreground">
-            Explore Our Blog Posts
+            Explore our blog posts
           </h1>
 
           <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
@@ -206,7 +206,8 @@ export default function ResourcesPage() {
                     <span>Character Counter</span>
                   </CardTitle>
                   <CardDescription>
-                    Optimize content length for SEO and social media. Check character limits for various platforms.
+                    Optimize content length for SEO and social media. Check
+                    character limits for various platforms.
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -237,7 +238,8 @@ export default function ResourcesPage() {
                     <span>Word Counter</span>
                   </CardTitle>
                   <CardDescription>
-                    Analyze text with detailed statistics including word count, reading time, and more.
+                    Analyze text with detailed statistics including word count,
+                    reading time, and more.
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -248,7 +250,9 @@ export default function ResourcesPage() {
                     </div>
                     <div className="flex flex-col items-center justify-center border rounded-md p-2">
                       <div className="text-2xl font-bold text-primary">1m</div>
-                      <div className="text-xs text-muted-foreground">Read Time</div>
+                      <div className="text-xs text-muted-foreground">
+                        Read Time
+                      </div>
                     </div>
                   </div>
                 </CardContent>
@@ -272,7 +276,8 @@ export default function ResourcesPage() {
                     <span>Responsive Tester</span>
                   </CardTitle>
                   <CardDescription>
-                    Test your website&apos;s responsiveness across different device sizes instantly.
+                    Test your website&apos;s responsiveness across different
+                    device sizes instantly.
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
