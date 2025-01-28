@@ -51,6 +51,11 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://www.shadcn.studio/resources/blogs/shadcn-themes</loc>
+    <lastmod>2024-12-18</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://www.shadcn.studio/resources/tools/contrast-checker</loc>
     <lastmod>2024-12-18</lastmod>
     <priority>0.7</priority>
