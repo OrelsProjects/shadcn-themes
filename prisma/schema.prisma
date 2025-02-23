@@ -155,5 +155,5 @@ model Copies {
   updatedAt DateTime @updatedAt
 
 
-  @@map("copies")
+  @@map("copy")
 }
