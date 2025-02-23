@@ -4,6 +4,7 @@ import {
   parseColor,
   convertColor,
   ColorSpace,
+  colorToText,
 } from "@/app/resources/tools/color-converter/utils";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -36,25 +37,25 @@ export default function ColorConverter() {
           case "hex":
             setColor({
               ...color,
-              hex: newColor,
+              hex: colorToText({ space: "hex", values: newColor }),
             });
             break;
           case "rgb":
             setColor({
               ...color,
-              rgb: newColor,
+              rgb: colorToText({ space: "rgb", values: newColor }),
             });
             break;
           case "hsl":
             setColor({
               ...color,
-              hsl: newColor,
+              hsl: colorToText({ space: "hsl", values: newColor }),
             });
             break;
           case "oklch":
             setColor({
               ...color,
-              oklch: newColor,
+              oklch: colorToText({ space: "oklch", values: newColor }),
             });
             break;
           default:

@@ -16,7 +16,7 @@ export function parseColor(
 
   // Split by common separators (space, comma)
   const values = cleanInput.split(/[\s,]+/).map(Number);
-
+  debugger;
   switch (format) {
     case "hex":
       // Remove # if present and validate hex format
@@ -27,8 +27,16 @@ export function parseColor(
       break;
 
     case "rgb":
-      // Check for rgb(r,g,b) format or three numbers
-      const rgbMatch = cleanInput.match(/^rgb\((\d+),(\d+),(\d+)\)$/);
+      // Check for rgb(r,g,b) format with optional spaces or space/comma separated values
+      const fullRGBMatch = cleanInput.match(
+        /^rgb\((\d+)\s*,\s*(\d+)\s*,\s*(\d+)\)$/,
+      );
+      // Match comma-space separated numbers
+      const rgbMatchComma = cleanInput.match(/^(\d+)\s*,\s*(\d+)\s*,\s*(\d+)$/);
+      // Match space separated numbers
+      const rgbMatchSpace = cleanInput.match(/^(\d+)\s+(\d+)\s+(\d+)$/);
+
+      const rgbMatch = fullRGBMatch || rgbMatchComma || rgbMatchSpace;
       if (rgbMatch) {
         const rgb = rgbMatch.slice(1).map(Number) as RGB;
         if (rgb.every(v => v >= 0 && v <= 255)) {
@@ -41,12 +49,17 @@ export function parseColor(
 
     case "hsl":
       // Check for hsl(h,s%,l%) format with optional spaces
-      const hslMatch = cleanInput.match(/^hsl\((\d+)\s*,\s*(\d+)%?\s*,\s*(\d+)%?\)$/);
-      const hslMatchComma = cleanInput.match(/^(\d+)\s*,\s*(\d+)%?\s*,\s*(\d+)%?$/);
+      const hslMatch = cleanInput.match(
+        /^hsl\((\d+)\s*,\s*(\d+)%?\s*,\s*(\d+)%?\)$/,
+      );
+      const hslMatchComma = cleanInput.match(
+        /^(\d+)\s*,\s*(\d+)%?\s*,\s*(\d+)%?$/,
+      );
       const hslMatchSpace = cleanInput.match(/^(\d+)\s+(\d+)%?\s+(\d+)%?$/);
       const hslMatchNoSpaceNoComma = cleanInput.match(/^(\d+)(\d+)%?(\d+)%?$/);
-      
-      let match = hslMatch || hslMatchComma || hslMatchSpace || hslMatchNoSpaceNoComma;
+
+      let match =
+        hslMatch || hslMatchComma || hslMatchSpace || hslMatchNoSpaceNoComma;
       if (hslMatchNoSpaceNoComma) {
         // Don't remove spaces
         cleanInput = input;
@@ -157,3 +170,23 @@ export function convertColor(color: { space: ColorSpace; values: number[] }): {
     oklch: `oklch(${oklch[0]}% ${oklch[1]} ${oklch[2]})`,
   };
 }
+
+export const colorToText = (color: {
+  space: ColorSpace;
+  values: HEX | RGB | HSL | OKLCH;
+}) => {
+  switch (color.space) {
+    case "rgb":
+      const rgb = color.values as RGB;
+      return `rgb(${rgb.join(", ")})`;
+    case "hsl":
+      const hsl = color.values as HSL;
+      return `hsl(${hsl[0]}, ${hsl[1]}%, ${hsl[2]}%)`;
+    case "hex":
+      const hex = color.values as HEX;
+      return `#${hex}`;
+    case "oklch":
+      const oklch = color.values as OKLCH;
+      return `oklch(${oklch[0]}% ${oklch[1]} ${oklch[2]})`;
+  }
+};
