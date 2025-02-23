@@ -144,7 +144,7 @@ model Report {
   @@map("reports")
 }
 
-model Copies {
+model Copy {
   id String @id @default(auto()) @map("_id") @db.ObjectId
 
   userId  String
