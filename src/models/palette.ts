@@ -2,6 +2,8 @@ export type HSL = [number, number, number]; // [hue, saturation, lightness]
 export type ThemeType = "light" | "dark";
 export type PaletteName = string;
 
+export type DBThemeColors = Record<ThemeType, ThemePalette>;
+
 export type Palette = Record<PaletteName, Record<ThemeType, ThemePalette>>;
 
 export type EncryptedPalette = {

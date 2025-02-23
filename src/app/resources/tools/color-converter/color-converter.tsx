@@ -31,6 +31,35 @@ export default function ColorConverter() {
       const parsedColor = parseColor(newColor, format);
       if (parsedColor) {
         setColor(convertColor(parsedColor));
+      } else {
+        switch (format) {
+          case "hex":
+            setColor({
+              ...color,
+              hex: newColor,
+            });
+            break;
+          case "rgb":
+            setColor({
+              ...color,
+              rgb: newColor,
+            });
+            break;
+          case "hsl":
+            setColor({
+              ...color,
+              hsl: newColor,
+            });
+            break;
+          case "oklch":
+            setColor({
+              ...color,
+              oklch: newColor,
+            });
+            break;
+          default:
+            break;
+        }
       }
     },
     [],

@@ -408,6 +408,90 @@ function applyCrazy(theme: ThemePalette, crazyRate: number): ThemePalette {
 }
 
 /**
+ * Build a baseline LIGHT theme derived from an existing dark theme
+ * (inverse of buildDarkTheme).
+ */
+export function buildLightThemeFromDark(darkTheme: ThemePalette): ThemePalette {
+  // lighten background by 0.85
+  const background = lightenHSL(darkTheme.background, 0.85);
+
+  // darken foreground by 0.7
+  const foreground = darkenHSL(darkTheme.foreground, 0.7);
+
+  // popover
+  const popover = background;
+  const popoverForeground = foreground;
+
+  // card => was 0.75, now 0.5 to avoid clashing with primary
+  const card = darkenHSL(background, 0.01);
+  const cardForeground = foreground;
+
+  // border => lighten by 0.5
+  const border = lightenHSL(darkTheme.border, 0.5);
+  const input = border;
+
+  // muted => lighten by 0.7
+  const muted = lightenHSL(darkTheme.muted, 0.7);
+  // muted foreground => darken by 0.5
+  const mutedForeground = darkenHSL(darkTheme["muted-foreground"], 0.5);
+
+  // primary => same hue, a bit lighter
+  const primaryLight = darkenHSL(darkTheme.primary, 0.1);
+  // primary foreground => same as darkTheme.primary-foreground, but a bit darker
+  const primaryForeground = darkenHSL(darkTheme["primary-foreground"], 0.1);
+
+  // destructive => lighten by 0.3
+  const destructiveLight = lightenHSL(darkTheme.destructive, 0.3);
+  const destructiveForeground: HSL = [20, 14, 4];
+
+  // ring => reuse the primary color
+  const ring = primaryLight;
+
+  // charts => invert the “darken by 0.3” to lighten by 0.3
+  const chart1 = lightenHSL(darkTheme["chart-1"], 0.3);
+  const chart2 = lightenHSL(darkTheme["chart-2"], 0.3);
+  const chart3 = lightenHSL(darkTheme["chart-3"], 0.3);
+  const chart4 = lightenHSL(darkTheme["chart-4"], 0.3);
+  const chart5 = background;
+
+  const baseTheme: BasePalette = {
+    background,
+    foreground,
+    popover,
+    "popover-foreground": popoverForeground,
+    card,
+    "card-foreground": cardForeground,
+    border,
+    input,
+    primary: primaryLight,
+    "primary-foreground": primaryForeground,
+    secondary: lightenHSL(darkTheme.secondary, 0.65),
+    "secondary-foreground": darkenHSL(darkTheme["secondary-foreground"], 0.5),
+    accent: lightenHSL(darkTheme.accent, 0.65),
+    "accent-foreground": darkenHSL(darkTheme["accent-foreground"], 0.5),
+    muted,
+    "muted-foreground": mutedForeground,
+    destructive: destructiveLight,
+    "destructive-foreground": destructiveForeground,
+    ring,
+    radius: "",
+    "chart-1": chart1,
+    "chart-2": chart2,
+    "chart-3": chart3,
+    "chart-4": chart4,
+    "chart-5": chart5,
+  };
+
+  // build a "light" sidebar from the baseTheme
+  const sideBar = buildSidebarTheme(baseTheme, "light");
+
+  return {
+    ...baseTheme,
+    ...sideBar,
+  };
+}
+
+/**
  * Final function that returns { light, dark } for any crazyRate=0..100,
  * ensuring the dark theme is derived from the light theme's colors
  * (no random background).

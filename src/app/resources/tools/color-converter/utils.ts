@@ -12,7 +12,7 @@ export function parseColor(
   format: ColorSpace,
 ): { space: ColorSpace; values: RGB | HSL | OKLCH | [number] } | null {
   // Remove all whitespace and convert to lowercase
-  let cleanInput = input.replace(/\s/g, "").toLowerCase();
+  let cleanInput = input.toLowerCase();
 
   // Split by common separators (space, comma)
   const values = cleanInput.split(/[\s,]+/).map(Number);
@@ -40,13 +40,13 @@ export function parseColor(
       break;
 
     case "hsl":
-      // Check for hsl(h,s%,l%) format or three numbers or space separated or space separated with percent no hsl() or comma separated no hsl()
-      const hslMatch = cleanInput.match(/^hsl\((\d+),(\d+)%?,(\d+)%?\)$/);
-      const hslMatchComma = cleanInput.match(/^(\d+),(\d+)%?,(\d+)%?$/);
+      // Check for hsl(h,s%,l%) format with optional spaces
+      const hslMatch = cleanInput.match(/^hsl\((\d+)\s*,\s*(\d+)%?\s*,\s*(\d+)%?\)$/);
+      const hslMatchComma = cleanInput.match(/^(\d+)\s*,\s*(\d+)%?\s*,\s*(\d+)%?$/);
       const hslMatchSpace = cleanInput.match(/^(\d+)\s+(\d+)%?\s+(\d+)%?$/);
       const hslMatchNoSpaceNoComma = cleanInput.match(/^(\d+)(\d+)%?(\d+)%?$/);
-      let match =
-        hslMatch || hslMatchComma || hslMatchSpace || hslMatchNoSpaceNoComma;
+      
+      let match = hslMatch || hslMatchComma || hslMatchSpace || hslMatchNoSpaceNoComma;
       if (hslMatchNoSpaceNoComma) {
         // Don't remove spaces
         cleanInput = input;
@@ -72,10 +72,17 @@ export function parseColor(
       break;
 
     case "oklch":
-      // Check for oklch(l%,c,h) format or three numbers
-      const oklchMatch = cleanInput.match(
-        /^oklch\(([\d.]+)%?,?([\d.]+),?([\d.]+)\)$/,
+      debugger;
+      // Check for oklch(l%,c,h) format or three numbers with optional % and spaces
+      const fullOklchMatch = cleanInput.match(
+        /^oklch\(([\d.]+)%?\s*([\d.]+)\s*([\d.]+)\)$/,
       );
+      // Match three space/comma separated numbers with optional %
+      const oklchMatchSimple = cleanInput.match(
+        /^([\d.]+)%?\s*[,\s]\s*([\d.]+)\s*[,\s]\s*([\d.]+)$/,
+      );
+
+      const oklchMatch = fullOklchMatch || oklchMatchSimple;
       if (oklchMatch) {
         const oklch = oklchMatch.slice(1).map(Number) as OKLCH;
         if (
@@ -118,25 +125,28 @@ export function convertColor(color: { space: ColorSpace; values: number[] }): {
       rgb = color.values as RGB;
       hsl = convert.rgb.hsl(rgb) as HSL;
       hex = convert.rgb.hex(rgb);
-      oklch = convert.lch.rgb(rgb) as LCH;
+      oklch = convert.rgb.lch(rgb) as LCH;
       break;
     case "hsl":
       hsl = color.values as HSL;
       rgb = convert.hsl.rgb(hsl) as RGB;
       hex = convert.hsl.hex(hsl);
-      oklch = convert.lch.rgb(rgb) as LCH;
+      oklch = convert.hsl.lch(hsl) as LCH; // this function finally results with oklch values
       break;
     case "hex":
       hex = color.values[0].toString(16).padStart(6, "0");
       rgb = convert.hex.rgb(hex) as RGB;
       hsl = convert.hex.hsl(hex) as HSL;
-      oklch = convert.lch.rgb(rgb) as LCH;
+      oklch = convert.hex.lch(hex) as LCH;
       break;
     case "oklch":
       oklch = color.values as LCH;
+      if (oklch[1] < 1) {
+        oklch[1] = oklch[1] * 100;
+      }
       rgb = convert.lch.rgb(oklch) as RGB;
-      hsl = convert.rgb.hsl(rgb) as HSL;
-      hex = convert.rgb.hex(rgb);
+      hsl = convert.lch.hsl(oklch) as HSL;
+      hex = convert.lch.hex(oklch);
       break;
   }
 

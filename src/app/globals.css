@@ -238,12 +238,6 @@
   }
 }
 
-@layer base {
-  body {
-    @apply bg-background-demo text-foreground-demo;
-  }
-}
-
 @media (min-width: 768px) {
   /* Size */
   ::-webkit-scrollbar {
@@ -263,15 +257,6 @@
   .scrollbar-visible::-webkit-scrollbar-thumb {
     background: hsla(224, 21%, 83%, 0.4);
     border-radius: 9999px;
-  }
-}
-
-@layer base {
-  * {
-    @apply border-border;
-  }
-  body {
-    @apply bg-background text-foreground;
   }
 }
 
